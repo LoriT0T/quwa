@@ -1,0 +1,54 @@
+---
+import { getDict, type Locale } from '../i18n';
+import { testimonialsFor } from '../data/testimonials';
+import { localePath } from '../lib/url';
+
+/** Requires a product. A testimonial with nothing to point at is decoration,
+    which is exactly the failure in docs/COMPETITOR-GAPS.md #8. */
+interface Props {
+  lang: Locale;
+  product: string;
+  /** Where the proof links to. Omit for the product's own page. */
+  href?: string;
+  linkLabel?: string;
+  limit?: number;
+  columns?: 1 | 2 | 3;
+}
+const { lang, product, href, linkLabel, limit = 3, columns = 3 } = Astro.props;
+const t = getDict(lang);
+const items = testimonialsFor(lang, product).slice(0, limit);
+const target = href ?? (product === 'membership' ? localePath(lang, 'membership') : localePath(lang, `programs/${product}`));
+---
+{items.length > 0 && (
+  <ul class="proof" style={`--cols:${columns}`}>
+    {items.map((entry) => (
+      <li class="card proof-item">
+        <p class="rating" aria-label={t.a11y.rating.replace('{rating}', String(entry.rating))}>
+          <bdi>{entry.rating.toFixed(2)}</bdi>
+          <span aria-hidden="true" class="rating-bar"><span style={`inline-size:${(entry.rating / 5) * 100}%`}></span></span>
+        </p>
+        <blockquote class="quote">{entry.quote}</blockquote>
+        <footer class="attrib">
+          <p class="name">{entry.name}</p>
+          <p class="meta">{entry.location} · {entry.context}</p>
+          {linkLabel && <a class="link" href={target}>{linkLabel}</a>}
+        </footer>
+      </li>
+    ))}
+  </ul>
+)}
+<style>
+  .proof { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
+  .proof-item { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
+  .rating { display: flex; align-items: center; gap: var(--space-2); font-size: var(--fs-small); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums; }
+  .rating-bar { inline-size: 56px; block-size: 4px; background: var(--c-line-strong); border-radius: var(--r-pill); overflow: hidden; }
+  .rating-bar > span { display: block; block-size: 100%; background: var(--c-accent); }
+  .quote { margin: 0; font-size: var(--fs-body); line-height: 1.62; color: var(--c-paper); }
+  .attrib { display: flex; flex-direction: column; gap: var(--space-1); margin-block-start: auto; }
+  .name { font-weight: var(--fw-bold); font-size: var(--fs-small); }
+  .meta { font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.5; }
+  .link { font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); color: var(--c-accent); margin-block-start: var(--space-2); }
+  .link:hover { text-decoration: underline; text-underline-offset: 3px; }
+  @media (min-width: 768px) { .proof { grid-template-columns: repeat(min(var(--cols), 2), 1fr); } }
+  @media (min-width: 1024px) { .proof { grid-template-columns: repeat(var(--cols), 1fr); } }
+</style>

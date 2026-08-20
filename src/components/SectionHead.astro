@@ -1,0 +1,21 @@
+---
+import Eyebrow from './Eyebrow.astro';
+interface Props {
+  eyebrow?: string;
+  title: string;
+  body?: string;
+  center?: boolean;
+  as?: 'h1' | 'h2';
+}
+const { eyebrow, title, body, center = false, as: Tag = 'h2' }: Props = Astro.props;
+---
+<header class:list={['head', center && 'head-center']}>
+  {eyebrow && <Eyebrow text={eyebrow} />}
+  <Tag class={Tag === 'h1' ? 'display' : 'h2'}>{title}</Tag>
+  {body && <p class="lead measure-prose">{body}</p>}
+</header>
+<style>
+  .head { display: flex; flex-direction: column; gap: var(--space-3); margin-block-end: var(--space-12); }
+  .head-center { align-items: center; text-align: center; }
+  .head-center :global(.measure-prose) { margin-inline: auto; }
+</style>

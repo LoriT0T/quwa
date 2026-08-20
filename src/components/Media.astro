@@ -1,0 +1,66 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { lqipFor } from '../assets/images/generated';
+
+/** Renders a sourced image, or a flagged flat block at the correct ratio.
+    Never a hand-drawn SVG of a person, a body, food or equipment — see
+    docs/DECISIONS.md #14 and assets/manifest.json for the open slots. */
+interface Props {
+  src?: ImageMetadata;
+  alt: string;
+  ratio?: string;
+  sizes?: string;
+  widths?: number[];
+  loading?: 'lazy' | 'eager';
+  priority?: boolean;
+  class?: string;
+  /** Slot name in assets/manifest.json, for the placeholder badge in dev. */
+  slot_id?: string;
+}
+const {
+  src, alt, ratio = '4 / 3', sizes = '(min-width: 1024px) 448px, 100vw',
+  widths = [400, 640, 900, 1280], loading = 'lazy', priority = false,
+  class: cls = '', slot_id,
+} = Astro.props;
+const isDev = import.meta.env.DEV;
+/* Blur-up placeholder, precomputed by scripts/optimize-images.mjs, so the box is
+   never empty while the AVIF decodes. Removes the CLS the placeholder would cause. */
+const lqip = slot_id ? lqipFor(slot_id) : undefined;
+const lqipStyle = lqip
+  ? `aspect-ratio:${ratio};background-image:url('${lqip}');background-size:cover;background-position:center`
+  : `aspect-ratio:${ratio}`;
+---
+{src ? (
+  <Image
+    src={src}
+    alt={alt}
+    widths={widths}
+    sizes={sizes}
+    format="avif"
+    loading={priority ? 'eager' : loading}
+    fetchpriority={priority ? 'high' : 'auto'}
+    decoding={priority ? 'sync' : 'async'}
+    class:list={['media', cls]}
+    style={lqipStyle}
+  />
+) : (
+  <div class:list={['media', 'media-block', cls]} style={`aspect-ratio:${ratio}`} role="img" aria-label={alt}>
+    {isDev && slot_id && <span class="slot-badge">{slot_id}</span>}
+  </div>
+)}
+<style>
+  .media { inline-size: 100%; block-size: auto; object-fit: cover; border-radius: var(--r-media); background: var(--c-surface-2); }
+  .media-block {
+    background:
+      linear-gradient(135deg, rgb(255 107 44 / .10), transparent 55%),
+      var(--c-surface-2);
+    border: 1px solid var(--c-line);
+    display: grid; place-items: center;
+  }
+  .slot-badge {
+    font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--c-faint); padding: 4px 8px; border: 1px dashed var(--c-line-strong);
+    border-radius: var(--r-sm);
+  }
+</style>

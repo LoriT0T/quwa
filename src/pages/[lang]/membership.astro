@@ -1,0 +1,179 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Price from '../../components/Price.astro';
+import Proof from '../../components/Proof.astro';
+import FAQ from '../../components/FAQ.astro';
+import CTA from '../../components/CTA.astro';
+import { getDict, fill, type Locale } from '../../i18n';
+import { localePath, absoluteUrl } from '../../lib/url';
+import { localeParams } from '../../lib/content';
+import { MEMBERSHIP, GUARANTEE_DAYS } from '../../config/pricing';
+import * as S from '../../lib/schema';
+
+export const getStaticPaths = localeParams;
+const lang = Astro.params.lang as Locale;
+const t = getDict(lang);
+const crumbs = [
+  { name: t.common.home, href: localePath(lang, '/') },
+  { name: t.nav.membership, href: localePath(lang, 'membership') },
+];
+const monthlyYear = MEMBERSHIP.monthly.amount * 12;
+const saving = monthlyYear - MEMBERSHIP.annual.amount;
+const schema = [
+  S.faqPage(t.membershipFaq),
+  S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUrl(c.href, Astro.site) }))),
+];
+---
+<Layout lang={lang} title={t.membership.title} description={t.membership.sub} path="membership" schema={schema}>
+  <Section>
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <div class="gap">
+      <SectionHead as="h1" eyebrow={t.membership.eyebrow} title={t.membership.title} body={t.membership.sub} center />
+    </div>
+
+    <!-- ── Plans. Annual is the visual default and carries the trial. ──── -->
+    <div class="plans">
+      <div class="card plan plan-annual">
+        <p class="badge">{t.membership.annualBadge}</p>
+        <h2 class="plan-name">{t.membership.annual}</h2>
+        <p class="amount">
+          <Price cents={MEMBERSHIP.annual.perMonth} lang={lang} />
+          <span class="per">/{t.common.perMonth}</span>
+        </p>
+        <p class="billed">
+          {fill(t.common.billedAnnually, { amount: '' })} <Price cents={MEMBERSHIP.annual.amount} lang={lang} />
+        </p>
+        <p class="saving">{fill(t.membership.savingVsMonthly, { amount: '' })} <Price cents={saving} lang={lang} /></p>
+        <p class="trial-badge">{t.membership.trialBadge}</p>
+        <button class="btn btn-primary btn-block" type="button"
+          data-add-to-cart={MEMBERSHIP.annual.id} data-title={`${t.membership.title} — ${t.membership.annual}`}
+          data-cents={MEMBERSHIP.annual.amount} data-kind="subscription" data-added-label={t.cta.added}>
+          {t.cta.primary}
+        </button>
+        <p class="terms">{t.membership.trialLine}</p>
+      </div>
+
+      <div class="card plan">
+        <h2 class="plan-name">{t.membership.monthly}</h2>
+        <p class="amount">
+          <Price cents={MEMBERSHIP.monthly.amount} lang={lang} />
+          <span class="per">/{t.common.perMonth}</span>
+        </p>
+        <p class="billed">{t.common.billedMonthly}</p>
+        <p class="saving saving-muted">&nbsp;</p>
+        <p class="trial-badge trial-none">&nbsp;</p>
+        <button class="btn btn-secondary btn-block" type="button"
+          data-add-to-cart={MEMBERSHIP.monthly.id} data-title={`${t.membership.title} — ${t.membership.monthly}`}
+          data-cents={MEMBERSHIP.monthly.amount} data-kind="subscription" data-added-label={t.cta.added}>
+          {t.cta.joinMembership}
+        </button>
+        <p class="terms">{t.membership.cancelBody}</p>
+      </div>
+    </div>
+
+    <!-- ── What you get ─────────────────────────────────────────────────── -->
+    <div class="features">
+      <h2 class="h3">{t.membership.whatYouGet}</h2>
+      <ul class="flist">{t.membership.features.map((f) => <li>{f}</li>)}</ul>
+    </div>
+  </Section>
+
+  <!-- ── Single vs library ──────────────────────────────────────────────── -->
+  <Section tight surface>
+    <h2 class="h2 mb">{t.membership.compareTitle}</h2>
+    <div class="table-wrap">
+      <table class="cmp">
+        <thead>
+          <tr>
+            <th scope="col">{t.membership.compareCols.feature}</th>
+            <th scope="col">{t.membership.compareCols.single}</th>
+            <th scope="col" class="hl">{t.membership.compareCols.member}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {t.membership.compareRows.map((r) => (
+            <tr>
+              <th scope="row">{r.feature}</th>
+              <td><span class="sr-only">{r.single ? t.common.included : t.common.notIncluded}</span>
+                <span aria-hidden="true" class={r.single ? 'yes' : 'no'}>{r.single ? '✓' : '—'}</span></td>
+              <td class="hl"><span class="sr-only">{r.member ? t.common.included : t.common.notIncluded}</span>
+                <span aria-hidden="true" class={r.member ? 'yes' : 'no'}>{r.member ? '✓' : '—'}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </Section>
+
+  <!-- ── Proof, tagged to the membership specifically ───────────────────── -->
+  <Section tight>
+    <h2 class="h2 mb">{t.home.proof.title}</h2>
+    <Proof lang={lang} product="membership" limit={3} columns={3} />
+    <p class="vary">{t.common.individualResult} {t.common.resultsVary}</p>
+  </Section>
+
+  <!-- ── Cancelling, then FAQ ───────────────────────────────────────────── -->
+  <Section>
+    <div class="cancel card">
+      <h2 class="h3">{t.membership.cancelTitle}</h2>
+      <p class="cancel-b">{t.membership.cancelBody}</p>
+    </div>
+    <h2 class="h2 mb faq-h">{t.membership.faqTitle}</h2>
+    <div class="faq-wrap"><FAQ items={t.membershipFaq} /></div>
+  </Section>
+
+  <Section tight>
+    <div class="closing">
+      <h2 class="h2">{t.membership.trialBadge}</h2>
+      <CTA lang={lang} href={localePath(lang, 'cart')} label={t.cta.primary} terms={t.membership.trialLine} center />
+      <p class="vary">{fill(t.common.guarantee, { n: GUARANTEE_DAYS })}</p>
+    </div>
+  </Section>
+</Layout>
+<style>
+  .gap { margin-block-start: var(--space-8); }
+  .plans { display: grid; gap: var(--space-4); max-inline-size: 900px; margin-inline: auto; }
+  .plan { padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-3); }
+  .plan-annual { border-color: var(--c-accent); box-shadow: var(--shadow-lift); order: -1; }
+  .badge { align-self: flex-start; padding: 4px 10px; border-radius: var(--r-pill); background: var(--c-accent); color: var(--c-accent-ink); font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); }
+  .plan-name { font-size: var(--fs-card-title); }
+  .amount { display: flex; align-items: baseline; gap: var(--space-2); font-size: var(--fs-h2); font-weight: var(--fw-bold); }
+  .per { font-size: var(--fs-body); color: var(--c-muted); font-weight: 400; }
+  .billed, .saving { font-size: var(--fs-small); color: var(--c-muted); }
+  .saving { color: var(--c-accent); font-weight: var(--fw-bold); }
+  .saving-muted { visibility: hidden; }
+  .trial-badge { font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-paper); }
+  :global(:root[lang="ar"]) .trial-badge { text-transform: none; }
+  .trial-none { visibility: hidden; }
+  .plan .btn { margin-block-start: var(--space-4); }
+  .terms { font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.5; }
+
+  .features { margin-block-start: var(--space-16); max-inline-size: var(--measure-prose); margin-inline: auto; }
+  .flist { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: grid; gap: var(--space-3); }
+  .flist li { font-size: var(--fs-small); color: var(--c-muted); padding-inline-start: var(--space-6); position: relative; line-height: 1.6; }
+  .flist li::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 7px; inline-size: 8px; block-size: 8px; border-radius: 2px; background: var(--c-accent); }
+
+  .mb { margin-block-end: var(--space-8); }
+  .table-wrap { overflow-x: auto; }
+  .cmp { inline-size: 100%; min-inline-size: 480px; border-collapse: collapse; }
+  .cmp th, .cmp td { padding: var(--space-4); text-align: start; border-block-end: 1px solid var(--c-line); font-size: var(--fs-small); }
+  .cmp thead th { font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-faint); }
+  :global(:root[lang="ar"]) .cmp thead th { text-transform: none; }
+  .cmp tbody th { font-weight: 400; color: var(--c-muted); }
+  .cmp td { text-align: center; }
+  .cmp .hl { background: var(--c-accent-soft); }
+  .yes { color: var(--c-accent); font-weight: var(--fw-bold); }
+  .no { color: var(--c-faint); }
+
+  .cancel { padding: var(--space-8); max-inline-size: var(--measure-prose); }
+  .cancel-b { margin-block-start: var(--space-3); color: var(--c-muted); line-height: 1.7; }
+  .faq-h { margin-block-start: var(--space-16); }
+  .faq-wrap { max-inline-size: 72ch; }
+  .vary { margin-block-start: var(--space-6); font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.6; }
+  .closing { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); text-align: center; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  @media (min-width: 768px) { .plans { grid-template-columns: 1fr 1fr; } .plan-annual { order: 0; } }
+</style>

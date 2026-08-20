@@ -1,0 +1,43 @@
+---
+/* Root 404. GitHub Pages serves /404.html for any unmatched path, so this has to
+   work before we know the visitor's locale. It offers both, and redirects to the
+   stored preference when there is one. */
+import { DEFAULT_LOCALE, LOCALES } from '../config/site';
+import { localePath } from '../lib/url';
+const map = Object.fromEntries(LOCALES.map((l) => [l, localePath(l, '404')]));
+const fallback = localePath(DEFAULT_LOCALE, '404');
+---
+<!doctype html>
+<html lang={DEFAULT_LOCALE}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>404</title>
+    <meta name="robots" content="noindex" />
+    <script is:inline define:vars={{ map, fallback }}>
+      (function () {
+        var target = fallback;
+        try {
+          var saved = localStorage.getItem('quwa.lang');
+          if (saved && map[saved]) target = map[saved];
+          else {
+            var tags = navigator.languages || [navigator.language || 'en'];
+            for (var i = 0; i < tags.length; i++) {
+              var code = String(tags[i]).toLowerCase().split('-')[0];
+              if (map[code]) { target = map[code]; break; }
+            }
+          }
+        } catch (e) {}
+        location.replace(target);
+      })();
+    </script>
+    <style>
+      body { background: #0b0e12; color: #f5f7fa; font-family: system-ui, sans-serif;
+             display: grid; place-items: center; min-height: 100svh; margin: 0; gap: 1rem; }
+      a { color: #ff6b2c; }
+    </style>
+  </head>
+  <body>
+    <p>404 — <a href={map.en}>English</a> · <a href={map.ar} lang="ar" dir="rtl">العربية</a></p>
+  </body>
+</html>

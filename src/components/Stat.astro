@@ -1,0 +1,22 @@
+---
+/** jeffnippard's 160px stat numeral, kept as a device and made fluid.
+    The results-vary note sits inside the block, adjacent to the claim. */
+interface Props { value: string; label: string; note?: string; }
+const { value, label, note } = Astro.props;
+---
+<div class="stat">
+  <p class="value"><bdi>{value}</bdi><span class="plus" aria-hidden="true">+</span></p>
+  <p class="label">{label}</p>
+  {note && <p class="note">{note}</p>}
+</div>
+<style>
+  .stat { display: flex; flex-direction: column; gap: var(--space-2); }
+  .value {
+    font-size: var(--fs-stat); font-weight: var(--fw-bold);
+    line-height: var(--lh-display); letter-spacing: -0.03em;
+    display: flex; align-items: flex-start; font-variant-numeric: tabular-nums;
+  }
+  .plus { font-size: 0.4em; color: var(--c-accent); margin-block-start: 0.2em; }
+  .label { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.5; max-inline-size: 24ch; }
+  .note { font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.5; max-inline-size: 40ch; }
+</style>

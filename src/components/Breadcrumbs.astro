@@ -1,0 +1,23 @@
+---
+import { getDict, type Locale } from '../i18n';
+interface Props { lang: Locale; items: readonly { name: string; href: string }[]; }
+const { lang, items } = Astro.props;
+const t = getDict(lang);
+---
+<nav class="crumbs" aria-label={t.common.breadcrumb}>
+  <ol>
+    {items.map((item, i) => (
+      <li>
+        {i < items.length - 1 ? <a href={item.href}>{item.name}</a> : <span aria-current="page">{item.name}</span>}
+        {i < items.length - 1 && <span class="sep" aria-hidden="true">/</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
+<style>
+  .crumbs ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+  .crumbs li { display: flex; align-items: center; gap: var(--space-2); font-size: var(--fs-eyebrow); color: var(--c-faint); }
+  .crumbs a { color: var(--c-muted); }
+  .crumbs a:hover { color: var(--c-accent); }
+  .sep { color: var(--c-line-strong); }
+</style>

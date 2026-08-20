@@ -1,0 +1,222 @@
+---
+import { getDict, type Locale } from '../i18n';
+import { toolStrings, type ToolDef } from '../lib/tools';
+import { CALORIE_FLOOR } from '../lib/calculators';
+import EmailCapture from './EmailCapture.astro';
+
+interface Props { lang: Locale; tool: ToolDef; }
+const { lang, tool } = Astro.props;
+const t = getDict(lang);
+const s = toolStrings(t, tool);
+const f = t.fields;
+const u = t.units;
+const slug = tool.slug;
+
+const activityKeys = ['sedentary', 'light', 'moderate', 'high', 'athlete'] as const;
+const goalKeys = ['cut', 'maintain', 'gain'] as const;
+
+/* Only the strings the client script needs, serialised per page. Importing the
+   whole dictionary into the bundle would ship both locales to every visitor. */
+const clientStrings = {
+  lang,
+  intlLocale: lang === 'ar' ? 'ar-u-nu-arab' : 'en-US',
+  results: s.results,
+  units: { kg: u.kg, lb: u.lb, cm: u.cm, in: u.in, kcal: u.kcal, g: u.g, ml: u.ml, l: u.l, floz: u.floz, reps: u.reps, pct: u.pct },
+  categories: tool.key === 'bodyfat' ? t.tools.bodyfat.categories : null,
+  labels: {
+    perSide: t.tools.plates.results.perSide,
+    formula: t.tools.onerm.results.formula,
+    avg: t.tools.onerm.results.avg,
+    error: t.common.error,
+    closest: t.tools.plates.results.closest,
+    exact: t.common.yes,
+  },
+};
+---
+<div class="calc card" data-tool={slug} data-floor-female={CALORIE_FLOOR.female} data-floor-male={CALORIE_FLOOR.male}>
+  <form class="form" data-calc-form novalidate>
+
+    {(slug === 'tdee' || slug === 'body-fat') && (
+      <fieldset class="fs">
+        <legend>{f.sex}</legend>
+        <div class="segs">
+          <label class="seg"><input type="radio" name="sex" value="male" checked /><span>{f.male}</span></label>
+          <label class="seg"><input type="radio" name="sex" value="female" /><span>{f.female}</span></label>
+        </div>
+        <p class="hint">{f.sexNote}</p>
+      </fieldset>
+    )}
+
+    <fieldset class="fs">
+      <legend class="sr-only">{u.metric} / {u.imperial}</legend>
+      <div class="segs segs-sm">
+        <label class="seg"><input type="radio" name="units" value="metric" checked /><span>{u.metric}</span></label>
+        <label class="seg"><input type="radio" name="units" value="imperial" /><span>{u.imperial}</span></label>
+      </div>
+    </fieldset>
+
+    <div class="grid">
+      {slug === 'tdee' && (
+        <label class="fld"><span>{f.age} <i>({f.years})</i></span>
+          <input class="field" type="number" name="age" min="14" max="99" step="1" value="30" required /></label>
+      )}
+
+      {(slug === 'tdee' || slug === 'body-fat') && (
+        <label class="fld"><span>{f.height} <i data-unit="length">{u.cm}</i></span>
+          <input class="field" type="number" name="height" min="100" max="250" step="0.5" value="175" required /></label>
+      )}
+
+      {slug !== 'one-rep-max' && slug !== 'plate-loading' && (
+        <label class="fld"><span>{f.weight} <i data-unit="mass">{u.kg}</i></span>
+          <input class="field" type="number" name="weight" min="30" max="300" step="0.1" value="80" required /></label>
+      )}
+
+      {slug === 'tdee' && (
+        <label class="fld fld-wide"><span>{f.activity}</span>
+          <select class="field" name="activity">
+            {activityKeys.map((k) => <option value={k} selected={k === 'moderate'}>{f.activityLevels[k]}</option>)}
+          </select></label>
+      )}
+
+      {slug === 'macros' && (
+        <>
+          <label class="fld"><span>{t.tools.macros.results.total} <i>({u.kcal})</i></span>
+            <input class="field" type="number" name="calories" min="800" max="6000" step="10" value="2400" required /></label>
+          <label class="fld"><span>{f.goalDirection}</span>
+            <select class="field" name="goal">
+              {goalKeys.map((k) => <option value={k} selected={k === 'maintain'}>{f.goals[k]}</option>)}
+            </select></label>
+          <fieldset class="fs fld-wide">
+            <legend>{f.sex}</legend>
+            <div class="segs">
+              <label class="seg"><input type="radio" name="sex" value="male" checked /><span>{f.male}</span></label>
+              <label class="seg"><input type="radio" name="sex" value="female" /><span>{f.female}</span></label>
+            </div>
+          </fieldset>
+        </>
+      )}
+
+      {slug === 'protein' && (
+        <>
+          <label class="fld"><span>{f.goalDirection}</span>
+            <select class="field" name="goal">
+              {goalKeys.map((k) => <option value={k} selected={k === 'gain'}>{f.goals[k]}</option>)}
+            </select></label>
+          <label class="fld"><span>{t.tools.protein.results.meals}</span>
+            <input class="field" type="number" name="meals" min="2" max="6" step="1" value="4" required /></label>
+        </>
+      )}
+
+      {slug === 'one-rep-max' && (
+        <>
+          <label class="fld"><span>{f.liftWeight} <i data-unit="mass">{u.kg}</i></span>
+            <input class="field" type="number" name="lift" min="1" max="600" step="0.5" value="100" required /></label>
+          <label class="fld"><span>{f.repsDone} <i>({u.reps})</i></span>
+            <input class="field" type="number" name="reps" min="1" max="20" step="1" value="5" required /></label>
+        </>
+      )}
+
+      {slug === 'body-fat' && (
+        <>
+          <label class="fld"><span>{f.neck} <i data-unit="length">{u.cm}</i></span>
+            <input class="field" type="number" name="neck" min="20" max="70" step="0.5" value="38" required /></label>
+          <label class="fld"><span>{f.waist} <i data-unit="length">{u.cm}</i></span>
+            <input class="field" type="number" name="waist" min="40" max="200" step="0.5" value="86" required /></label>
+          <label class="fld" data-female-only hidden><span>{f.hip} <i data-unit="length">{u.cm}</i></span>
+            <input class="field" type="number" name="hip" min="50" max="200" step="0.5" value="98" /></label>
+        </>
+      )}
+
+      {slug === 'water' && (
+        <>
+          <label class="fld"><span>{f.trainingMinutes}</span>
+            <input class="field" type="number" name="minutes" min="0" max="300" step="5" value="60" required /></label>
+          <label class="fld"><span>{f.climate}</span>
+            <select class="field" name="climate">
+              <option value="temperate">{f.climates.temperate}</option>
+              <option value="hot">{f.climates.hot}</option>
+            </select></label>
+        </>
+      )}
+
+      {slug === 'plate-loading' && (
+        <>
+          <label class="fld"><span>{f.targetWeight} <i data-unit="mass">{u.kg}</i></span>
+            <input class="field" type="number" name="target" min="20" max="500" step="0.5" value="100" required /></label>
+          <label class="fld"><span>{f.barWeight} <i data-unit="mass">{u.kg}</i></span>
+            <input class="field" type="number" name="bar" min="5" max="60" step="0.5" value="20" required /></label>
+        </>
+      )}
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">{t.cta.calculate}</button>
+      <button class="btn btn-ghost" type="reset">{t.cta.reset}</button>
+    </div>
+  </form>
+
+  <output class="result" data-calc-result hidden>
+    <h2 class="res-title">{t.tools.resultTitle}</h2>
+    <div class="res-body" data-result-body></div>
+    <p class="floor" data-floor-warning hidden>{t.tools.floorWarning}</p>
+    <p class="estimate">{t.common.estimate}</p>
+    <p class="method">{s.note}</p>
+  </output>
+</div>
+<script>
+  import '../scripts/calculator';
+</script>
+
+<script is:inline type="application/json" data-tool-strings set:html={JSON.stringify(clientStrings)}></script>
+
+<div class="gate">
+  <EmailCapture
+    lang={lang}
+    title={t.tools.emailGateTitle}
+    body={t.tools.emailGateBody}
+    cta={t.cta.getResults}
+    source={`tool-${slug}`}
+  />
+</div>
+
+<style>
+  .calc { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-6); }
+  .form { display: flex; flex-direction: column; gap: var(--space-6); }
+  .fs { border: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+  legend { font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-faint); padding: 0; }
+  :global(:root[lang="ar"]) legend { text-transform: none; }
+  .segs { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+  .seg { position: relative; }
+  .seg input { position: absolute; opacity: 0; inline-size: 1px; block-size: 1px; }
+  .seg span {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-block-size: 44px; padding-inline: var(--space-5);
+    border: 1px solid var(--c-line-strong); border-radius: var(--r-pill);
+    font-size: var(--fs-small); font-weight: var(--fw-bold); cursor: pointer;
+    transition: background-color .16s var(--ease), color .16s var(--ease), border-color .16s var(--ease);
+  }
+  .seg input:checked + span { background: var(--c-accent); color: var(--c-accent-ink); border-color: var(--c-accent); }
+  .seg input:focus-visible + span { outline: 3px solid var(--c-accent); outline-offset: 2px; }
+  .segs-sm span { min-block-size: 38px; padding-inline: var(--space-4); font-size: var(--fs-eyebrow); }
+  .hint { font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.5; }
+  .grid { display: grid; gap: var(--space-4); }
+  .fld { display: flex; flex-direction: column; gap: var(--space-2); }
+  .fld > span { font-size: var(--fs-small); font-weight: var(--fw-bold); }
+  .fld i { font-style: normal; color: var(--c-faint); font-weight: 400; }
+  .actions { display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; }
+  .result { display: block; border-block-start: 1px solid var(--c-line); padding-block-start: var(--space-6); }
+  .res-title { font-size: var(--fs-h3); margin-block-end: var(--space-4); }
+  .floor {
+    margin-block-start: var(--space-4); padding: var(--space-4);
+    background: var(--c-accent-soft); border: 1px solid var(--c-accent);
+    border-radius: var(--r-control); font-size: var(--fs-small); line-height: 1.6;
+  }
+  .estimate { margin-block-start: var(--space-4); font-size: var(--fs-eyebrow); color: var(--c-muted); font-weight: var(--fw-bold); }
+  .method { margin-block-start: var(--space-2); font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.6; max-inline-size: var(--measure-prose); }
+  .gate { margin-block-start: var(--space-6); }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  @media (min-width: 560px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+    .fld-wide { grid-column: 1 / -1; }
+  }
+</style>

@@ -1,0 +1,34 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import CTA from '../../components/CTA.astro';
+import { getDict, type Locale } from '../../i18n';
+import { localePath } from '../../lib/url';
+import { localeParams } from '../../lib/content';
+
+export const getStaticPaths = localeParams;
+const lang = Astro.params.lang as Locale;
+const t = getDict(lang);
+---
+<Layout lang={lang} title={t.common.page404Title} description={t.common.page404Body} path="404" noindex noOffers>
+  <Section>
+    <div class="wrap">
+      <p class="code" aria-hidden="true">404</p>
+      <h1 class="h2">{t.common.page404Title}</h1>
+      <p class="lead">{t.common.page404Body}</p>
+      <CTA lang={lang} href={localePath(lang, 'tools')} label={t.home.closing.cta} terms={t.home.trustline} />
+      <ul class="links">
+        <li><a href={localePath(lang, 'programs')}>{t.nav.programs}</a></li>
+        <li><a href={localePath(lang, 'membership')}>{t.nav.membership}</a></li>
+        <li><a href={localePath(lang, 'blog')}>{t.nav.blog}</a></li>
+      </ul>
+    </div>
+  </Section>
+</Layout>
+<style>
+  .wrap { display: flex; flex-direction: column; gap: var(--space-4); max-inline-size: var(--measure-prose); }
+  .code { font-size: var(--fs-stat); font-weight: var(--fw-bold); color: var(--c-accent); line-height: 1; }
+  .links { list-style: none; margin: var(--space-8) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-6); }
+  .links a { font-weight: var(--fw-bold); color: var(--c-muted); }
+  .links a:hover { color: var(--c-accent); }
+</style>

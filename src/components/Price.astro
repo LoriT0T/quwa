@@ -1,0 +1,17 @@
+---
+import { price } from '../lib/currency';
+import type { Locale } from '../config/site';
+interface Props {
+  /** USD cents. Always. The client converts for display only. */
+  cents: number;
+  lang: Locale;
+  class?: string;
+  strike?: boolean;
+}
+const { cents, lang, class: cls = '', strike = false } = Astro.props;
+---
+<bdi class:list={['price', strike && 'price-strike', cls]} data-price={cents}>{price(cents, 'USD', lang)}</bdi>
+<style>
+  .price { font-variant-numeric: tabular-nums; unicode-bidi: isolate; }
+  .price-strike { text-decoration: line-through; color: var(--c-faint); font-weight: 400; }
+</style>

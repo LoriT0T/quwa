@@ -1,0 +1,100 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   QUWA design tokens.
+   Every value here is justified against a measured number in docs/REFERENCE-SPEC.md
+   §6. Do not add a token without adding its justification there.
+   Rendered live at /[lang]/styleguide.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* ── Colour: exactly 4 load-bearing values, matching the reference count ──
+     jeffnippard 4 · rpstrength 3 · joinladder 4 · bodyboost 0 accents.       */
+  --c-ink: #0b0e12;
+  --c-surface: #161b22;
+  --c-paper: #f5f7fa;
+  --c-accent: #ff6b2c;
+
+  /* Secondary values are alpha derivatives of the foreground only — the same
+     device jeffnippard uses (rgba(28,28,28,α) at α = .1 / .5 / .6 / .8). */
+  --c-muted: rgb(245 247 250 / 0.62);
+  --c-faint: rgb(245 247 250 / 0.42);
+  --c-line: rgb(245 247 250 / 0.12);
+  --c-line-strong: rgb(245 247 250 / 0.22);
+  --c-surface-2: #1c232c;
+  --c-accent-ink: #0b0e12;
+  --c-accent-soft: rgb(255 107 44 / 0.14);
+  --c-positive: #4ade80;
+
+  /* ── Type scale.
+     16 body is unanimous across all three quality references.
+     Nothing exists between --fs-lead (18) and --fs-h2 (30) — joinladder's
+     deliberate gap, ratio 2.000, is the hierarchy. */
+  --fs-eyebrow: 0.75rem;              /* 12 — jeffnippard's device at an accessible size */
+  --fs-small: 0.875rem;               /* 14 */
+  --fs-body: 1rem;                    /* 16 — jeffnippard×33, joinladder×160 */
+  --fs-lead: 1.125rem;                /* 18 — joinladder×48 */
+  --fs-card-title: 1.25rem;           /* 20 — jeffnippard×8, joinladder×6 */
+  --fs-h3: 1.5rem;                    /* 24 — jeffnippard×6, joinladder×6 */
+  --fs-h2: clamp(1.875rem, 1.55rem + 1.4vw, 2.25rem);   /* 30→36, joinladder exactly */
+  --fs-display: clamp(2.25rem, 1.35rem + 4.5vw, 3.75rem); /* 36→60 */
+  --fs-stat: clamp(3.5rem, 1.9rem + 8vw, 7.5rem);       /* 56→120 */
+
+  --fw-body: 400;
+  --fw-bold: 700;
+
+  --lh-body: 1.5;                     /* 16/1.50 on jeffnippard and joinladder both */
+  --lh-heading: 1.15;
+  --lh-display: 1;
+  --tracking-eyebrow: 0.14em;
+  --tracking-display: -0.02em;
+
+  /* ── Space. Base unit 4, section rhythm 8. joinladder runs a pure 8 scale
+     with zero off-scale values; jeffnippard adds 4px component granularity. */
+  --space-1: 0.25rem;   /*  4 */
+  --space-2: 0.5rem;    /*  8 */
+  --space-3: 0.75rem;   /* 12 */
+  --space-4: 1rem;      /* 16 */
+  --space-6: 1.5rem;    /* 24 */
+  --space-8: 2rem;      /* 32 */
+  --space-12: 3rem;     /* 48 */
+  --space-16: 4rem;     /* 64 */
+  --space-24: 6rem;     /* 96 */
+  --space-32: 8rem;     /* 128 */
+  --space-section: clamp(4rem, 8vw, 8rem);         /* 64→128, joinladder measured */
+  --space-section-tight: clamp(3rem, 5vw, 6rem);   /* 48→96, proof/stat bands */
+
+  /* ── Grid */
+  --container: 80rem;                              /* 1280 — joinladder & bodyboost */
+  --page-x: clamp(1rem, 4vw, 3rem);                /* 16→48, both endpoints measured */
+  --measure-card: 28rem;                           /* 448 — most-repeated max-width */
+  --measure-prose: 42rem;                          /* 672 */
+
+  /* ── Radius */
+  --r-media: 4px;       /* jeffnippard 3px×27, on-unit */
+  --r-sm: 6px;
+  --r-control: 8px;     /* joinladder 8px×44 */
+  --r-card: 12px;       /* joinladder 12px×19 */
+  --r-pill: 9999px;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.5);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.35), 0 18px 40px -18px rgb(0 0 0 / 0.65);
+
+  --header-h: 60px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* Latin is the default body face; overridden per locale below. */
+  --font-body: var(--font-latin), system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Optical size match between the two families; measured, see DECISIONS.md #7. */
+  --font-scale: 1;
+}
+
+:root[lang="ar"] {
+  --font-body: var(--font-arabic), system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* IBM Plex Sans Arabic sets ~4% smaller on the x-height than Inter at the same
+     px size. Correcting here keeps the two locales reading as one brand rather
+     than two sites. Measured value recorded in DECISIONS.md. */
+  --font-scale: 1.04;
+  --tracking-eyebrow: 0.06em;   /* Arabic is joined; wide tracking breaks ligatures */
+  --tracking-display: 0;
+  --lh-heading: 1.3;            /* Arabic ascenders/descenders need more leading */
+  --lh-display: 1.2;
+}

@@ -1,0 +1,83 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import ProgramCard from '../../../components/ProgramCard.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import CTA from '../../../components/CTA.astro';
+import { getDict, type Locale } from '../../../i18n';
+import { localePath, absoluteUrl } from '../../../lib/url';
+import { localeParams, getPrograms } from '../../../lib/content';
+import * as S from '../../../lib/schema';
+
+export const getStaticPaths = localeParams;
+
+const lang = Astro.params.lang as Locale;
+const t = getDict(lang);
+const programs = await getPrograms(lang);
+const bundles = programs.filter((p) => p.data.kind === 'bundle');
+const singles = programs.filter((p) => p.data.kind !== 'bundle');
+
+const crumbs = [
+  { name: t.common.home, href: localePath(lang, '/') },
+  { name: t.nav.programs, href: localePath(lang, 'programs') },
+];
+const schema = [
+  S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUrl(c.href, Astro.site) }))),
+];
+---
+<Layout lang={lang} title={t.programs.indexTitle} description={t.programs.indexSub} path="programs" schema={schema}>
+  <Section>
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <div class="head-space">
+      <SectionHead as="h1" eyebrow={t.home.programsSection.eyebrow} title={t.programs.indexTitle} body={t.programs.indexSub} />
+    </div>
+
+    <h2 class="group-title">{t.common.bundle}</h2>
+    <ul class="grid">
+      {bundles.map((entry) => (
+        <li><ProgramCard lang={lang} product={entry.data.product} title={entry.data.title}
+          cardLine={entry.data.cardLine} kind={entry.data.kind} level={entry.data.level}
+          goal={entry.data.goal} weeks={entry.data.weeks} daysPerWeek={entry.data.daysPerWeek}
+          isNew={entry.data.isNew} image={entry.data.image} imageAlt={entry.data.imageAlt} /></li>
+      ))}
+    </ul>
+
+    <h2 class="group-title group-title-gap">{t.nav.programs}</h2>
+    <ul class="grid">
+      {singles.map((entry, i) => (
+        <li><ProgramCard lang={lang} product={entry.data.product} title={entry.data.title}
+          cardLine={entry.data.cardLine} kind={entry.data.kind} level={entry.data.level}
+          goal={entry.data.goal} weeks={entry.data.weeks} daysPerWeek={entry.data.daysPerWeek}
+          isNew={entry.data.isNew} image={entry.data.image} imageAlt={entry.data.imageAlt}
+          priority={i < 2} /></li>
+      ))}
+    </ul>
+
+    <div class="included card">
+      <h2 class="h3">{t.programs.included.title}</h2>
+      <ul class="inc-list">{t.programs.included.items.map((item) => <li>{item}</li>)}</ul>
+    </div>
+
+    <div class="alt">
+      <CTA lang={lang} href={localePath(lang, 'membership')} label={t.cta.joinMembership} terms={t.membership.trialLine} />
+    </div>
+  </Section>
+</Layout>
+<style>
+  .head-space { margin-block-start: var(--space-8); }
+  .group-title {
+    font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
+    color: var(--c-faint); margin-block-end: var(--space-4);
+  }
+  :global(:root[lang="ar"]) .group-title { text-transform: none; }
+  .group-title-gap { margin-block-start: var(--space-16); }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
+  .included { margin-block-start: var(--space-16); padding: var(--space-8); }
+  .inc-list { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: grid; gap: var(--space-3); }
+  .inc-list li { font-size: var(--fs-small); color: var(--c-muted); padding-inline-start: var(--space-6); position: relative; line-height: 1.55; }
+  .inc-list li::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 7px; inline-size: 8px; block-size: 8px; border-radius: 2px; background: var(--c-accent); }
+  .alt { margin-block-start: var(--space-12); }
+  @media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } .inc-list { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1024px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+</style>

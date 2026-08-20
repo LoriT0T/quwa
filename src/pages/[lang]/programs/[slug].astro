@@ -1,0 +1,247 @@
+---
+import { render } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import Section from '../../../components/Section.astro';
+import Eyebrow from '../../../components/Eyebrow.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Price from '../../../components/Price.astro';
+import Media from '../../../components/Media.astro';
+import Proof from '../../../components/Proof.astro';
+import FAQ from '../../../components/FAQ.astro';
+import StickyCTA from '../../../components/StickyCTA.astro';
+import ProgramCard from '../../../components/ProgramCard.astro';
+import { getDict, fill, type Locale } from '../../../i18n';
+import { localePath, absoluteUrl, rootPath } from '../../../lib/url';
+import { getPrograms } from '../../../lib/content';
+import { PRODUCT_PRICES, BUNDLE_CONTENTS, GUARANTEE_DAYS } from '../../../config/pricing';
+import { aggregateRating } from '../../../data/testimonials';
+import { price } from '../../../lib/currency';
+import { LOCALES } from '../../../config/site';
+import * as S from '../../../lib/schema';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of LOCALES) {
+    for (const entry of await getPrograms(lang)) {
+      paths.push({ params: { lang, slug: entry.data.product }, props: { entry } });
+    }
+  }
+  return paths;
+}
+
+const lang = Astro.params.lang as Locale;
+const { entry } = Astro.props;
+const d = entry.data;
+const t = getDict(lang);
+const { Content } = await render(entry);
+
+const cents = PRODUCT_PRICES[d.product] ?? 0;
+const rating = aggregateRating(lang, d.product);
+const path = `programs/${d.product}`;
+const url = absoluteUrl(localePath(lang, path), Astro.site);
+const origin = Astro.site ? Astro.site.origin + rootPath('').replace(/\/$/, '') : '';
+
+const bundleParts = BUNDLE_CONTENTS[d.product] ?? null;
+const bundleSum = bundleParts?.reduce((sum, id) => sum + (PRODUCT_PRICES[id] ?? 0), 0) ?? 0;
+
+const all = await getPrograms(lang);
+const related = d.related
+  .map((productId) => all.find((p) => p.data.product === productId))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p))
+  .slice(0, 3);
+
+const crumbs = [
+  { name: t.common.home, href: localePath(lang, '/') },
+  { name: t.nav.programs, href: localePath(lang, 'programs') },
+  { name: d.title, href: localePath(lang, path) },
+];
+
+const schema = [
+  S.product({
+    url, name: d.title, description: d.summary,
+    image: absoluteUrl(rootPath('og/default.png'), Astro.site),
+    sku: d.product, priceCents: cents,
+    rating: rating ?? undefined, origin,
+  }),
+  S.faqPage(d.faq),
+  S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUrl(c.href, Astro.site) }))),
+];
+
+const meta = [
+  d.weeks && { k: t.common.format, v: fill(t.common.weeks, { n: d.weeks }) },
+  d.daysPerWeek && { k: t.nav.programs, v: fill(t.common.daysPerWeek, { n: d.daysPerWeek }) },
+  d.minutesPerSession && { k: t.fields.trainingMinutes, v: fill(t.common.minutes, { n: d.minutesPerSession }) },
+  d.pages && { k: t.common.format, v: fill(t.common.pages, { n: d.pages }) },
+].filter(Boolean) as { k: string; v: string }[];
+---
+<Layout lang={lang} title={d.title} description={d.seoDescription} path={path} ogType="product" schema={schema}>
+  <!-- ── Product hero ─────────────────────────────────────────────────── -->
+  <section class="phero">
+    <div class="container-page">
+      <Breadcrumbs lang={lang} items={crumbs} />
+      <div class="phero-grid">
+        <div class="phero-copy">
+          <Eyebrow text={d.kind === 'bundle' ? t.common.bundle : t.home.programsSection.eyebrow} />
+          <h1 class="display">{d.title}</h1>
+          <p class="lead">{d.summary}</p>
+
+          <dl class="meta">
+            {meta.map((m) => <div><dt>{m.k}</dt><dd>{m.v}</dd></div>)}
+          </dl>
+
+          <div class="buy">
+            <p class="buy-price">
+              <Price cents={cents} lang={lang} />
+              {bundleParts && <Price cents={bundleSum} lang={lang} strike />}
+            </p>
+            {rating && (
+              <p class="buy-rating">
+                <bdi>{rating.value.toFixed(2)}</bdi>
+                <span>({rating.count})</span>
+              </p>
+            )}
+            <button class="btn btn-primary" type="button"
+              data-add-to-cart={d.product} data-title={d.title} data-cents={cents} data-kind="one_time"
+              data-added-label={t.cta.added}>{t.cta.addToCart}</button>
+            <p class="buy-terms">
+              {t.common.instantDownload} · {t.common.lifetimeAccess} · {fill(t.common.guarantee, { n: GUARANTEE_DAYS })}
+            </p>
+            <p class="buy-terms">{t.common.worksOn}</p>
+          </div>
+        </div>
+
+        <div class="phero-media">
+          <Media src={d.image} alt={d.imageAlt ?? d.title} ratio="1 / 1" slot_id={`program-${d.product}-hero`}
+                 priority sizes="(min-width: 1024px) 520px, 100vw" widths={[420, 640, 1040]} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div data-fold-anchor></div>
+
+  <!-- ── Rationale (markdown body) ────────────────────────────────────── -->
+  <Section surface>
+    <div class="prose-body"><Content /></div>
+  </Section>
+
+  <!-- ── What's inside ────────────────────────────────────────────────── -->
+  <Section>
+    <div class="cols">
+      <div>
+        <h2 class="h2">{d.kind === 'bundle' ? t.programs.bundleContains : t.programs.whatsInside}</h2>
+        <ul class="ticks">{d.whatsInside.map((item) => <li>{item}</li>)}</ul>
+        {bundleParts && (
+          <p class="saving">
+            {fill(t.programs.bundleSaving, { sum: price(bundleSum, 'USD', lang), price: price(cents, 'USD', lang) })}
+          </p>
+        )}
+      </div>
+      <div class="fit">
+        <div class="fit-block">
+          <h3 class="h3">{t.programs.whoFor}</h3>
+          <ul class="ticks">{d.whoFor.map((item) => <li>{item}</li>)}</ul>
+        </div>
+        <div class="fit-block">
+          <h3 class="h3">{t.programs.whoNotFor}</h3>
+          <ul class="crosses">{d.whoNotFor.map((item) => <li>{item}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- ── Sample week ──────────────────────────────────────────────────── -->
+  {d.sampleWeek && d.sampleWeek.length > 0 && (
+    <Section tight surface>
+      <h2 class="h2 mb">{t.programs.sampleWeek}</h2>
+      <ol class="week">
+        {d.sampleWeek.map((day) => (
+          <li class="card day">
+            <p class="day-name">{day.day}</p>
+            <p class="day-focus">{day.focus}</p>
+            <p class="day-detail">{day.detail}</p>
+          </li>
+        ))}
+      </ol>
+    </Section>
+  )}
+
+  <!-- ── Proof for this specific program ──────────────────────────────── -->
+  <Section tight>
+    <h2 class="h2 mb">{t.programs.proofTitle}</h2>
+    <Proof lang={lang} product={d.product} limit={3} columns={3} />
+    <p class="vary">{t.common.resultsVary}</p>
+  </Section>
+
+  <!-- ── FAQ for this specific program ────────────────────────────────── -->
+  <Section>
+    <h2 class="h2 mb">{t.programs.faqTitle}</h2>
+    <div class="faq-wrap"><FAQ items={d.faq} /></div>
+  </Section>
+
+  <!-- ── Related ──────────────────────────────────────────────────────── -->
+  {related.length > 0 && (
+    <Section tight surface>
+      <h2 class="h2 mb">{t.programs.alsoConsider}</h2>
+      <ul class="rel">
+        {related.map((item) => (
+          <li><ProgramCard lang={lang} product={item.data.product} title={item.data.title}
+            cardLine={item.data.cardLine} kind={item.data.kind} level={item.data.level}
+            goal={item.data.goal} weeks={item.data.weeks} daysPerWeek={item.data.daysPerWeek}
+            isNew={item.data.isNew} image={item.data.image} imageAlt={item.data.imageAlt} /></li>
+        ))}
+      </ul>
+    </Section>
+  )}
+
+  <StickyCTA lang={lang} product={d.product} title={d.title} cents={cents} />
+</Layout>
+
+<style>
+  .phero { padding-block: var(--space-8) var(--space-16); }
+  .phero-grid { display: grid; gap: var(--space-8); align-items: start; margin-block-start: var(--space-8); }
+  .phero-copy { display: flex; flex-direction: column; gap: var(--space-4); }
+  .phero-media { order: -1; }
+  .meta { margin: var(--space-4) 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+  .meta dt { font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-faint); font-weight: var(--fw-bold); }
+  :global(:root[lang="ar"]) .meta dt { text-transform: none; }
+  .meta dd { margin: 0; font-size: var(--fs-small); font-weight: var(--fw-bold); }
+  .buy { margin-block-start: var(--space-6); padding-block-start: var(--space-6); border-block-start: 1px solid var(--c-line); display: flex; flex-direction: column; gap: var(--space-3); align-items: flex-start; }
+  .buy-price { display: flex; align-items: baseline; gap: var(--space-3); font-size: var(--fs-h2); font-weight: var(--fw-bold); }
+  .buy-rating { font-size: var(--fs-small); color: var(--c-muted); font-variant-numeric: tabular-nums; display: flex; gap: var(--space-2); }
+  .buy .btn { min-inline-size: 240px; }
+  .buy-terms { font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.5; }
+
+  .mb { margin-block-end: var(--space-8); }
+  .cols { display: grid; gap: var(--space-12); }
+  .fit { display: flex; flex-direction: column; gap: var(--space-8); }
+  .fit-block h3 { margin-block-end: var(--space-4); }
+  .ticks, .crosses { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+  .ticks li, .crosses li { font-size: var(--fs-small); color: var(--c-muted); padding-inline-start: var(--space-6); position: relative; line-height: 1.6; }
+  .ticks li::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 7px; inline-size: 8px; block-size: 8px; border-radius: 2px; background: var(--c-accent); }
+  .crosses li::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 10px; inline-size: 10px; block-size: 2px; background: var(--c-line-strong); }
+  .saving { margin-block-start: var(--space-6); font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--c-accent); }
+
+  .week { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+  .day { padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-1); }
+  .day-name { font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-accent); font-weight: var(--fw-bold); }
+  :global(:root[lang="ar"]) .day-name { text-transform: none; }
+  .day-focus { font-weight: var(--fw-bold); font-size: var(--fs-small); }
+  .day-detail { font-size: var(--fs-eyebrow); color: var(--c-muted); line-height: 1.6; }
+
+  .vary { margin-block-start: var(--space-8); font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.6; max-inline-size: 80ch; }
+  .faq-wrap { max-inline-size: 72ch; }
+  .rel { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
+
+  @media (min-width: 640px) {
+    .week { grid-template-columns: 1fr 1fr; }
+    .rel { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 1024px) {
+    .phero-grid { grid-template-columns: 1.05fr 0.95fr; gap: var(--space-16); }
+    .phero-media { order: 0; position: sticky; inset-block-start: calc(var(--header-h) + var(--space-6)); }
+    .cols { grid-template-columns: 1fr 1fr; gap: var(--space-16); }
+    .week { grid-template-columns: repeat(3, 1fr); }
+    .rel { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>

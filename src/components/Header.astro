@@ -1,0 +1,143 @@
+---
+import { getDict, type Locale } from '../i18n';
+import { localePath } from '../lib/url';
+import LocaleSwitcher from './LocaleSwitcher.astro';
+import CurrencySwitcher from './CurrencySwitcher.astro';
+import Wordmark from './Wordmark.astro';
+
+interface Props { lang: Locale; path: string; }
+const { lang, path } = Astro.props;
+const t = getDict(lang);
+
+/* Nav order is the revenue ladder, deliberately — see docs/COMPETITOR-GAPS.md.
+   Free tools first (the acquisition engine the competitor has none of),
+   membership third (the one-time buyer's next step, not the stranger's first). */
+const nav = [
+  { href: localePath(lang, 'tools'), label: t.nav.tools, key: 'tools' },
+  { href: localePath(lang, 'programs'), label: t.nav.programs, key: 'programs' },
+  { href: localePath(lang, 'membership'), label: t.nav.membership, key: 'membership' },
+  { href: localePath(lang, 'blog'), label: t.nav.blog, key: 'blog' },
+];
+const current = path.split('/')[0];
+---
+<a class="announce" href={localePath(lang, 'membership')}>
+  <span>{t.home.announce}</span>
+</a>
+
+<header class="site-header">
+  <div class="container-page bar">
+    <a class="brand" href={localePath(lang, '/')} aria-label={t.brand.wordmark}>
+      <Wordmark lang={lang} />
+    </a>
+
+    <nav class="nav-desktop" aria-label={t.nav.menu}>
+      {nav.map((item) => (
+        <a href={item.href} class:list={['nav-link', current === item.key && 'is-current']}
+           aria-current={current === item.key ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
+
+    <div class="actions">
+      <div class="hide-sm"><CurrencySwitcher lang={lang} /></div>
+      <LocaleSwitcher lang={lang} path={path} />
+      <a class="cart-link" href={localePath(lang, 'cart')} aria-label={t.nav.cart}>
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M6 6h15l-1.5 9h-12z" /><circle cx="9" cy="20" r="1.4" /><circle cx="18" cy="20" r="1.4" /><path d="M6 6 5 2H2" />
+        </svg>
+        <span class="cart-count" data-cart-count hidden>0</span>
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
+        <span class="sr-only">{t.nav.openMenu}</span>
+        <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 6h18M3 12h18M3 18h18" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-nav" id="mobile-nav" hidden data-mobile-nav>
+    <div class="container-page mobile-inner">
+      {nav.map((item) => <a href={item.href} class="mobile-link">{item.label}</a>)}
+      <a href={localePath(lang, 'recipes')} class="mobile-link">{t.nav.recipes}</a>
+      <div class="mobile-currency"><CurrencySwitcher lang={lang} /></div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .announce {
+    display: block; padding-block: var(--space-2); padding-inline: var(--space-4);
+    background: var(--c-accent); color: var(--c-accent-ink);
+    font-size: var(--fs-eyebrow); font-weight: var(--fw-bold);
+    text-align: center; line-height: 1.4;
+  }
+  .announce:hover { background: #ff7f4a; }
+
+  .site-header {
+    position: sticky; inset-block-start: 0; z-index: 40;
+    background: rgb(11 14 18 / .88);
+    backdrop-filter: blur(12px);
+    border-block-end: 1px solid var(--c-line);
+  }
+  .bar {
+    display: flex; align-items: center; gap: var(--space-4);
+    min-block-size: var(--header-h);
+  }
+  .brand { display: inline-flex; align-items: center; margin-inline-end: auto; }
+
+  .nav-desktop { display: none; gap: var(--space-6); }
+  .nav-link {
+    font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--c-muted);
+    padding-block: var(--space-2); position: relative;
+  }
+  .nav-link:hover { color: var(--c-paper); }
+  .nav-link.is-current { color: var(--c-paper); }
+  .nav-link.is-current::after {
+    content: ''; position: absolute; inset-block-end: 0; inset-inline: 0;
+    block-size: 2px; background: var(--c-accent); border-radius: var(--r-pill);
+  }
+
+  .actions { display: flex; align-items: center; gap: var(--space-2); }
+  .cart-link {
+    position: relative; display: inline-flex; align-items: center; justify-content: center;
+    inline-size: 40px; block-size: 40px; border-radius: var(--r-pill); color: var(--c-muted);
+  }
+  .cart-link:hover { color: var(--c-paper); background: rgb(245 247 250 / .06); }
+  .cart-count {
+    position: absolute; inset-block-start: 2px; inset-inline-end: 0;
+    min-inline-size: 18px; block-size: 18px; padding-inline: 4px;
+    display: grid; place-items: center;
+    background: var(--c-accent); color: var(--c-accent-ink);
+    border-radius: var(--r-pill); font-size: 11px; font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+  }
+  .menu-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    inline-size: 40px; block-size: 40px; background: transparent;
+    border: 1px solid var(--c-line); border-radius: var(--r-pill);
+    color: var(--c-paper); cursor: pointer;
+  }
+  .hide-sm { display: none; }
+
+  .mobile-nav { border-block-start: 1px solid var(--c-line); background: var(--c-ink); }
+  .mobile-inner { display: flex; flex-direction: column; padding-block: var(--space-4); gap: var(--space-1); }
+  .mobile-link {
+    padding-block: var(--space-3); font-size: var(--fs-card-title);
+    font-weight: var(--fw-bold); color: var(--c-paper);
+    border-block-end: 1px solid var(--c-line);
+  }
+  .mobile-currency { padding-block-start: var(--space-4); }
+
+  @media (min-width: 768px) {
+    .hide-sm { display: block; }
+  }
+  @media (min-width: 1024px) {
+    .nav-desktop { display: flex; }
+    .menu-btn { display: none; }
+    .mobile-nav { display: none !important; }
+  }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+</style>

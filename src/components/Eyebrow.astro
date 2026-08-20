@@ -1,0 +1,5 @@
+---
+interface Props { text: string; class?: string; }
+const { text, class: cls = '' } = Astro.props;
+---
+<p class:list={['eyebrow', cls]}>{text}</p>

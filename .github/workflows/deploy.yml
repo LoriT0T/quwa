@@ -1,0 +1,58 @@
+name: Build and deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never cancel a deploy mid-flight; queue instead.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Type-check and build
+        # `npm run build` is `astro check && astro build` — a type error fails the deploy.
+        run: npm run build
+        env:
+          # Project-site defaults. For a custom domain set PUBLIC_SITE_URL to the
+          # domain and PUBLIC_BASE_PATH to an empty string — see README.
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || 'https://lorit0t.github.io' }}
+          PUBLIC_BASE_PATH: ${{ vars.PUBLIC_BASE_PATH || '/quwa' }}
+          PUBLIC_COMMERCE_MODE: ${{ vars.PUBLIC_COMMERCE_MODE || 'mock' }}
+          PUBLIC_PAYMENT_PROVIDER: ${{ vars.PUBLIC_PAYMENT_PROVIDER || 'lemonsqueezy' }}
+          PUBLIC_EMAIL_PROVIDER: ${{ vars.PUBLIC_EMAIL_PROVIDER || 'mock' }}
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

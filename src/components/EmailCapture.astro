@@ -1,0 +1,47 @@
+---
+import { getDict, type Locale } from '../i18n';
+interface Props {
+  lang: Locale;
+  title: string;
+  body?: string;
+  cta: string;
+  /** Identifies which magnet converted, for the email provider. */
+  source: string;
+  compact?: boolean;
+  surface?: boolean;
+}
+const { lang, title, body, cta, source, compact = false, surface = true } = Astro.props;
+const t = getDict(lang);
+const id = `email-${source.replace(/[^a-z0-9]/gi, '-')}`;
+---
+<form class:list={['capture', surface && 'card', compact && 'compact']} data-email-form data-source={source} novalidate>
+  <div class="copy">
+    <p class="h">{title}</p>
+    {body && <p class="b">{body}</p>}
+  </div>
+  <div class="row">
+    <label class="sr-only" for={id}>{t.common.email}</label>
+    <input class="field" id={id} type="email" name="email" required autocomplete="email"
+           placeholder={t.common.emailPlaceholder} inputmode="email" spellcheck="false" />
+    <button class="btn btn-primary" type="submit">{cta}</button>
+  </div>
+  <p class="note">{t.common.privacyNote}</p>
+  <p class="msg" data-form-message role="status" aria-live="polite" hidden></p>
+</form>
+<style>
+  .capture { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
+  .capture.compact { padding: 0; gap: var(--space-3); }
+  .copy { display: flex; flex-direction: column; gap: var(--space-2); }
+  .h { font-size: var(--fs-card-title); font-weight: var(--fw-bold); line-height: 1.3; }
+  .b { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.6; max-inline-size: var(--measure-prose); }
+  .row { display: flex; flex-direction: column; gap: var(--space-2); }
+  .note { font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.5; }
+  .msg { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--c-positive); }
+  .msg[data-state='error'] { color: var(--c-accent); }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  @media (min-width: 560px) {
+    .row { flex-direction: row; }
+    .row .field { flex: 1; }
+    .row .btn { flex: none; }
+  }
+</style>

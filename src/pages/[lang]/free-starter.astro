@@ -1,0 +1,44 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import Eyebrow from '../../components/Eyebrow.astro';
+import EmailCapture from '../../components/EmailCapture.astro';
+import Media from '../../components/Media.astro';
+import Proof from '../../components/Proof.astro';
+import { getDict, type Locale } from '../../i18n';
+import { localeParams } from '../../lib/content';
+
+export const getStaticPaths = localeParams;
+const lang = Astro.params.lang as Locale;
+const t = getDict(lang);
+---
+<Layout lang={lang} title={t.starter.title} description={t.starter.sub} path="free-starter" noOffers>
+  <Section>
+    <div class="grid">
+      <div class="copy">
+        <Eyebrow text={t.starter.eyebrow} />
+        <h1 class="display">{t.starter.title}</h1>
+        <p class="lead measure-prose">{t.starter.sub}</p>
+        <p class="body measure-prose">{t.starter.body}</p>
+        <ul class="inc">{t.starter.includes.map((item) => <li>{item}</li>)}</ul>
+      </div>
+      <div class="form-col">
+        <Media alt={t.home.heroAlt} ratio="3 / 2" slot_id="starter-cover" />
+        <div class="form">
+          <EmailCapture lang={lang} title={t.starter.formTitle} cta={t.cta.startFree} source="free-starter" />
+        </div>
+        <Proof lang={lang} product="minimal-kit" limit={1} columns={1} />
+      </div>
+    </div>
+  </Section>
+</Layout>
+<style>
+  .grid { display: grid; gap: var(--space-12); align-items: start; }
+  .copy { display: flex; flex-direction: column; gap: var(--space-4); }
+  .body { color: var(--c-muted); line-height: 1.7; }
+  .inc { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+  .inc li { font-size: var(--fs-small); color: var(--c-muted); padding-inline-start: var(--space-6); position: relative; line-height: 1.6; }
+  .inc li::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 7px; inline-size: 8px; block-size: 8px; border-radius: 2px; background: var(--c-accent); }
+  .form-col { display: flex; flex-direction: column; gap: var(--space-4); }
+  @media (min-width: 900px) { .grid { grid-template-columns: 1.05fr 0.95fr; gap: var(--space-16); } }
+</style>

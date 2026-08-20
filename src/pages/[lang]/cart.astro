@@ -1,0 +1,69 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import OrderBump from '../../components/OrderBump.astro';
+import { getDict, type Locale } from '../../i18n';
+import { localePath } from '../../lib/url';
+import { localeParams, getProgram } from '../../lib/content';
+import { COMMERCE_MODE } from '../../config/site';
+import { REFERRAL } from '../../config/pricing';
+
+export const getStaticPaths = localeParams;
+const lang = Astro.params.lang as Locale;
+const t = getDict(lang);
+const bumpProduct = await getProgram(lang, 'recipe-pack');
+---
+<Layout lang={lang} title={t.cart.title} description={t.cart.title} path="cart" noindex noOffers>
+  <Section>
+    <SectionHead as="h1" title={t.cart.title} />
+
+    <div class="layout" data-cart-page
+      data-checkout-url={localePath(lang, 'checkout')}
+      data-programs-url={localePath(lang, 'programs')}
+      data-referral-pct={REFERRAL.friendDiscountPct}>
+
+      <div class="lines">
+        <p class="empty" data-cart-empty hidden>
+          {t.cart.empty} <a href={localePath(lang, 'programs')}>{t.cart.emptyCta}</a>
+        </p>
+        <ul class="items" data-cart-items></ul>
+
+        <div class="bump-wrap" data-bump-wrap hidden>
+          <OrderBump lang={lang} title={bumpProduct?.data.title ?? 'Recipe Collection'} />
+        </div>
+      </div>
+
+      <aside class="summary card" data-cart-summary hidden>
+        <h2 class="h3">{t.checkout.orderSummary}</h2>
+        <dl class="totals">
+          <div><dt>{t.cart.subtotal}</dt><dd data-cart-subtotal></dd></div>
+          <div data-discount-row hidden><dt>{t.cart.referralApplied}</dt><dd data-cart-discount></dd></div>
+          <div class="grand"><dt>{t.cart.total}</dt><dd data-cart-total></dd></div>
+        </dl>
+        <a class="btn btn-primary btn-block" href={localePath(lang, 'checkout')} data-checkout-link>{t.cta.checkout}</a>
+        <p class="note">{t.cart.checkoutNote}</p>
+        <p class="note">{t.cart.methods}</p>
+        {COMMERCE_MODE === 'mock' && <p class="mock">{t.cart.mockNotice}</p>}
+      </aside>
+    </div>
+  </Section>
+  <script>
+    import '../../scripts/cart-page';
+  </script>
+</Layout>
+<style>
+  .layout { display: grid; gap: var(--space-8); align-items: start; }
+  .items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+  .empty { color: var(--c-muted); }
+  .empty a { color: var(--c-accent); font-weight: var(--fw-bold); text-decoration: underline; text-underline-offset: 4px; }
+  .bump-wrap { margin-block-start: var(--space-6); }
+  .summary { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
+  .totals { margin: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+  .totals > div { display: flex; justify-content: space-between; gap: var(--space-4); font-size: var(--fs-small); color: var(--c-muted); }
+  .totals dd { margin: 0; font-variant-numeric: tabular-nums; }
+  .grand { padding-block-start: var(--space-3); border-block-start: 1px solid var(--c-line); font-size: var(--fs-card-title) !important; font-weight: var(--fw-bold); color: var(--c-paper) !important; }
+  .note { font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.5; }
+  .mock { font-size: var(--fs-eyebrow); color: var(--c-accent); font-weight: var(--fw-bold); line-height: 1.5; }
+  @media (min-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr) 340px; gap: var(--space-12); } }
+</style>

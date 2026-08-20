@@ -1,0 +1,31 @@
+---
+import { getDict, type Locale } from '../i18n';
+import { SITE } from '../config/site';
+interface Props { lang: Locale; size?: 'sm' | 'lg'; }
+const { lang, size = 'sm' } = Astro.props;
+const t = getDict(lang);
+---
+<span class:list={['wordmark', size]}>
+  <span class="mark" aria-hidden="true"></span>
+  <span class="text">{t.brand.wordmark}</span>
+  {lang === 'ar' && <span class="latin" lang="en" dir="ltr">{SITE.name}</span>}
+</span>
+<style>
+  .wordmark { display: inline-flex; align-items: center; gap: var(--space-2); }
+  .mark {
+    inline-size: 10px; block-size: 22px; border-radius: 2px;
+    background: var(--c-accent);
+    box-shadow: 14px 0 0 -1px var(--c-paper), 28px 0 0 -3px var(--c-accent);
+    margin-inline-end: 30px;
+  }
+  .text {
+    font-size: var(--fs-card-title); font-weight: var(--fw-bold);
+    letter-spacing: 0.02em; color: var(--c-paper); line-height: 1;
+  }
+  :global(:root[lang="ar"]) .text { letter-spacing: 0; }
+  .latin {
+    font-size: var(--fs-eyebrow); color: var(--c-faint);
+    letter-spacing: 0.12em; font-weight: var(--fw-bold);
+  }
+  .lg .text { font-size: var(--fs-h3); }
+</style>

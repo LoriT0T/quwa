@@ -1,0 +1,92 @@
+---
+import { render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CTA from '../../components/CTA.astro';
+import Media from '../../components/Media.astro';
+import { getDict, fill, type Locale } from '../../i18n';
+import { localePath, absoluteUrl } from '../../lib/url';
+import { localeParams, getRecipes } from '../../lib/content';
+import * as S from '../../lib/schema';
+
+export const getStaticPaths = localeParams;
+const lang = Astro.params.lang as Locale;
+const t = getDict(lang);
+const recipes = await getRecipes(lang);
+const rendered = await Promise.all(recipes.map(async (entry) => ({ entry, ...(await render(entry)) })));
+const crumbs = [
+  { name: t.common.home, href: localePath(lang, '/') },
+  { name: t.nav.recipes, href: localePath(lang, 'recipes') },
+];
+const schema = [S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUrl(c.href, Astro.site) })))];
+---
+<Layout lang={lang} title={t.recipes.indexTitle} description={t.recipes.indexSub} path="recipes" schema={schema}>
+  <Section>
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <div class="gap">
+      <SectionHead as="h1" eyebrow={t.common.free} title={t.recipes.indexTitle} body={t.recipes.indexSub} />
+    </div>
+    <div class="list">
+      {rendered.map(({ entry, Content }) => (
+        <article class="card recipe">
+          <div class="rmedia">
+            <Media src={entry.data.image} alt={entry.data.imageAlt ?? entry.data.title} ratio="16 / 9" slot_id={`recipe-${entry.data.recipe}`} />
+          </div>
+          <div class="rbody">
+            <h2 class="h3">{entry.data.title}</h2>
+            <p class="summary">{entry.data.summary}</p>
+
+            <dl class="macros">
+              <div><dt>{t.units.kcal}</dt><dd><bdi>{entry.data.perServing.kcal}</bdi></dd></div>
+              <div><dt>{t.tools.macros.results.protein}</dt><dd><bdi>{entry.data.perServing.protein}{t.units.g}</bdi></dd></div>
+              <div><dt>{t.tools.macros.results.carbs}</dt><dd><bdi>{entry.data.perServing.carbs}{t.units.g}</bdi></dd></div>
+              <div><dt>{t.tools.macros.results.fat}</dt><dd><bdi>{entry.data.perServing.fat}{t.units.g}</bdi></dd></div>
+            </dl>
+            <p class="per">{t.recipes.perServing} · {t.recipes.servings}: <bdi>{entry.data.servings}</bdi> · {t.recipes.prepTime} <bdi>{entry.data.prepMinutes}</bdi> · {t.recipes.cookTime} <bdi>{entry.data.cookMinutes}</bdi></p>
+
+            <div class="cols">
+              <div>
+                <h3 class="sub">{t.recipes.ingredients}</h3>
+                <ul class="ing">{entry.data.ingredients.map((item) => <li>{item}</li>)}</ul>
+              </div>
+              <div>
+                <h3 class="sub">{t.recipes.method}</h3>
+                <ol class="method">{entry.data.method.map((step) => <li>{step}</li>)}</ol>
+              </div>
+            </div>
+            <div class="prose-body note"><Content /></div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="pack">
+      <CTA lang={lang} href={localePath(lang, 'programs/recipe-pack')} label={t.recipes.packCta}
+           terms={fill(t.common.guarantee, { n: 14 })} />
+    </div>
+  </Section>
+</Layout>
+<style>
+  .gap { margin-block-start: var(--space-8); }
+  .list { display: flex; flex-direction: column; gap: var(--space-8); }
+  .recipe { overflow: hidden; }
+  .rbody { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
+  .summary { color: var(--c-muted); line-height: 1.6; max-inline-size: var(--measure-prose); }
+  .macros { margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-3); max-inline-size: 420px; }
+  .macros dt { font-size: var(--fs-eyebrow); color: var(--c-faint); text-transform: uppercase; letter-spacing: var(--tracking-eyebrow); }
+  :global(:root[lang="ar"]) .macros dt { text-transform: none; }
+  .macros dd { margin: 0; font-size: var(--fs-card-title); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums; }
+  .per { font-size: var(--fs-eyebrow); color: var(--c-faint); }
+  .cols { display: grid; gap: var(--space-6); margin-block-start: var(--space-2); }
+  .sub { font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-faint); margin-block-end: var(--space-3); }
+  :global(:root[lang="ar"]) .sub { text-transform: none; }
+  .ing, .method { margin: 0; padding-inline-start: var(--space-5); display: flex; flex-direction: column; gap: var(--space-2); color: var(--c-muted); font-size: var(--fs-small); line-height: 1.6; }
+  .ing { list-style: none; padding-inline-start: 0; }
+  .ing li { padding-inline-start: var(--space-5); position: relative; }
+  .ing li::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 8px; inline-size: 6px; block-size: 6px; border-radius: 2px; background: var(--c-accent); }
+  .note { margin-block-start: var(--space-2); padding-block-start: var(--space-4); border-block-start: 1px solid var(--c-line); }
+  .pack { margin-block-start: var(--space-16); }
+  @media (min-width: 768px) { .cols { grid-template-columns: 0.9fr 1.1fr; gap: var(--space-8); } }
+</style>

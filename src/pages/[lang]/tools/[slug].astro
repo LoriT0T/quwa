@@ -1,0 +1,101 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Section from '../../../components/Section.astro';
+import Eyebrow from '../../../components/Eyebrow.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Calculator from '../../../components/Calculator.astro';
+import FAQ from '../../../components/FAQ.astro';
+import CTA from '../../../components/CTA.astro';
+import { getDict, type Locale } from '../../../i18n';
+import { localePath, absoluteUrl, rootPath } from '../../../lib/url';
+import { TOOLS, getTool, toolStrings } from '../../../lib/tools';
+import { LOCALES } from '../../../config/site';
+import * as S from '../../../lib/schema';
+
+export function getStaticPaths() {
+  return LOCALES.flatMap((lang) => TOOLS.map((tool) => ({ params: { lang, slug: tool.slug } })));
+}
+
+const lang = Astro.params.lang as Locale;
+const tool = getTool(Astro.params.slug as string)!;
+const t = getDict(lang);
+const s = toolStrings(t, tool);
+const path = `tools/${tool.slug}`;
+const url = absoluteUrl(localePath(lang, path), Astro.site);
+const origin = Astro.site ? Astro.site.origin + rootPath('').replace(/\/$/, '') : '';
+
+const crumbs = [
+  { name: t.common.home, href: localePath(lang, '/') },
+  { name: t.nav.tools, href: localePath(lang, 'tools') },
+  { name: s.name, href: localePath(lang, path) },
+];
+const schema = [
+  S.softwareApplication({ url, name: s.name, description: s.description, origin }),
+  S.faqPage(s.faq),
+  S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUrl(c.href, Astro.site) }))),
+];
+const related = tool.related.map((slug) => getTool(slug)!).filter(Boolean);
+---
+<Layout lang={lang} title={s.name} description={s.description} path={path} schema={schema}>
+  <Section>
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <div class="layout">
+      <div class="main">
+        <header class="head">
+          <Eyebrow text={t.tools.eyebrow} />
+          <h1 class="h2">{s.name}</h1>
+          <p class="lead measure-prose">{s.description}</p>
+        </header>
+
+        <Calculator lang={lang} tool={tool} />
+
+        <section class="how">
+          <h2 class="h3">{t.tools.howItWorks}</h2>
+          <p class="how-body measure-prose">{s.note}</p>
+        </section>
+
+        <section class="faq-sec">
+          <h2 class="h3">{t.home.faq.title}</h2>
+          <FAQ items={s.faq} />
+        </section>
+      </div>
+
+      <aside class="side">
+        <div class="card side-card">
+          <h2 class="side-t">{t.tools.relatedTitle}</h2>
+          <ul class="side-list">
+            {related.map((item) => (
+              <li><a href={localePath(lang, `tools/${item.slug}`)}>{toolStrings(t, item).name}</a></li>
+            ))}
+            <li><a href={localePath(lang, 'tools')}>{t.cta.seeAll}</a></li>
+          </ul>
+        </div>
+        <div class="card side-card">
+          <h2 class="side-t">{t.starter.eyebrow}</h2>
+          <p class="side-b">{t.starter.sub}</p>
+          <CTA lang={lang} href={localePath(lang, 'free-starter')} label={t.cta.startFree}
+               terms={t.home.trustline} variant="secondary" block />
+        </div>
+      </aside>
+    </div>
+  </Section>
+</Layout>
+<style>
+  .layout { display: grid; gap: var(--space-12); margin-block-start: var(--space-8); }
+  .head { display: flex; flex-direction: column; gap: var(--space-3); margin-block-end: var(--space-8); }
+  .how, .faq-sec { margin-block-start: var(--space-16); }
+  .how-body { margin-block-start: var(--space-4); color: var(--c-muted); line-height: 1.7; }
+  .faq-sec h2 { margin-block-end: var(--space-6); }
+  .side { display: flex; flex-direction: column; gap: var(--space-4); }
+  .side-card { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); }
+  .side-t { font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-faint); }
+  :global(:root[lang="ar"]) .side-t { text-transform: none; }
+  .side-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+  .side-list a { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--c-muted); }
+  .side-list a:hover { color: var(--c-accent); }
+  .side-b { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.55; }
+  @media (min-width: 1024px) {
+    .layout { grid-template-columns: minmax(0, 1fr) 320px; gap: var(--space-16); }
+    .side { position: sticky; inset-block-start: calc(var(--header-h) + var(--space-6)); align-self: start; }
+  }
+</style>

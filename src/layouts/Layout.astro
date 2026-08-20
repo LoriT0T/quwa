@@ -1,0 +1,106 @@
+---
+import { Font } from 'astro:assets';
+import '../styles/global.css';
+import { getDict, type Locale } from '../i18n';
+import { DIR, OG_LOCALE, LOCALES } from '../config/site';
+import { localePath, rootPath, alternates, absoluteUrl } from '../lib/url';
+import * as S from '../lib/schema';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ExitIntent from '../components/ExitIntent.astro';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description: string;
+  /** Logical path without locale or base, e.g. "programs/strength-base". */
+  path: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article' | 'product';
+  noindex?: boolean;
+  /** Extra JSON-LD nodes merged into the page @graph. */
+  schema?: Record<string, unknown>[];
+  /** Suppresses the exit-intent offer on checkout and legal routes. */
+  noOffers?: boolean;
+}
+
+const {
+  lang, title, description, path,
+  ogImage, ogType = 'website', noindex = false, schema = [], noOffers = false,
+} = Astro.props;
+
+const t = getDict(lang);
+const dir = DIR[lang];
+const origin = Astro.site ? Astro.site.origin + rootPath('').replace(/\/$/, '') : '';
+const canonical = absoluteUrl(localePath(lang, path), Astro.site);
+const alts = alternates(path, Astro.site);
+const ogUrl = absoluteUrl(rootPath(ogImage ?? 'og/default.png'), Astro.site);
+const fullTitle = path === '/' ? `${t.brand.wordmark} — ${t.brand.tagline}` : `${title} · ${t.brand.wordmark}`;
+
+const graph = S.graph([
+  S.organization(origin, lang, t.brand.wordmark, t.brand.description),
+  S.website(origin, lang, t.brand.wordmark),
+  ...schema,
+]);
+---
+
+<html lang={lang} dir={dir}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {alts.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={t.brand.wordmark} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={OG_LOCALE[lang]} />
+    {LOCALES.filter((l) => l !== lang).map((l) => (
+      <meta property="og:locale:alternate" content={OG_LOCALE[l]} />
+    ))}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogUrl} />
+
+    <meta name="theme-color" content="#0b0e12" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href={rootPath('favicon.svg')} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={rootPath('apple-touch-icon.png')} />
+    <link rel="sitemap" href={rootPath('sitemap-index.xml')} />
+
+    <Font cssVariable="--font-latin" preload />
+    <Font cssVariable="--font-arabic" preload />
+
+    <script is:inline set:html={graph} type="application/ld+json" />
+
+    {/* Restores the visitor's currency before first paint so prices never flash. */}
+    <script is:inline>
+      try {
+        var c = localStorage.getItem('quwa.currency');
+        if (c) document.documentElement.dataset.currency = c;
+      } catch (e) {}
+    </script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">{t.nav.skipToContent}</a>
+    <Header lang={lang} path={path} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    {!noOffers && <ExitIntent lang={lang} />}
+    <script>
+      import '../scripts/app';
+    </script>
+  </body>
+</html>

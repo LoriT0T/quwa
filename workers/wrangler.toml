@@ -1,0 +1,36 @@
+name = "quwa-api"
+main = "src/index.ts"
+compatibility_date = "2026-06-01"
+compatibility_flags = ["nodejs_compat"]
+
+# The site itself stays on GitHub Pages. This Worker is the only server-side
+# piece, and it exists because static hosting cannot protect a file or know
+# whether a subscription is live.
+
+[[kv_namespaces]]
+binding = "ORDERS"
+id = "REPLACE_WITH_KV_ID"          # wrangler kv namespace create ORDERS
+preview_id = "REPLACE_WITH_PREVIEW_ID"
+
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "REPLACE_WITH_KV_ID"          # wrangler kv namespace create SESSIONS
+preview_id = "REPLACE_WITH_PREVIEW_ID"
+
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "quwa-downloads"     # wrangler r2 bucket create quwa-downloads
+
+[vars]
+ALLOWED_ORIGIN = "https://lorit0t.github.io"
+DOWNLOAD_TTL_SECONDS = "259200"    # 72 hours
+MAGIC_LINK_TTL_SECONDS = "900"     # 15 minutes
+SESSION_TTL_SECONDS = "2592000"    # 30 days
+
+# Secrets — set with `wrangler secret put <NAME>`, never in this file:
+#   LEMONSQUEEZY_WEBHOOK_SECRET
+#   PADDLE_WEBHOOK_SECRET
+#   STRIPE_WEBHOOK_SECRET
+#   DOWNLOAD_SIGNING_SECRET
+#   MAGIC_LINK_SECRET
+#   EMAIL_API_KEY

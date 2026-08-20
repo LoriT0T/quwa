@@ -1,0 +1,256 @@
+{
+  "$schema": "./manifest.schema.json",
+  "version": 1,
+  "note": "One entry per image slot. `source` is a decision, and `why` records it. Slots with source 'shoot' render as a flagged flat block until a real shoot exists \u2014 see docs/SHOT-LIST.md. Never hand-draw an SVG of a person, a body, a food item or a piece of equipment.",
+  "output": {
+    "masters": "src/assets/images",
+    "responsive": "public/images/opt",
+    "downloads": "public/images/source",
+    "widths": [
+      400,
+      640,
+      900,
+      1280,
+      1600
+    ],
+    "formats": [
+      "avif",
+      "webp"
+    ],
+    "lqipWidth": 24
+  },
+  "slots": [
+    {
+      "id": "home-hero",
+      "path": "src/assets/images/home-hero.jpg",
+      "ratio": "4:5",
+      "width": 1040,
+      "height": 1300,
+      "source": "stock",
+      "why": "A real gym environment. Generated gym interiors reliably produce impossible equipment geometry, and equipment that a lifter can see is wrong undermines the one thing this brand sells.",
+      "query": [
+        "barbell weight plates gym"
+      ],
+      "prompt": "A loaded Olympic barbell resting on rubber gym flooring, shot low and close at 35mm, hard directional light raking from the upper left, deep shadow filling the right third of the frame. Cool near-black environment, one warm highlight on the knurling. Negative space reserved in the upper third for a headline. No people, no faces, no visible branding.",
+      "alt": "home.heroAlt"
+    },
+    {
+      "id": "og-default",
+      "path": "public/og/default.png",
+      "ratio": "1.91:1",
+      "width": 1200,
+      "height": 630,
+      "source": "generate",
+      "why": "Brand composition with exact typography and negative space. Nothing photographic is required and nothing photographic would be more useful.",
+      "prompt": "Flat brand card: near-black #0b0e12 ground, the QUWA wordmark set left, a single #ff6b2c accent rule, generous negative space. Type only.",
+      "alt": "QUWA"
+    },
+    {
+      "id": "program-hypertrophy-foundations",
+      "path": "src/assets/images/program-hypertrophy-foundations.jpg",
+      "ratio": "4:3",
+      "width": 1200,
+      "height": 900,
+      "source": "stock",
+      "query": [
+        "dumbbell rack gym"
+      ],
+      "why": "Equipment, not a person. Stock covers it and a generated dumbbell rack does not survive close inspection.",
+      "prompt": "A rack of dumbbells in a dim gym, shallow depth of field, single warm key light, cool shadows, no people.",
+      "alt": "program.hypertrophy-foundations.imageAlt"
+    },
+    {
+      "id": "program-strength-base",
+      "path": "src/assets/images/program-strength-base.jpg",
+      "ratio": "4:3",
+      "width": 1200,
+      "height": 900,
+      "source": "stock",
+      "query": [
+        "squat rack barbell",
+        "power rack gym",
+        "barbell bench press"
+      ],
+      "why": "Equipment. Same reasoning as above.",
+      "prompt": "A power rack with a loaded bar at shoulder height, low key, hard side light, no people.",
+      "alt": "program.strength-base.imageAlt"
+    },
+    {
+      "id": "program-lean-recomposition",
+      "path": "src/assets/images/program-lean-recomposition.jpg",
+      "ratio": "4:3",
+      "width": 1200,
+      "height": 900,
+      "source": "stock",
+      "query": [
+        "grilled chicken vegetables plate",
+        "healthy dinner plate",
+        "salad chicken protein"
+      ],
+      "why": "Food photography. Generated food is the single most obvious failure case in image models.",
+      "prompt": "An overhead plate of grilled chicken, rice and green vegetables on a dark surface, single soft window light from the left.",
+      "alt": "program.lean-recomposition.imageAlt"
+    },
+    {
+      "id": "program-minimal-kit",
+      "path": "src/assets/images/program-minimal-kit.jpg",
+      "ratio": "4:3",
+      "width": 1200,
+      "height": 900,
+      "source": "stock",
+      "query": [
+        "dumbbells floor",
+        "dumbbell weights home",
+        "exercise bench dumbbell"
+      ],
+      "why": "Equipment in a domestic setting.",
+      "prompt": "A pair of adjustable dumbbells on a wooden floor beside a bench, natural window light, no people.",
+      "alt": "program.minimal-kit.imageAlt"
+    },
+    {
+      "id": "program-posterior-chain",
+      "path": "src/assets/images/program-posterior-chain.jpg",
+      "ratio": "4:3",
+      "width": 1200,
+      "height": 900,
+      "source": "stock",
+      "query": [
+        "kettlebell gym floor"
+      ],
+      "why": "Equipment.",
+      "prompt": "Kettlebells lined up on a gym floor, raking light, cool palette, no people.",
+      "alt": "program.posterior-chain.imageAlt"
+    },
+    {
+      "id": "program-push-pull-legs",
+      "path": "src/assets/images/program-push-pull-legs.jpg",
+      "ratio": "4:3",
+      "width": 1200,
+      "height": 900,
+      "source": "stock",
+      "query": [
+        "weight plates gym",
+        "barbell plates rack",
+        "gym weights iron"
+      ],
+      "why": "Equipment.",
+      "prompt": "Stacked bumper plates seen edge-on, tight crop, hard light, deep shadow.",
+      "alt": "program.push-pull-legs.imageAlt"
+    },
+    {
+      "id": "program-recipe-pack",
+      "path": "src/assets/images/program-recipe-pack.jpg",
+      "ratio": "4:3",
+      "width": 1200,
+      "height": 900,
+      "source": "stock",
+      "query": [
+        "meal prep containers",
+        "food containers healthy meal",
+        "lunch box meal prep"
+      ],
+      "why": "Food.",
+      "prompt": "Prepared meals in glass containers on a dark counter, overhead, soft directional light.",
+      "alt": "program.recipe-pack.imageAlt"
+    },
+    {
+      "id": "recipe-shakshuka",
+      "path": "src/assets/images/recipe-shakshuka.jpg",
+      "ratio": "16:9",
+      "width": 1280,
+      "height": 720,
+      "source": "stock",
+      "query": [
+        "shakshuka eggs",
+        "eggs tomato skillet",
+        "baked eggs tomato sauce"
+      ],
+      "why": "Food.",
+      "prompt": "Shakshuka in a cast-iron pan, overhead, herbs scattered, warm light against a dark surface.",
+      "alt": "recipe.shakshuka.imageAlt"
+    },
+    {
+      "id": "recipe-chicken-rice-bowl",
+      "path": "src/assets/images/recipe-chicken-rice-bowl.jpg",
+      "ratio": "16:9",
+      "width": 1280,
+      "height": 720,
+      "source": "stock",
+      "query": [
+        "chicken rice bowl vegetables"
+      ],
+      "why": "Food.",
+      "prompt": "A bowl of chicken, rice and vegetables, three-quarter view, soft key light, dark background.",
+      "alt": "recipe.chicken-rice-bowl.imageAlt"
+    },
+    {
+      "id": "recipe-overnight-oats",
+      "path": "src/assets/images/recipe-overnight-oats.jpg",
+      "ratio": "16:9",
+      "width": 1280,
+      "height": 720,
+      "source": "stock",
+      "query": [
+        "oats jar berries",
+        "porridge oats bowl berries",
+        "oatmeal breakfast bowl"
+      ],
+      "why": "Food.",
+      "prompt": "A jar of overnight oats topped with berries on a dark surface, side light, shallow depth of field.",
+      "alt": "recipe.overnight-oats.imageAlt"
+    },
+    {
+      "id": "starter-cover",
+      "path": "src/assets/images/starter-cover.jpg",
+      "ratio": "3:2",
+      "width": 1200,
+      "height": 800,
+      "source": "stock",
+      "query": [
+        "notebook pen desk",
+        "training journal notebook",
+        "notebook workout plan"
+      ],
+      "why": "An object, not a person.",
+      "prompt": "A training notebook and pen on a gym bench, hard side light, cool palette.",
+      "alt": "starter.title"
+    },
+    {
+      "id": "texture-grain",
+      "path": "public/images/opt/texture-grain.png",
+      "ratio": "1:1",
+      "width": 512,
+      "height": 512,
+      "source": "generate",
+      "why": "An abstract texture. There is nothing to photograph and nothing a model would add.",
+      "prompt": "Fine monochrome film grain, 4% opacity, tileable.",
+      "alt": ""
+    },
+    {
+      "id": "proof-transformation-1",
+      "path": "src/assets/images/proof-transformation-1.jpg",
+      "ratio": "4:5",
+      "width": 800,
+      "height": 1000,
+      "source": "shoot",
+      "why": "This slot would show an actual member's result. It cannot be stock and it must not be generated \u2014 a generated body presented as a customer outcome is a fabricated testimonial. Blocked until a real shoot exists.",
+      "prompt": "",
+      "alt": "",
+      "blocked": true,
+      "shotList": "docs/SHOT-LIST.md#transformation-set"
+    },
+    {
+      "id": "founder-portrait",
+      "path": "src/assets/images/founder-portrait.jpg",
+      "ratio": "1:1",
+      "width": 800,
+      "height": 800,
+      "source": "shoot",
+      "why": "A named person's portrait. Generating one and attaching a name to it is impersonation.",
+      "prompt": "",
+      "alt": "",
+      "blocked": true,
+      "shotList": "docs/SHOT-LIST.md#founder"
+    }
+  ]
+}

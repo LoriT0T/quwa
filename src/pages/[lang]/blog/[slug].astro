@@ -1,0 +1,142 @@
+---
+import { render } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import Section from '../../../components/Section.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import EmailCapture from '../../../components/EmailCapture.astro';
+import { getDict, fill, type Locale } from '../../../i18n';
+import { localePath, absoluteUrl, rootPath } from '../../../lib/url';
+import { getPosts, slugOf } from '../../../lib/content';
+import { formatDate } from '../../../lib/currency';
+import { getTool, toolStrings } from '../../../lib/tools';
+import { LOCALES } from '../../../config/site';
+import * as S from '../../../lib/schema';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of LOCALES) {
+    const posts = await getPosts(lang);
+    for (const entry of posts) {
+      paths.push({ params: { lang, slug: slugOf(entry) }, props: { entry, posts } });
+    }
+  }
+  return paths;
+}
+
+const lang = Astro.params.lang as Locale;
+const { entry, posts } = Astro.props;
+const d = entry.data;
+const t = getDict(lang);
+const { Content } = await render(entry);
+const slug = slugOf(entry);
+const path = `blog/${slug}`;
+const url = absoluteUrl(localePath(lang, path), Astro.site);
+const origin = Astro.site ? Astro.site.origin + rootPath('').replace(/\/$/, '') : '';
+
+const crumbs = [
+  { name: t.common.home, href: localePath(lang, '/') },
+  { name: t.nav.blog, href: localePath(lang, 'blog') },
+  { name: d.title, href: localePath(lang, path) },
+];
+const schema = [
+  S.article({
+    url, headline: d.title, description: d.description,
+    image: absoluteUrl(rootPath('og/default.png'), Astro.site),
+    published: d.published.toISOString(),
+    updated: d.updated?.toISOString(),
+    lang, origin, authorName: t.blog.author,
+  }),
+  S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUrl(c.href, Astro.site) }))),
+];
+
+const related = posts.filter((p) => slugOf(p) !== slug)
+  .filter((p) => p.data.tags.some((tag) => d.tags.includes(tag)))
+  .slice(0, 3);
+const linkedTools = d.tools.map((s) => getTool(s)).filter(Boolean);
+---
+<Layout lang={lang} title={d.title} description={d.description} path={path} ogType="article" schema={schema}>
+  <Section>
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <div class="layout">
+      <article class="art">
+        <header class="art-head">
+          <p class="meta">
+            <time datetime={d.published.toISOString()}>{t.blog.published} {formatDate(d.published, lang)}</time>
+            {d.updated && <span>· {t.blog.updated} {formatDate(d.updated, lang)}</span>}
+            <span>· {fill(t.blog.readingTime, { n: d.readingMinutes })}</span>
+          </p>
+          <h1 class="h2">{d.title}</h1>
+          <p class="lead measure-prose">{d.description}</p>
+        </header>
+        <div class="prose-body"><Content /></div>
+        <footer class="art-foot">
+          <p class="tags">{d.tags.map((tag) => <span class="tag">{tag}</span>)}</p>
+          <p class="author">{t.blog.author}</p>
+        </footer>
+      </article>
+
+      <aside class="side">
+        {linkedTools.length > 0 && (
+          <div class="card side-card">
+            <h2 class="side-t">{t.blog.ctaTitle}</h2>
+            <p class="side-b">{t.blog.ctaBody}</p>
+            <ul class="side-list">
+              {linkedTools.map((tool) => (
+                <li><a href={localePath(lang, `tools/${tool!.slug}`)}>{toolStrings(t, tool!).name} →</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <div class="card side-card">
+          <EmailCapture lang={lang} title={t.starter.title} cta={t.cta.startFree} source={`blog-${slug}`} compact surface={false} />
+        </div>
+      </aside>
+    </div>
+
+    {related.length > 0 && (
+      <section class="related">
+        <h2 class="h3">{t.blog.related}</h2>
+        <ul class="rlist">
+          {related.map((post) => (
+            <li class="card rcard">
+              <a href={localePath(lang, `blog/${slugOf(post)}`)}>
+                <h3 class="rtitle">{post.data.title}</h3>
+                <p class="rdesc">{post.data.description}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <div class="back"><a href={localePath(lang, 'blog')}>← {t.blog.backToIndex}</a></div>
+  </Section>
+</Layout>
+<style>
+  .layout { display: grid; gap: var(--space-12); margin-block-start: var(--space-8); }
+  .art-head { display: flex; flex-direction: column; gap: var(--space-3); margin-block-end: var(--space-12); }
+  .meta { display: flex; flex-wrap: wrap; gap: var(--space-2); font-size: var(--fs-eyebrow); color: var(--c-faint); }
+  .art-foot { margin-block-start: var(--space-12); padding-block-start: var(--space-6); border-block-start: 1px solid var(--c-line); display: flex; flex-wrap: wrap; gap: var(--space-4); justify-content: space-between; }
+  .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .tag { font-size: var(--fs-eyebrow); color: var(--c-faint); padding: 2px 8px; border: 1px solid var(--c-line); border-radius: var(--r-pill); }
+  .author { font-size: var(--fs-eyebrow); color: var(--c-faint); }
+  .side { display: flex; flex-direction: column; gap: var(--space-4); }
+  .side-card { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); }
+  .side-t { font-size: var(--fs-card-title); }
+  .side-b { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.55; }
+  .side-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+  .side-list a { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--c-accent); }
+  .related { margin-block-start: var(--space-16); }
+  .rlist { list-style: none; margin: var(--space-6) 0 0; padding: 0; display: grid; gap: var(--space-4); }
+  .rcard a { display: block; padding: var(--space-6); }
+  .rtitle { font-size: var(--fs-card-title); margin-block-end: var(--space-2); }
+  .rcard:hover .rtitle { color: var(--c-accent); }
+  .rdesc { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.55; }
+  .back { margin-block-start: var(--space-12); }
+  .back a { font-weight: var(--fw-bold); color: var(--c-accent); }
+  @media (min-width: 768px) { .rlist { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1024px) {
+    .layout { grid-template-columns: minmax(0, 1fr) 320px; gap: var(--space-16); }
+    .side { position: sticky; inset-block-start: calc(var(--header-h) + var(--space-6)); align-self: start; }
+  }
+</style>

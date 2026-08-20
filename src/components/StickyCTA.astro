@@ -1,0 +1,40 @@
+---
+import { getDict, type Locale } from '../i18n';
+import Price from './Price.astro';
+/** Appears below the fold on every product route. The competitor's buy button
+    scrolls away and never returns — docs/COMPETITOR-GAPS.md #21. */
+interface Props { lang: Locale; product: string; title: string; cents: number; }
+const { lang, product, title, cents } = Astro.props;
+const t = getDict(lang);
+---
+<div class="sticky" data-sticky-cta hidden>
+  <div class="inner">
+    <div class="info">
+      <p class="t">{title}</p>
+      <p class="p"><Price cents={cents} lang={lang} /></p>
+    </div>
+    <button class="btn btn-primary" type="button" data-add-to-cart={product} data-title={title} data-cents={cents} data-kind="one_time">
+      {t.cta.addToCart}
+    </button>
+  </div>
+</div>
+<style>
+  .sticky {
+    position: fixed; inset-inline: 0; inset-block-end: 0; z-index: 35;
+    background: rgb(22 27 34 / .96); backdrop-filter: blur(12px);
+    border-block-start: 1px solid var(--c-line-strong);
+    padding: var(--space-3) var(--page-x);
+    padding-block-end: max(var(--space-3), env(safe-area-inset-bottom));
+    transform: translateY(100%); transition: transform .22s var(--ease);
+  }
+  .sticky[data-visible] { transform: translateY(0); }
+  .inner {
+    max-inline-size: var(--container); margin-inline: auto;
+    display: flex; align-items: center; gap: var(--space-4);
+  }
+  .info { min-inline-size: 0; flex: 1; }
+  .t { font-size: var(--fs-small); font-weight: var(--fw-bold); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .p { font-size: var(--fs-small); color: var(--c-muted); }
+  .btn { flex: none; min-block-size: 44px; padding-inline: var(--space-4); }
+  @media (min-width: 1024px) { .sticky { display: none; } }
+</style>

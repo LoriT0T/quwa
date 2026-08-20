@@ -1,0 +1,62 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import EmailCapture from '../../../components/EmailCapture.astro';
+import { getDict, type Locale } from '../../../i18n';
+import { localePath, absoluteUrl } from '../../../lib/url';
+import { localeParams } from '../../../lib/content';
+import { TOOLS, toolStrings } from '../../../lib/tools';
+import * as S from '../../../lib/schema';
+
+export const getStaticPaths = localeParams;
+const lang = Astro.params.lang as Locale;
+const t = getDict(lang);
+const crumbs = [
+  { name: t.common.home, href: localePath(lang, '/') },
+  { name: t.nav.tools, href: localePath(lang, 'tools') },
+];
+const schema = [S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUrl(c.href, Astro.site) })))];
+---
+<Layout lang={lang} title={t.tools.indexTitle} description={t.tools.indexSub} path="tools" schema={schema}>
+  <Section>
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <div class="gap">
+      <SectionHead as="h1" eyebrow={t.tools.eyebrow} title={t.tools.indexTitle} body={t.tools.indexSub} />
+    </div>
+    <ul class="grid">
+      {TOOLS.map((tool) => {
+        const s = toolStrings(t, tool);
+        return (
+          <li class="card item">
+            <a href={localePath(lang, `tools/${tool.slug}`)}>
+              <span class="free">{t.common.free}</span>
+              <h2 class="name">{s.name}</h2>
+              <p class="line">{s.short}</p>
+              <span class="go">{t.cta.tryTool} →</span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+    <div class="capture">
+      <EmailCapture lang={lang} title={t.starter.title} body={t.starter.sub} cta={t.cta.startFree} source="tools-index" />
+    </div>
+  </Section>
+</Layout>
+<style>
+  .gap { margin-block-start: var(--space-8); }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
+  .item { padding: 0; transition: border-color .16s var(--ease), transform .16s var(--ease); }
+  .item:hover { border-color: var(--c-accent); transform: translateY(-2px); }
+  .item a { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-6); block-size: 100%; }
+  .free { font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); color: var(--c-accent); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; }
+  :global(:root[lang="ar"]) .free { text-transform: none; }
+  .name { font-size: var(--fs-card-title); }
+  .line { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.55; flex: 1; }
+  .go { font-size: var(--fs-small); font-weight: var(--fw-bold); margin-block-start: var(--space-2); }
+  .capture { margin-block-start: var(--space-16); max-inline-size: var(--measure-prose); }
+  @media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1024px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+</style>

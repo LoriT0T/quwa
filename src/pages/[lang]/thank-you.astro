@@ -1,0 +1,74 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import { getDict, fill, type Locale } from '../../i18n';
+import { localePath } from '../../lib/url';
+import { localeParams } from '../../lib/content';
+import { MEMBERSHIP, UPSELL } from '../../config/pricing';
+import { COMMERCE_MODE } from '../../config/site';
+import Price from '../../components/Price.astro';
+
+export const getStaticPaths = localeParams;
+const lang = Astro.params.lang as Locale;
+const t = getDict(lang);
+---
+<Layout lang={lang} title={t.thankYou.title} description={t.thankYou.sub} path="thank-you" noindex noOffers>
+  <Section>
+    <div class="done" data-thankyou
+      data-membership-id={MEMBERSHIP.annual.id}
+      data-membership-cents={MEMBERSHIP.annual.amount}
+      data-membership-title={`${t.membership.title} — ${t.membership.annual}`}
+      data-cart-url={localePath(lang, 'cart')}>
+
+      <p class="tick" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 13 4 4L19 7" /></svg>
+      </p>
+      <h1 class="display">{t.thankYou.title}</h1>
+      <p class="lead measure-prose">{t.thankYou.sub}</p>
+
+      <section class="downloads card">
+        <h2 class="h3">{t.thankYou.downloadTitle}</h2>
+        <ul class="dl" data-download-list></ul>
+        <p class="note">{t.thankYou.linkExpiry}</p>
+        {COMMERCE_MODE === 'mock' && <p class="mock">{t.cart.mockNotice}</p>}
+      </section>
+
+      <!-- ── Post-purchase upsell: the purchase price credited in full ──── -->
+      <section class="upsell card" data-upsell hidden>
+        <p class="eyebrow">{t.thankYou.upsellEyebrow}</p>
+        <h2 class="h3">{t.thankYou.upsellTitle}</h2>
+        <p class="up-body" data-upsell-body></p>
+        <p class="up-price">
+          <Price cents={MEMBERSHIP.annual.amount} lang={lang} />
+          <span class="up-minus" data-upsell-credit></span>
+        </p>
+        <button class="btn btn-primary" type="button" data-upsell-accept></button>
+        <a class="decline" href={localePath(lang, 'programs')} data-upsell-decline>{t.thankYou.upsellDecline}</a>
+        <p class="note">{t.thankYou.upsellExpiry} · {fill(t.common.weeks, { n: UPSELL.windowHours / 24 })}</p>
+      </section>
+
+      <section class="next">
+        <h2 class="h3">{t.thankYou.nextTitle}</h2>
+        <ol class="steps">{t.thankYou.nextSteps.map((step) => <li>{step}</li>)}</ol>
+      </section>
+    </div>
+  </Section>
+  <script>
+    import '../../scripts/thankyou-page';
+  </script>
+</Layout>
+<style>
+  .done { display: flex; flex-direction: column; gap: var(--space-4); max-inline-size: 760px; }
+  .tick { inline-size: 56px; block-size: 56px; display: grid; place-items: center; border-radius: var(--r-pill); background: var(--c-accent); color: var(--c-accent-ink); }
+  .downloads, .upsell { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); margin-block-start: var(--space-8); }
+  .upsell { border-color: var(--c-accent); align-items: flex-start; }
+  .dl { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+  .note { font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.5; }
+  .mock { font-size: var(--fs-eyebrow); color: var(--c-accent); font-weight: var(--fw-bold); }
+  .up-body { color: var(--c-muted); line-height: 1.6; font-size: var(--fs-small); }
+  .up-price { font-size: var(--fs-h3); font-weight: var(--fw-bold); display: flex; gap: var(--space-3); align-items: baseline; }
+  .up-minus { font-size: var(--fs-small); color: var(--c-accent); }
+  .decline { font-size: var(--fs-eyebrow); color: var(--c-faint); text-decoration: underline; text-underline-offset: 3px; }
+  .next { margin-block-start: var(--space-12); }
+  .steps { margin: var(--space-4) 0 0; padding-inline-start: var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); color: var(--c-muted); line-height: 1.6; }
+</style>

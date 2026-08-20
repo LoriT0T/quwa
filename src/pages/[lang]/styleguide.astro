@@ -1,0 +1,153 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import Eyebrow from '../../components/Eyebrow.astro';
+import Price from '../../components/Price.astro';
+import Proof from '../../components/Proof.astro';
+import FAQ from '../../components/FAQ.astro';
+import CTA from '../../components/CTA.astro';
+import Stat from '../../components/Stat.astro';
+import OrderBump from '../../components/OrderBump.astro';
+import Media from '../../components/Media.astro';
+import { getDict, type Locale } from '../../i18n';
+import { localePath } from '../../lib/url';
+import { localeParams } from '../../lib/content';
+
+export const getStaticPaths = localeParams;
+const lang = Astro.params.lang as Locale;
+const t = getDict(lang);
+
+/* Every value below is read from the live token, never retyped. If a token
+   changes, this page changes with it — that is the point of the route. */
+const colours = [
+  { token: '--c-ink', role: 'Page ground' },
+  { token: '--c-surface', role: 'Raised card' },
+  { token: '--c-surface-2', role: 'Media placeholder' },
+  { token: '--c-paper', role: 'Foreground' },
+  { token: '--c-accent', role: 'The one accent' },
+  { token: '--c-muted', role: 'Secondary text' },
+  { token: '--c-faint', role: 'Tertiary text' },
+  { token: '--c-line', role: 'Hairline' },
+];
+const typeScale = [
+  { token: '--fs-eyebrow', label: 'Eyebrow', ref: 'jeffnippard 10px×72 / 12px×49' },
+  { token: '--fs-small', label: 'Small', ref: 'joinladder 14px×10' },
+  { token: '--fs-body', label: 'Body', ref: 'unanimous across all three references' },
+  { token: '--fs-lead', label: 'Lead', ref: 'joinladder 18px×48' },
+  { token: '--fs-card-title', label: 'Card title', ref: 'jeffnippard 20px×8' },
+  { token: '--fs-h3', label: 'H3', ref: 'jeffnippard 24px×6' },
+  { token: '--fs-h2', label: 'H2', ref: 'joinladder 36/30 exactly' },
+  { token: '--fs-display', label: 'Display', ref: 'joinladder 60/48' },
+  { token: '--fs-stat', label: 'Stat numeral', ref: 'jeffnippard 160px, made fluid' },
+];
+const spacing = ['--space-1', '--space-2', '--space-3', '--space-4', '--space-6', '--space-8', '--space-12', '--space-16', '--space-24', '--space-32'];
+const radii = ['--r-media', '--r-sm', '--r-control', '--r-card', '--r-pill'];
+---
+<Layout lang={lang} title="Styleguide" description="QUWA design tokens, rendered live." path="styleguide" noindex noOffers>
+  <Section>
+    <h1 class="display">Styleguide</h1>
+    <p class="lead measure-prose">
+      Every token in <code>src/styles/tokens.css</code>, rendered by the same components the site
+      uses. Justifications are in <code>docs/REFERENCE-SPEC.md</code> §6.
+    </p>
+
+    <h2 class="h2 sec">Colour — 4 load-bearing</h2>
+    <ul class="swatches">
+      {colours.map((c) => (
+        <li class="swatch">
+          <span class="chip" style={`background: var(${c.token})`}></span>
+          <code>{c.token}</code>
+          <span class="val" data-token={c.token}></span>
+          <span class="role">{c.role}</span>
+        </li>
+      ))}
+    </ul>
+
+    <h2 class="h2 sec">Type scale</h2>
+    <ul class="type">
+      {typeScale.map((s) => (
+        <li class="trow">
+          <span class="sample" style={`font-size: var(${s.token}); font-weight: var(--fw-bold)`}>
+            {lang === 'ar' ? 'تدرّب بخطة' : 'Train with a plan'}
+          </span>
+          <span class="tmeta">
+            <code>{s.token}</code>
+            <span class="val" data-token={s.token}></span>
+            <span class="ref">{s.ref}</span>
+          </span>
+        </li>
+      ))}
+    </ul>
+
+    <h2 class="h2 sec">Weight — barbell, 400 and 700 only</h2>
+    <p style="font-weight: 400; font-size: var(--fs-lead)">400 · {lang === 'ar' ? 'نصّ الفقرة العادي' : 'Regular body copy'}</p>
+    <p style="font-weight: 700; font-size: var(--fs-lead)">700 · {lang === 'ar' ? 'عنوان عريض' : 'Bold heading'}</p>
+
+    <h2 class="h2 sec">Space — base 4</h2>
+    <ul class="spaces">
+      {spacing.map((token) => (
+        <li><span class="bar" style={`inline-size: var(${token})`}></span><code>{token}</code><span class="val" data-token={token}></span></li>
+      ))}
+    </ul>
+
+    <h2 class="h2 sec">Radius</h2>
+    <ul class="radii">
+      {radii.map((token) => (
+        <li><span class="rbox" style={`border-radius: var(${token})`}></span><code>{token}</code><span class="val" data-token={token}></span></li>
+      ))}
+    </ul>
+
+    <h2 class="h2 sec">Grid</h2>
+    <ul class="tokens">
+      {['--container', '--page-x', '--measure-card', '--measure-prose', '--space-section', '--space-section-tight'].map((token) => (
+        <li><code>{token}</code><span class="val" data-token={token}></span></li>
+      ))}
+    </ul>
+
+    <h2 class="h2 sec">Controls</h2>
+    <div class="row">
+      <button class="btn btn-primary" type="button">{t.cta.primary}</button>
+      <button class="btn btn-secondary" type="button">{t.cta.viewPrograms}</button>
+      <button class="btn btn-ghost" type="button">{t.cta.seeAll}</button>
+    </div>
+    <div class="row"><input class="field" placeholder={t.common.emailPlaceholder} style="max-inline-size: 320px" /></div>
+
+    <h2 class="h2 sec">Components</h2>
+    <Eyebrow text={t.home.eyebrow} />
+    <div class="row"><Price cents={3900} lang={lang} /> <Price cents={22900} lang={lang} strike /></div>
+    <div class="comp"><CTA lang={lang} href={localePath(lang, 'membership')} label={t.cta.primary} /></div>
+    <div class="comp"><Stat value="7" label={t.home.stats.items[0]?.label ?? ''} /></div>
+    <div class="comp"><Media alt="placeholder slot" ratio="16 / 9" slot_id="styleguide-demo" /></div>
+    <div class="comp"><OrderBump lang={lang} title="Recipe Collection" /></div>
+    <div class="comp"><Proof lang={lang} product="hypertrophy-foundations" limit={1} columns={1} /></div>
+    <div class="comp faq"><FAQ items={t.homeFaq.slice(0, 2)} /></div>
+  </Section>
+
+  <script>
+    /* Print the computed value of every token so the page cannot drift from the CSS. */
+    const styles = getComputedStyle(document.documentElement);
+    document.querySelectorAll<HTMLElement>('[data-token]').forEach((el) => {
+      el.textContent = styles.getPropertyValue(el.dataset.token!).trim();
+    });
+  </script>
+</Layout>
+<style>
+  .sec { margin-block: var(--space-16) var(--space-6); }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: var(--fs-eyebrow); color: var(--c-accent); }
+  .val { font-family: ui-monospace, monospace; font-size: var(--fs-eyebrow); color: var(--c-muted); }
+  .ref { font-size: var(--fs-eyebrow); color: var(--c-faint); }
+  .swatches, .type, .spaces, .radii, .tokens { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
+  .swatch { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+  .chip { inline-size: 48px; block-size: 48px; border-radius: var(--r-control); border: 1px solid var(--c-line-strong); flex: none; }
+  .role { font-size: var(--fs-small); color: var(--c-muted); }
+  .trow { display: flex; flex-direction: column; gap: var(--space-2); padding-block: var(--space-4); border-block-end: 1px solid var(--c-line); }
+  .tmeta { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: baseline; }
+  .sample { line-height: 1.1; }
+  .spaces li, .radii li, .tokens li { display: flex; align-items: center; gap: var(--space-3); }
+  .bar { block-size: 16px; background: var(--c-accent); border-radius: 2px; }
+  .rbox { inline-size: 56px; block-size: 40px; background: var(--c-surface); border: 1px solid var(--c-line-strong); flex: none; }
+  .row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin-block-end: var(--space-4); }
+  .comp { margin-block: var(--space-6); max-inline-size: 560px; }
+  .faq { max-inline-size: 72ch; }
+  @media (min-width: 768px) { .swatches { grid-template-columns: 1fr 1fr; } }
+</style>

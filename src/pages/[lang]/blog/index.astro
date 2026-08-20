@@ -1,0 +1,62 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import EmailCapture from '../../../components/EmailCapture.astro';
+import { getDict, fill, type Locale } from '../../../i18n';
+import { localePath, absoluteUrl } from '../../../lib/url';
+import { localeParams, getPosts, slugOf } from '../../../lib/content';
+import { formatDate } from '../../../lib/currency';
+import * as S from '../../../lib/schema';
+
+export const getStaticPaths = localeParams;
+const lang = Astro.params.lang as Locale;
+const t = getDict(lang);
+const posts = await getPosts(lang);
+const crumbs = [
+  { name: t.common.home, href: localePath(lang, '/') },
+  { name: t.nav.blog, href: localePath(lang, 'blog') },
+];
+const schema = [S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUrl(c.href, Astro.site) })))];
+---
+<Layout lang={lang} title={t.blog.indexTitle} description={t.blog.indexSub} path="blog" schema={schema}>
+  <Section>
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <div class="gap">
+      <SectionHead as="h1" eyebrow={t.nav.blog} title={t.blog.indexTitle} body={t.blog.indexSub} />
+    </div>
+    <ul class="list">
+      {posts.map((post) => (
+        <li class="item">
+          <a href={localePath(lang, `blog/${slugOf(post)}`)}>
+            <p class="meta">
+              <time datetime={post.data.published.toISOString()}>{formatDate(post.data.published, lang)}</time>
+              <span aria-hidden="true">·</span>
+              <span>{fill(t.blog.readingTime, { n: post.data.readingMinutes })}</span>
+            </p>
+            <h2 class="title">{post.data.title}</h2>
+            <p class="desc">{post.data.description}</p>
+            <p class="tags">{post.data.tags.map((tag) => <span class="tag">{tag}</span>)}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="capture">
+      <EmailCapture lang={lang} title={t.footer.newsletterTitle} body={t.footer.newsletterBody} cta={t.cta.subscribe} source="blog-index" />
+    </div>
+  </Section>
+</Layout>
+<style>
+  .gap { margin-block-start: var(--space-8); }
+  .list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-block-start: 1px solid var(--c-line); }
+  .item { border-block-end: 1px solid var(--c-line); }
+  .item a { display: block; padding-block: var(--space-6); }
+  .item:hover .title { color: var(--c-accent); }
+  .meta { display: flex; flex-wrap: wrap; gap: var(--space-2); font-size: var(--fs-eyebrow); color: var(--c-faint); }
+  .title { font-size: var(--fs-h3); margin-block: var(--space-2); max-inline-size: 34ch; transition: color .16s var(--ease); }
+  .desc { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.6; max-inline-size: var(--measure-prose); }
+  .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-block-start: var(--space-3); }
+  .tag { font-size: var(--fs-eyebrow); color: var(--c-faint); padding: 2px 8px; border: 1px solid var(--c-line); border-radius: var(--r-pill); }
+  .capture { margin-block-start: var(--space-16); max-inline-size: var(--measure-prose); }
+</style>

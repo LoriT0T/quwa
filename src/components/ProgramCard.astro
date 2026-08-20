@@ -1,0 +1,129 @@
+---
+import { getDict, fill, type Locale } from '../i18n';
+import { localePath } from '../lib/url';
+import { PRODUCT_PRICES } from '../config/pricing';
+import { aggregateRating } from '../data/testimonials';
+import Price from './Price.astro';
+import Media from './Media.astro';
+import type { ImageMetadata } from 'astro';
+
+/** Card anatomy mirrors jeffnippard's, measured in docs/REFERENCE-SPEC.md §1.9:
+    badge → media → title → price → numeric rating → attribute rows.
+    The attribute rows answer "is this for me?" before the click. */
+interface Props {
+  lang: Locale;
+  product: string;
+  title: string;
+  cardLine: string;
+  kind: 'program' | 'bundle' | 'pack';
+  level: string;
+  goal: string;
+  weeks?: number;
+  daysPerWeek?: number;
+  isNew?: boolean;
+  image?: ImageMetadata;
+  imageAlt?: string;
+  priority?: boolean;
+}
+const {
+  lang, product, title, cardLine, kind, level, goal,
+  weeks, daysPerWeek, isNew = false, image, imageAlt, priority = false,
+} = Astro.props;
+const t = getDict(lang);
+const href = localePath(lang, `programs/${product}`);
+const cents = PRODUCT_PRICES[product] ?? 0;
+const rating = aggregateRating(lang, product);
+
+const levelLabel: Record<string, string> = {
+  beginner: t.fields.trainingAges.beginner,
+  intermediate: t.fields.trainingAges.intermediate,
+  advanced: t.fields.trainingAges.advanced,
+  all: t.programs.filterAll,
+};
+const goalLabel: Record<string, string> = {
+  muscle: t.fields.goals.gain,
+  strength: t.common.level,
+  recomposition: t.fields.goals.cut,
+  nutrition: t.nav.recipes,
+};
+---
+<article class="card pcard">
+  <a class="hit" href={href} aria-label={title}></a>
+
+  <div class="media-wrap">
+    {(isNew || kind === 'bundle') && (
+      <span class:list={['badge', kind === 'bundle' && 'badge-bundle']}>
+        {kind === 'bundle' ? t.common.bundle : t.common.new}
+      </span>
+    )}
+    <Media src={image} alt={imageAlt ?? title} ratio="4 / 3" slot_id={`program-${product}`} priority={priority} />
+  </div>
+
+  <div class="body">
+    <h3 class="title">{title}</h3>
+    <p class="line">{cardLine}</p>
+
+    <p class="price-row">
+      <Price cents={cents} lang={lang} />
+      {rating && (
+        <span class="rating" aria-label={fill(t.a11y.rating, { rating: rating.value.toFixed(2) })}>
+          <bdi>{rating.value.toFixed(2)}</bdi>
+          <span class="rcount" aria-hidden="true">({rating.count})</span>
+        </span>
+      )}
+    </p>
+
+    <dl class="attrs">
+      <div class="attr"><dt>{t.common.level}</dt><dd>{levelLabel[level] ?? level}</dd></div>
+      <div class="attr"><dt>{t.common.goal}</dt><dd>{goalLabel[goal] ?? goal}</dd></div>
+      {weeks && daysPerWeek && (
+        <div class="attr">
+          <dt>{t.common.format}</dt>
+          <dd>{fill(t.common.weeks, { n: weeks })} · {fill(t.common.daysPerWeek, { n: daysPerWeek })}</dd>
+        </div>
+      )}
+    </dl>
+  </div>
+</article>
+
+<style>
+  .pcard {
+    position: relative; display: flex; flex-direction: column; overflow: hidden;
+    transition: border-color .16s var(--ease), transform .16s var(--ease);
+    max-inline-size: var(--measure-card);
+  }
+  .pcard:hover { border-color: var(--c-line-strong); transform: translateY(-2px); }
+  .pcard:focus-within { border-color: var(--c-accent); }
+  .hit { position: absolute; inset: 0; z-index: 2; }
+  .media-wrap { position: relative; }
+  .badge {
+    position: absolute; z-index: 1; inset-block-start: var(--space-3); inset-inline-start: var(--space-3);
+    padding: 4px 10px; border-radius: var(--r-pill);
+    background: var(--c-accent); color: var(--c-accent-ink);
+    font-size: var(--fs-eyebrow); font-weight: var(--fw-bold);
+    letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
+  }
+  :global(:root[lang="ar"]) .badge { text-transform: none; }
+  .badge-bundle { background: var(--c-paper); color: var(--c-ink); }
+  .body { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); flex: 1; }
+  .title { font-size: var(--fs-card-title); }
+  .line { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.5; }
+  .price-row {
+    display: flex; align-items: baseline; gap: var(--space-3);
+    font-size: var(--fs-card-title); font-weight: var(--fw-bold);
+  }
+  .rating { font-size: var(--fs-small); color: var(--c-muted); font-weight: 400; font-variant-numeric: tabular-nums; }
+  .rcount { color: var(--c-faint); }
+  .attrs {
+    margin: 0; margin-block-start: auto; padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--c-line);
+    display: flex; flex-direction: column; gap: var(--space-2);
+  }
+  .attr { display: flex; gap: var(--space-3); justify-content: space-between; align-items: baseline; }
+  .attr dt {
+    font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase; color: var(--c-faint); font-weight: var(--fw-bold); flex: none;
+  }
+  :global(:root[lang="ar"]) .attr dt { text-transform: none; }
+  .attr dd { margin: 0; font-size: var(--fs-small); text-align: end; color: var(--c-paper); }
+</style>

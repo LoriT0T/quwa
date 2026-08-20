@@ -1,0 +1,42 @@
+---
+import { getDict, type Locale } from '../i18n';
+import { localePath } from '../lib/url';
+import EmailCapture from './EmailCapture.astro';
+/** Desktop: pointer leaving the viewport top. Mobile: scroll depth past 55%.
+    Both fire once per visitor, stored in localStorage. Wired in scripts/app.ts. */
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const t = getDict(lang);
+---
+<dialog class="offer" data-exit-intent aria-labelledby="exit-title">
+  <button class="close" type="button" data-exit-close aria-label={t.common.close}>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+  </button>
+  <p class="eyebrow">{t.starter.eyebrow}</p>
+  <h2 id="exit-title" class="h3">{t.exitIntent.title}</h2>
+  <p class="body">{t.exitIntent.body}</p>
+  <EmailCapture lang={lang} title="" cta={t.exitIntent.cta} source="exit-intent" compact surface={false} />
+  <a class="dismiss" href={localePath(lang, 'free-starter')} data-exit-close>{t.exitIntent.dismiss}</a>
+</dialog>
+<style>
+  .offer {
+    inline-size: min(440px, calc(100vw - 2rem));
+    padding: var(--space-8);
+    background: var(--c-surface); color: var(--c-paper);
+    border: 1px solid var(--c-line-strong); border-radius: var(--r-card);
+    box-shadow: var(--shadow-lift);
+    margin: auto;
+  }
+  .offer::backdrop { background: rgb(11 14 18 / .74); backdrop-filter: blur(4px); }
+  .offer > * + * { margin-block-start: var(--space-3); }
+  .body { color: var(--c-muted); line-height: 1.6; font-size: var(--fs-small); }
+  .close {
+    position: absolute; inset-block-start: var(--space-3); inset-inline-end: var(--space-3);
+    inline-size: 36px; block-size: 36px; display: grid; place-items: center;
+    background: transparent; border: none; color: var(--c-muted);
+    border-radius: var(--r-pill); cursor: pointer;
+  }
+  .close:hover { color: var(--c-paper); background: rgb(245 247 250 / .08); }
+  .dismiss { display: inline-block; font-size: var(--fs-eyebrow); color: var(--c-faint); }
+  .dismiss:hover { color: var(--c-muted); text-decoration: underline; }
+</style>

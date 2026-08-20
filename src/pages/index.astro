@@ -1,0 +1,50 @@
+---
+/* Root entry. GitHub Pages cannot negotiate content, so language detection has
+   to happen in the browser. This page carries no content of its own and is
+   excluded from the sitemap; every crawlable URL lives under /en or /ar. */
+import { DEFAULT_LOCALE, LOCALES } from '../config/site';
+import { localePath } from '../lib/url';
+import { getDict } from '../i18n';
+
+const fallback = localePath(DEFAULT_LOCALE, '/');
+const t = getDict(DEFAULT_LOCALE);
+const map = Object.fromEntries(LOCALES.map((l) => [l, localePath(l, '/')]));
+---
+<!doctype html>
+<html lang={DEFAULT_LOCALE}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{t.brand.wordmark} — {t.brand.tagline}</title>
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href={fallback} />
+    <meta http-equiv="refresh" content={`0; url=${fallback}`} />
+    <script is:inline define:vars={{ map, fallback }}>
+      (function () {
+        var target = fallback;
+        try {
+          var saved = localStorage.getItem('quwa.lang');
+          if (saved && map[saved]) target = map[saved];
+          else {
+            var tags = navigator.languages || [navigator.language || 'en'];
+            for (var i = 0; i < tags.length; i++) {
+              var code = String(tags[i]).toLowerCase().split('-')[0];
+              if (map[code]) { target = map[code]; break; }
+            }
+          }
+        } catch (e) {}
+        location.replace(target);
+      })();
+    </script>
+    <style>
+      body { background: #0b0e12; color: #f5f7fa; font-family: system-ui, sans-serif;
+             display: grid; place-items: center; min-height: 100svh; margin: 0; }
+      a { color: #ff6b2c; }
+    </style>
+  </head>
+  <body>
+    <p>
+      <a href={map.en}>English</a> · <a href={map.ar} lang="ar" dir="rtl">العربية</a>
+    </p>
+  </body>
+</html>

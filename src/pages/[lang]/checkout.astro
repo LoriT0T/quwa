@@ -1,0 +1,102 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import { getDict, type Locale } from '../../i18n';
+import { localePath } from '../../lib/url';
+import { localeParams } from '../../lib/content';
+import { COMMERCE_MODE, PAYMENT_PROVIDER } from '../../config/site';
+
+export const getStaticPaths = localeParams;
+const lang = Astro.params.lang as Locale;
+const t = getDict(lang);
+const methods = [
+  { id: 'card', label: t.checkout.card },
+  { id: 'apple_pay', label: t.checkout.applePay },
+  { id: 'google_pay', label: t.checkout.googlePay },
+  { id: 'paypal', label: t.checkout.paypal },
+];
+---
+<Layout lang={lang} title={t.checkout.title} description={t.checkout.title} path="checkout" noindex noOffers>
+  <Section>
+    <SectionHead as="h1" title={t.checkout.title} />
+
+    <div class="layout" data-checkout
+      data-mode={COMMERCE_MODE}
+      data-provider={PAYMENT_PROVIDER}
+      data-lang={lang}
+      data-success={localePath(lang, 'thank-you')}
+      data-cancel={localePath(lang, 'cart')}
+      data-cart-url={localePath(lang, 'cart')}>
+
+      <form class="pay card" data-checkout-form novalidate>
+        <div class="grp">
+          <label class="lbl" for="co-email">{t.checkout.emailLabel}</label>
+          <input class="field" id="co-email" type="email" name="email" required autocomplete="email"
+                 placeholder={t.common.emailPlaceholder} inputmode="email" />
+          <p class="hint">{t.checkout.emailHelp}</p>
+        </div>
+
+        <fieldset class="grp">
+          <legend class="lbl">{t.checkout.payWith}</legend>
+          <div class="methods">
+            {methods.map((m, i) => (
+              <label class="method">
+                <input type="radio" name="method" value={m.id} checked={i === 0} />
+                <span>{m.label}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <button class="btn btn-primary btn-block" type="submit" data-place-order>{t.checkout.place}</button>
+        <p class="msg" data-checkout-message role="status" aria-live="polite" hidden></p>
+        <p class="note">{t.checkout.terms}</p>
+        <p class="note">{t.cart.checkoutNote} · {t.checkout.secure}</p>
+        {COMMERCE_MODE === 'mock' && <p class="mock">{t.cart.mockNotice}</p>}
+      </form>
+
+      <aside class="summary card">
+        <h2 class="h3">{t.checkout.orderSummary}</h2>
+        <ul class="lines" data-checkout-lines></ul>
+        <dl class="totals">
+          <div class="grand"><dt>{t.cart.total}</dt><dd data-checkout-total></dd></div>
+        </dl>
+        <p class="empty" data-checkout-empty hidden>
+          {t.cart.empty} <a href={localePath(lang, 'programs')}>{t.cart.emptyCta}</a>
+        </p>
+      </aside>
+    </div>
+  </Section>
+  <script>
+    import '../../scripts/checkout-page';
+  </script>
+</Layout>
+<style>
+  .layout { display: grid; gap: var(--space-8); align-items: start; }
+  .pay { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-6); }
+  .grp { border: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+  .lbl { font-size: var(--fs-small); font-weight: var(--fw-bold); padding: 0; }
+  .hint { font-size: var(--fs-eyebrow); color: var(--c-faint); }
+  .methods { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); margin-block-start: var(--space-2); }
+  .method { position: relative; }
+  .method input { position: absolute; opacity: 0; inline-size: 1px; block-size: 1px; }
+  .method span {
+    display: flex; align-items: center; justify-content: center; min-block-size: 48px;
+    border: 1px solid var(--c-line-strong); border-radius: var(--r-control);
+    font-size: var(--fs-small); font-weight: var(--fw-bold); cursor: pointer;
+  }
+  .method input:checked + span { border-color: var(--c-accent); background: var(--c-accent-soft); }
+  .method input:focus-visible + span { outline: 3px solid var(--c-accent); outline-offset: 2px; }
+  .summary { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
+  .lines { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+  .totals { margin: 0; }
+  .grand { display: flex; justify-content: space-between; padding-block-start: var(--space-3); border-block-start: 1px solid var(--c-line); font-weight: var(--fw-bold); font-size: var(--fs-card-title); }
+  .grand dd { margin: 0; font-variant-numeric: tabular-nums; }
+  .note { font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.5; }
+  .mock { font-size: var(--fs-eyebrow); color: var(--c-accent); font-weight: var(--fw-bold); }
+  .msg { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--c-accent); }
+  .empty { font-size: var(--fs-small); color: var(--c-muted); }
+  .empty a { color: var(--c-accent); font-weight: var(--fw-bold); }
+  @media (min-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr) 340px; gap: var(--space-12); } }
+</style>

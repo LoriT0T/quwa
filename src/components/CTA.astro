@@ -1,0 +1,28 @@
+---
+import { getDict, type Locale } from '../i18n';
+/** Risk reversal is welded to the button — joinladder's "No Credit Card To Start"
+    sits directly beneath the hero CTA, never in a separate section. */
+interface Props {
+  lang: Locale;
+  href: string;
+  label: string;
+  variant?: 'primary' | 'secondary';
+  terms?: string | false;
+  block?: boolean;
+  center?: boolean;
+  dataAttrs?: Record<string, string>;
+}
+const { lang, href, label, variant = 'primary', terms, block = false, center = false, dataAttrs = {} } = Astro.props;
+const t = getDict(lang);
+const termsLine = terms === false ? null : (terms ?? t.cta.trialTerms);
+---
+<div class:list={['cta', center && 'cta-center', block && 'cta-block']}>
+  <a href={href} class:list={['btn', `btn-${variant}`, block && 'btn-block']} {...dataAttrs}>{label}</a>
+  {termsLine && <p class="cta-terms">{termsLine}</p>}
+</div>
+<style>
+  .cta { display: flex; flex-direction: column; gap: var(--space-3); align-items: flex-start; }
+  .cta-center { align-items: center; text-align: center; }
+  .cta-block { align-items: stretch; }
+  .cta-terms { font-size: var(--fs-eyebrow); color: var(--c-muted); line-height: 1.5; }
+</style>

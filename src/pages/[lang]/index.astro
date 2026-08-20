@@ -1,0 +1,273 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Eyebrow from '../../components/Eyebrow.astro';
+import CTA from '../../components/CTA.astro';
+import ProgramCard from '../../components/ProgramCard.astro';
+import Proof from '../../components/Proof.astro';
+import FAQ from '../../components/FAQ.astro';
+import Stat from '../../components/Stat.astro';
+import Price from '../../components/Price.astro';
+import Media from '../../components/Media.astro';
+import { getDict, fill, type Locale } from '../../i18n';
+import { localePath } from '../../lib/url';
+import { localeParams, getPrograms } from '../../lib/content';
+import { TOOLS, toolStrings } from '../../lib/tools';
+import { MEMBERSHIP, GUARANTEE_DAYS } from '../../config/pricing';
+import * as S from '../../lib/schema';
+import heroImage from '../../assets/images/home-hero.jpg';
+
+export const getStaticPaths = localeParams;
+
+const lang = Astro.params.lang as Locale;
+const t = getDict(lang);
+const programs = (await getPrograms(lang)).filter((p) => p.data.featured).slice(0, 3);
+const tools = TOOLS.slice(0, 4);
+const schema = [S.faqPage(t.homeFaq)];
+---
+<Layout
+  lang={lang}
+  title={t.brand.tagline}
+  description={t.brand.description}
+  path="/"
+  schema={schema}
+>
+  <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container-page hero-grid">
+      <div class="hero-copy">
+        <Eyebrow text={t.home.eyebrow} />
+        <h1 class="display">{t.home.h1.split('\n').map((line, i) => <>{i > 0 && <br />}{line}</>)}</h1>
+        <p class="lead measure-prose">{t.home.sub}</p>
+        <div class="hero-actions">
+          <CTA
+            lang={lang}
+            href={localePath(lang, 'tools')}
+            label={t.home.closing.cta}
+            terms={t.home.trustline}
+          />
+          <a class="btn btn-secondary" href={localePath(lang, 'programs')}>{t.cta.viewPrograms}</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <Media
+          src={heroImage}
+          alt={t.home.heroAlt}
+          ratio="4 / 5"
+          slot_id="home-hero"
+          priority
+          sizes="(min-width: 1024px) 520px, 100vw"
+          widths={[420, 640, 1040]}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Free tools: the acquisition layer, promoted above the products ── -->
+  <Section>
+    <SectionHead eyebrow={t.home.tools.eyebrow} title={t.home.tools.title} body={t.home.tools.body} />
+    <ul class="tool-grid">
+      {tools.map((tool) => {
+        const s = toolStrings(t, tool);
+        return (
+          <li class="card tool">
+            <a href={localePath(lang, `tools/${tool.slug}`)}>
+              <span class="tool-free">{t.common.free}</span>
+              <h3 class="h3 tool-name">{s.name}</h3>
+              <p class="tool-line">{s.short}</p>
+              <span class="tool-cta">{t.cta.tryTool} →</span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+    <p class="tool-all">
+      <a href={localePath(lang, 'tools')}>{t.cta.seeAll} ({TOOLS.length})</a>
+    </p>
+  </Section>
+
+  <!-- ── Programs ─────────────────────────────────────────────────────── -->
+  <Section surface>
+    <SectionHead
+      eyebrow={t.home.programsSection.eyebrow}
+      title={t.home.programsSection.title}
+      body={t.home.programsSection.body}
+    />
+    <ul class="prog-grid">
+      {programs.map((entry) => (
+        <li>
+          <ProgramCard
+            lang={lang}
+            product={entry.data.product}
+            title={entry.data.title}
+            cardLine={entry.data.cardLine}
+            kind={entry.data.kind}
+            level={entry.data.level}
+            goal={entry.data.goal}
+            weeks={entry.data.weeks}
+            daysPerWeek={entry.data.daysPerWeek}
+            isNew={entry.data.isNew}
+            image={entry.data.image}
+            imageAlt={entry.data.imageAlt}
+          />
+        </li>
+      ))}
+    </ul>
+    <p class="tool-all"><a href={localePath(lang, 'programs')}>{t.cta.seeAll}</a></p>
+  </Section>
+
+  <!-- ── Why it works ─────────────────────────────────────────────────── -->
+  <Section>
+    <SectionHead eyebrow={t.home.props.eyebrow} title={t.home.props.title} />
+    <ul class="props">
+      {t.home.props.items.map((item, i) => (
+        <li class="prop">
+          <span class="prop-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="prop-t">{item.title}</h3>
+          <p class="prop-b">{item.body}</p>
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <!-- ── Proof, attached to the specific programs it is about ─────────── -->
+  <Section tight surface>
+    <SectionHead eyebrow={t.home.proof.eyebrow} title={t.home.proof.title} />
+    <div class="proof-stack">
+      <Proof lang={lang} product="hypertrophy-foundations" limit={1} columns={3} linkLabel={t.cta.viewProgram} />
+      <Proof lang={lang} product="strength-base" limit={1} columns={3} linkLabel={t.cta.viewProgram} />
+      <Proof lang={lang} product="membership" limit={1} columns={3} linkLabel={t.cta.joinMembership} />
+    </div>
+    <p class="vary">{t.common.resultsVary}</p>
+  </Section>
+
+  <!-- ── Membership ───────────────────────────────────────────────────── -->
+  <Section>
+    <div class="member">
+      <div>
+        <SectionHead
+          eyebrow={t.home.membershipSection.eyebrow}
+          title={t.home.membershipSection.title}
+          body={t.home.membershipSection.body}
+        />
+        <CTA
+          lang={lang}
+          href={localePath(lang, 'membership')}
+          label={t.cta.primary}
+          terms={t.membership.trialLine}
+        />
+      </div>
+      <div class="card price-card">
+        <p class="pc-badge">{t.membership.annualBadge}</p>
+        <p class="pc-amount"><Price cents={MEMBERSHIP.annual.perMonth} lang={lang} /><span class="pc-per">/{t.common.perMonth}</span></p>
+        <p class="pc-billed">{fill(t.common.billedAnnually, { amount: '' })}</p>
+        <p class="pc-annual"><Price cents={MEMBERSHIP.annual.amount} lang={lang} /></p>
+        <ul class="pc-list">
+          {t.membership.features.slice(0, 4).map((f) => <li>{f}</li>)}
+        </ul>
+        <a class="btn btn-primary btn-block" href={localePath(lang, 'membership')}>{t.cta.primary}</a>
+        <p class="pc-terms">{t.cta.trialTerms}</p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- ── Stats ────────────────────────────────────────────────────────── -->
+  <Section tight surface>
+    <SectionHead eyebrow={t.home.stats.eyebrow} title={t.home.stats.title} />
+    <ul class="stats">
+      {t.home.stats.items.map((item, i) => (
+        <li><Stat value={item.value} label={item.label} note={i === 0 ? undefined : undefined} /></li>
+      ))}
+    </ul>
+    <p class="vary">{fill(t.common.guarantee, { n: GUARANTEE_DAYS })} · {t.common.resultsVary}</p>
+  </Section>
+
+  <!-- ── FAQ ──────────────────────────────────────────────────────────── -->
+  <Section>
+    <SectionHead eyebrow={t.home.faq.eyebrow} title={t.home.faq.title} />
+    <div class="faq-wrap"><FAQ items={t.homeFaq} /></div>
+  </Section>
+
+  <!-- ── Closing ──────────────────────────────────────────────────────── -->
+  <Section tight>
+    <div class="closing">
+      <h2 class="h2">{t.home.closing.title}</h2>
+      <p class="lead">{t.home.closing.body}</p>
+      <CTA lang={lang} href={localePath(lang, 'tools')} label={t.home.closing.cta} terms={t.home.trustline} center />
+    </div>
+  </Section>
+</Layout>
+
+<style>
+  .hero { padding-block: var(--space-12) var(--space-16); }
+  .hero-grid { display: grid; gap: var(--space-8); align-items: center; }
+  .hero-copy { display: flex; flex-direction: column; gap: var(--space-4); }
+  .hero-copy h1 { margin-block: var(--space-2) var(--space-1); }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: flex-start; margin-block-start: var(--space-4); }
+  .hero-media { order: -1; }
+
+  .tool-grid, .prog-grid, .props, .stats, .proof-stack {
+    list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4);
+  }
+  .tool { padding: 0; transition: border-color .16s var(--ease), transform .16s var(--ease); }
+  .tool:hover { border-color: var(--c-accent); transform: translateY(-2px); }
+  .tool a { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-6); block-size: 100%; }
+  .tool-free {
+    font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); color: var(--c-accent);
+    letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
+  }
+  :global(:root[lang="ar"]) .tool-free { text-transform: none; }
+  .tool-name { font-size: var(--fs-card-title); }
+  .tool-line { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.55; flex: 1; }
+  .tool-cta { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--c-paper); margin-block-start: var(--space-2); }
+  .tool-all { margin-block-start: var(--space-8); }
+  .tool-all a { font-weight: var(--fw-bold); color: var(--c-accent); text-decoration: underline; text-underline-offset: 4px; }
+
+  .props { counter-reset: prop; }
+  .prop { display: flex; flex-direction: column; gap: var(--space-2); padding-block-start: var(--space-4); border-block-start: 2px solid var(--c-accent); }
+  .prop-n { font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); color: var(--c-accent); font-variant-numeric: tabular-nums; }
+  .prop-t { font-size: var(--fs-card-title); }
+  .prop-b { color: var(--c-muted); line-height: 1.6; font-size: var(--fs-small); }
+
+  .proof-stack { gap: var(--space-4); }
+  .vary { margin-block-start: var(--space-8); font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.6; max-inline-size: 80ch; }
+
+  .member { display: grid; gap: var(--space-8); align-items: start; }
+  .price-card { padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-3); }
+  .pc-badge {
+    align-self: flex-start; padding: 4px 10px; border-radius: var(--r-pill);
+    background: var(--c-accent); color: var(--c-accent-ink);
+    font-size: var(--fs-eyebrow); font-weight: var(--fw-bold);
+  }
+  .pc-amount { font-size: var(--fs-h2); font-weight: var(--fw-bold); display: flex; align-items: baseline; gap: var(--space-2); }
+  .pc-per { font-size: var(--fs-body); color: var(--c-muted); font-weight: 400; }
+  .pc-billed { font-size: var(--fs-small); color: var(--c-muted); }
+  .pc-annual { font-size: var(--fs-card-title); font-weight: var(--fw-bold); }
+  .pc-list { list-style: none; margin: var(--space-4) 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+  .pc-list li { font-size: var(--fs-small); color: var(--c-muted); padding-inline-start: var(--space-6); position: relative; line-height: 1.5; }
+  .pc-list li::before {
+    content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 7px;
+    inline-size: 8px; block-size: 8px; border-radius: 2px; background: var(--c-accent);
+  }
+  .pc-terms { font-size: var(--fs-eyebrow); color: var(--c-faint); text-align: center; }
+
+  .faq-wrap { max-inline-size: 72ch; }
+  .closing { display: flex; flex-direction: column; gap: var(--space-4); align-items: center; text-align: center; }
+  .closing .lead { max-inline-size: 48ch; }
+
+  @media (min-width: 640px) {
+    .tool-grid { grid-template-columns: 1fr 1fr; }
+    .props { grid-template-columns: 1fr 1fr; gap: var(--space-8); }
+    .stats { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .hero { padding-block: var(--space-24) var(--space-32); }
+    .hero-grid { grid-template-columns: 1.15fr 0.85fr; gap: var(--space-16); }
+    .hero-media { order: 0; }
+    .tool-grid { grid-template-columns: repeat(4, 1fr); }
+    .prog-grid { grid-template-columns: repeat(3, 1fr); }
+    .props { grid-template-columns: repeat(4, 1fr); }
+    .member { grid-template-columns: 1.1fr 0.9fr; gap: var(--space-16); }
+  }
+</style>

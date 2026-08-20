@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/Section.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { getDict, fill, type Locale } from '../i18n';
+import { localePath, absoluteUrl } from '../lib/url';
+import { SITE } from '../config/site';
+import { formatDate } from '../lib/currency';
+import * as S from '../lib/schema';
+
+interface Props { lang: Locale; page: 'terms' | 'privacy' | 'refund'; path: string; }
+const { lang, page, path } = Astro.props;
+const t = getDict(lang);
+const content = t.legalPages[page];
+/* Fixed publication date — a legal page whose date moves on every deploy is not
+   a legal page. Bump this by hand when the text actually changes. */
+const updated = new Date('2026-08-20');
+const crumbs = [
+  { name: t.common.home, href: localePath(lang, '/') },
+  { name: content.title, href: localePath(lang, path) },
+];
+const schema = [S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUrl(c.href, Astro.site) })))];
+---
+<Layout lang={lang} title={content.title} description={content.intro} path={path} schema={schema} noOffers>
+  <Section>
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <article class="legal">
+      <header class="lhead">
+        <h1 class="h2">{content.title}</h1>
+        <p class="lead">{content.intro}</p>
+        <p class="updated">{fill(t.legal.lastUpdated, { date: formatDate(updated, lang) })}</p>
+      </header>
+      {content.sections.map((section) => (
+        <section class="lsec">
+          <h2 class="h3">{section.h}</h2>
+          {section.p.map((para) => <p>{para}</p>)}
+        </section>
+      ))}
+      <p class="contact">{fill(t.legal.contactUs, { email: SITE.supportEmail })}</p>
+    </article>
+  </Section>
+</Layout>
+<style>
+  .legal { max-inline-size: var(--measure-prose); margin-block-start: var(--space-8); }
+  .lhead { display: flex; flex-direction: column; gap: var(--space-3); margin-block-end: var(--space-12); }
+  .updated { font-size: var(--fs-eyebrow); color: var(--c-faint); }
+  .lsec { margin-block-end: var(--space-12); }
+  .lsec h2 { margin-block-end: var(--space-4); }
+  .lsec p { color: var(--c-muted); line-height: 1.75; margin-block-end: var(--space-4); }
+  .contact { font-size: var(--fs-small); color: var(--c-faint); padding-block-start: var(--space-6); border-block-start: 1px solid var(--c-line); }
+</style>

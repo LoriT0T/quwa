@@ -1,0 +1,113 @@
+---
+import { getDict, fill, type Locale } from '../i18n';
+import { localePath } from '../lib/url';
+import { SITE } from '../config/site';
+import Wordmark from './Wordmark.astro';
+import EmailCapture from './EmailCapture.astro';
+
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const t = getDict(lang);
+const year = new Date().getFullYear();
+
+const columns = [
+  {
+    title: t.footer.explore,
+    links: [
+      { label: t.nav.programs, href: localePath(lang, 'programs') },
+      { label: t.nav.membership, href: localePath(lang, 'membership') },
+      { label: t.nav.blog, href: localePath(lang, 'blog') },
+      { label: t.nav.recipes, href: localePath(lang, 'recipes') },
+    ],
+  },
+  {
+    title: t.footer.freeStuff,
+    links: [
+      { label: t.tools.indexTitle, href: localePath(lang, 'tools') },
+      { label: t.starter.title, href: localePath(lang, 'free-starter') },
+      { label: t.referral.title, href: localePath(lang, 'referral') },
+    ],
+  },
+  {
+    title: t.footer.legalCol,
+    links: [
+      { label: t.legal.terms, href: localePath(lang, 'terms') },
+      { label: t.legal.privacy, href: localePath(lang, 'privacy') },
+      { label: t.legal.refund, href: localePath(lang, 'refund-policy') },
+    ],
+  },
+];
+---
+<footer class="site-footer">
+  <div class="container-page">
+    <div class="top">
+      <div class="brand-col">
+        <a href={localePath(lang, '/')}><Wordmark lang={lang} size="lg" /></a>
+        <p class="tagline">{t.footer.tagline}</p>
+        <ul class="social">
+          <li><a href={SITE.social.instagram} rel="me noopener" target="_blank">Instagram</a></li>
+          <li><a href={SITE.social.tiktok} rel="me noopener" target="_blank">TikTok</a></li>
+          <li><a href={SITE.social.youtube} rel="me noopener" target="_blank">YouTube</a></li>
+        </ul>
+      </div>
+
+      {columns.map((col) => (
+        <nav class="col" aria-label={col.title}>
+          <h2 class="col-title">{col.title}</h2>
+          <ul>
+            {col.links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+          </ul>
+        </nav>
+      ))}
+    </div>
+
+    <div class="news">
+      <EmailCapture
+        lang={lang}
+        title={t.footer.newsletterTitle}
+        body={t.footer.newsletterBody}
+        cta={t.cta.subscribe}
+        source="footer"
+      />
+    </div>
+
+    <div class="bottom">
+      <p class="rights">{fill(t.footer.rights, { year, brand: t.brand.wordmark })}</p>
+      <p class="built">{t.footer.builtIn}</p>
+    </div>
+    <p class="disclaimer">{t.footer.disclaimer}</p>
+  </div>
+</footer>
+<style>
+  .site-footer {
+    border-block-start: 1px solid var(--c-line);
+    padding-block: var(--space-16) var(--space-8);
+    margin-block-start: var(--space-section);
+  }
+  .top { display: grid; gap: var(--space-8); }
+  .brand-col { display: flex; flex-direction: column; gap: var(--space-4); }
+  .tagline { color: var(--c-muted); font-size: var(--fs-small); max-inline-size: 30ch; }
+  .social { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-4); }
+  .social a { font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-muted); }
+  .social a:hover { color: var(--c-accent); }
+  .col-title {
+    font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
+    color: var(--c-faint); margin-block-end: var(--space-4);
+  }
+  :global(:root[lang="ar"]) .col-title, :global(:root[lang="ar"]) .social a { text-transform: none; }
+  .col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+  .col a { font-size: var(--fs-small); color: var(--c-muted); }
+  .col a:hover { color: var(--c-paper); }
+  .news { margin-block: var(--space-12); max-inline-size: var(--measure-prose); }
+  .bottom {
+    display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-6);
+    justify-content: space-between; align-items: center;
+    padding-block-start: var(--space-8); border-block-start: 1px solid var(--c-line);
+  }
+  .rights, .built { font-size: var(--fs-eyebrow); color: var(--c-faint); }
+  .disclaimer {
+    margin-block-start: var(--space-6); font-size: var(--fs-eyebrow);
+    color: var(--c-faint); line-height: 1.6; max-inline-size: 90ch;
+  }
+  @media (min-width: 768px) { .top { grid-template-columns: 1.4fr repeat(3, 1fr); gap: var(--space-12); } }
+</style>

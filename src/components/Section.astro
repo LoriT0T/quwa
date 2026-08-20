@@ -1,0 +1,23 @@
+---
+/** The single pacing primitive. All inter-section air comes from here, never ad hoc.
+    Mirrors jeffnippard's one repeated 102px spacer, folded into padding. */
+interface Props {
+  tight?: boolean;
+  surface?: boolean;
+  id?: string;
+  class?: string;
+  label?: string;
+  as?: 'section' | 'div' | 'article';
+}
+const { tight = false, surface = false, id, class: cls = '', label, as: Tag = 'section' }: Props = Astro.props;
+---
+<Tag
+  id={id}
+  aria-label={label}
+  class:list={[tight ? 'section-tight' : 'section', surface && 'bg-surface-band', cls]}
+>
+  <div class="container-page"><slot /></div>
+</Tag>
+<style>
+  .bg-surface-band { background: var(--c-surface); }
+</style>

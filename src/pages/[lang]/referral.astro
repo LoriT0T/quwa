@@ -1,0 +1,82 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import EmailCapture from '../../components/EmailCapture.astro';
+import { getDict, fill, type Locale } from '../../i18n';
+import { localeParams } from '../../lib/content';
+import { REFERRAL } from '../../config/pricing';
+import { price } from '../../lib/currency';
+
+export const getStaticPaths = localeParams;
+const lang = Astro.params.lang as Locale;
+const t = getDict(lang);
+const steps = t.referral.steps.map((step) =>
+  fill(step, { pct: REFERRAL.friendDiscountPct, amount: price(REFERRAL.referrerCreditAmount, 'USD', lang) }),
+);
+---
+<Layout lang={lang} title={t.referral.title} description={t.referral.sub} path="referral" noOffers>
+  <Section>
+    <SectionHead as="h1" eyebrow={t.nav.membership} title={t.referral.title} body={t.referral.sub} />
+    <div class="grid">
+      <div>
+        <h2 class="h3">{t.referral.howTitle}</h2>
+        <ol class="steps">{steps.map((step) => <li>{step}</li>)}</ol>
+        <p class="limit">{fill(t.referral.limit, { n: REFERRAL.maxCreditsPerYear })}</p>
+      </div>
+      <div class="card panel" data-referral>
+        <EmailCapture lang={lang} title={t.referral.getLink} cta={t.cta.subscribe} source="referral" compact surface={false} />
+        <div class="link-row" data-referral-link hidden>
+          <label class="lbl" for="ref-link">{t.referral.yourLink}</label>
+          <div class="row">
+            <input class="field" id="ref-link" readonly data-referral-value />
+            <button class="btn btn-secondary" type="button" data-referral-copy
+              data-copy-label={t.referral.copy} data-copied-label={t.referral.copied}>{t.referral.copy}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+  <script>
+    const root = document.querySelector<HTMLElement>('[data-referral]');
+    if (root) {
+      const panel = root.querySelector<HTMLElement>('[data-referral-link]')!;
+      const value = root.querySelector<HTMLInputElement>('[data-referral-value]')!;
+      const copy = root.querySelector<HTMLButtonElement>('[data-referral-copy]')!;
+
+      const show = (email: string): void => {
+        // Deterministic, non-reversible-looking code derived from the address.
+        let hash = 0;
+        for (let i = 0; i < email.length; i += 1) hash = (hash * 31 + email.charCodeAt(i)) >>> 0;
+        const code = hash.toString(36).toUpperCase().slice(0, 6).padEnd(6, 'X');
+        value.value = `${window.location.origin}${window.location.pathname.replace(/referral\/?$/, '')}?ref=${code}`;
+        panel.hidden = false;
+      };
+
+      root.querySelector('form')?.addEventListener('submit', (event) => {
+        const input = (event.currentTarget as HTMLFormElement).querySelector<HTMLInputElement>('input[type="email"]');
+        const email = input?.value.trim() ?? '';
+        if (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) setTimeout(() => show(email), 0);
+      });
+
+      const stored = (() => { try { return localStorage.getItem('quwa.email'); } catch { return null; } })();
+      if (stored) show(stored);
+
+      copy.addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(value.value); } catch { value.select(); }
+        copy.textContent = copy.dataset.copiedLabel ?? 'Copied';
+        setTimeout(() => { copy.textContent = copy.dataset.copyLabel ?? 'Copy'; }, 1800);
+      });
+    }
+  </script>
+</Layout>
+<style>
+  .grid { display: grid; gap: var(--space-8); align-items: start; }
+  .steps { margin: var(--space-4) 0 0; padding-inline-start: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); color: var(--c-muted); line-height: 1.65; }
+  .limit { margin-block-start: var(--space-6); font-size: var(--fs-eyebrow); color: var(--c-faint); }
+  .panel { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-6); }
+  .lbl { font-size: var(--fs-small); font-weight: var(--fw-bold); display: block; margin-block-end: var(--space-2); }
+  .row { display: flex; flex-direction: column; gap: var(--space-2); }
+  @media (min-width: 560px) { .row { flex-direction: row; } .row .field { flex: 1; } }
+  @media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; gap: var(--space-16); } }
+</style>
