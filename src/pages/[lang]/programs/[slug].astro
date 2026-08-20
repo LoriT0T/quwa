@@ -68,9 +68,9 @@ const schema = [
 ];
 
 const meta = [
-  d.weeks && { k: t.common.format, v: fill(t.common.weeks, { n: d.weeks }) },
-  d.daysPerWeek && { k: t.nav.programs, v: fill(t.common.daysPerWeek, { n: d.daysPerWeek }) },
-  d.minutesPerSession && { k: t.fields.trainingMinutes, v: fill(t.common.minutes, { n: d.minutesPerSession }) },
+  d.weeks && { k: t.common.length, v: fill(t.common.weeks, { n: d.weeks }) },
+  d.daysPerWeek && { k: t.common.schedule, v: fill(t.common.daysPerWeek, { n: d.daysPerWeek }) },
+  d.minutesPerSession && { k: t.common.perSession, v: fill(t.common.minutes, { n: d.minutesPerSession }) },
   d.pages && { k: t.common.format, v: fill(t.common.pages, { n: d.pages }) },
 ].filter(Boolean) as { k: string; v: string }[];
 ---

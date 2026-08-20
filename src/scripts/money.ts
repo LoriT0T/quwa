@@ -4,6 +4,13 @@ import { CURRENCIES, type CurrencyCode } from '../config/pricing';
 
 const THREE_DECIMAL = new Set(['KWD', 'BHD', 'OMR', 'JOD']);
 
+export const CURRENCY_EVENT = 'quwa:currency';
+
+/** Re-run `fn` whenever the detected or chosen currency changes. */
+export function onCurrencyChange(fn: () => void): void {
+  window.addEventListener(CURRENCY_EVENT, fn);
+}
+
 export function currentCurrency(): CurrencyCode {
   const code = document.documentElement.dataset.currency;
   return code && code in CURRENCIES ? (code as CurrencyCode) : 'USD';
@@ -32,11 +39,31 @@ export function locale(): { lang: 'en' | 'ar'; intl: string } {
   return { lang, intl: lang === 'ar' ? 'ar-u-nu-arab' : 'en-US' };
 }
 
-export const COPY = {
-  en: { remove: 'Remove', qty: 'Qty', download: 'Download', applyCredit: 'Apply {a} and upgrade',
-        creditLine: 'less {a} credit', spent: 'You just spent {a}.', processing: 'Processing…',
-        emailInvalid: 'Enter a valid email address', empty: 'Your cart is empty.' },
-  ar: { remove: 'إزالة', qty: 'الكمية', download: 'تحميل', applyCredit: 'احتسب {a} وارتقِ',
-        creditLine: 'ناقص رصيد {a}', spent: 'دفعت للتوّ {a}.', processing: 'جارٍ المعالجة…',
-        emailInvalid: 'أدخل بريداً إلكترونياً صحيحاً', empty: 'سلّتك فارغة.' },
-} as const;
+export interface ClientStrings {
+  lang: 'en' | 'ar';
+  intl: string;
+  remove: string;
+  qty: string;
+  download: string;
+  empty: string;
+  processing: string;
+  emailInvalid: string;
+  emailSent: string;
+  demoMode: string;
+  applyCredit: string;
+  spent: string;
+  creditLine: string;
+}
+
+/**
+ * Read the strings <ClientStrings> serialised from the locale files. There is no
+ * English fallback dictionary here on purpose — a missing key should surface as a
+ * visible empty string during development, not silently ship the wrong language.
+ */
+export function strings(): ClientStrings {
+  const el = document.querySelector<HTMLScriptElement>('[data-strings]');
+  const parsed = el?.textContent ? (JSON.parse(el.textContent) as ClientStrings) : null;
+  if (parsed) return parsed;
+  const lang = locale().lang;
+  return { lang, intl: locale().intl } as ClientStrings;
+}

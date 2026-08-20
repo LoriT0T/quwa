@@ -8,6 +8,7 @@ import * as S from '../lib/schema';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ExitIntent from '../components/ExitIntent.astro';
+import ClientStrings from '../components/ClientStrings.astro';
 
 interface Props {
   lang: Locale;
@@ -119,6 +120,7 @@ const graph = S.graph([
     </main>
     <Footer lang={lang} />
     {!noOffers && <ExitIntent lang={lang} />}
+    <ClientStrings lang={lang} />
     <script>
       import '../scripts/app';
     </script>

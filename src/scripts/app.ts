@@ -53,6 +53,8 @@ function detectCurrency(): CurrencyCode {
   return 'USD';
 }
 
+export const CURRENCY_EVENT = 'quwa:currency';
+
 function applyCurrency(code: CurrencyCode): void {
   html.dataset.currency = code;
   document.querySelectorAll<HTMLElement>('[data-price]').forEach((el) => {
@@ -63,6 +65,9 @@ function applyCurrency(code: CurrencyCode): void {
   document.querySelectorAll<HTMLSelectElement>('[data-currency-select]').forEach((sel) => {
     sel.value = code;
   });
+  // Page scripts render their own money (cart totals, order summaries) and cannot
+  // rely on having run after this file. They re-render on this event instead.
+  window.dispatchEvent(new CustomEvent(CURRENCY_EVENT, { detail: code }));
 }
 
 function initCurrency(): void {
@@ -177,11 +182,16 @@ function initEmailForms(): void {
   });
 }
 
+/** Both strings come from the locale files via <ClientStrings>; see money.ts. */
+function clientStrings(): { emailSent?: string; emailInvalid?: string } {
+  const el = document.querySelector<HTMLScriptElement>('[data-strings]');
+  try { return el?.textContent ? JSON.parse(el.textContent) : {}; } catch { return {}; }
+}
 function sentCopy(): string {
-  return lang === 'ar' ? 'أُرسلت. تفقّد بريدك.' : 'Sent. Check your inbox.';
+  return clientStrings().emailSent ?? '';
 }
 function invalidCopy(): string {
-  return lang === 'ar' ? 'أدخل بريداً إلكترونياً صحيحاً' : 'Enter a valid email address';
+  return clientStrings().emailInvalid ?? '';
 }
 
 /* ── Exit intent (desktop) / scroll depth (mobile) ────────────────────────── */

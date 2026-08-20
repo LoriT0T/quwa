@@ -2,13 +2,13 @@ import { getCart, getReferral, clearCart, type CartLine } from '../lib/cart';
 import { getPaymentProvider } from '../lib/payments';
 import type { PaymentMethod } from '../lib/payments/types';
 import { REFERRAL, MEMBERSHIP } from '../config/pricing';
-import { money, locale, currentCurrency, COPY } from './money';
+import { money, locale, currentCurrency, strings, onCurrencyChange } from './money';
 
 const root = document.querySelector<HTMLElement>('[data-checkout]');
 
 if (root) {
   const { lang, intl } = locale();
-  const copy = COPY[lang];
+  const copy = strings();
   const form = root.querySelector<HTMLFormElement>('[data-checkout-form]')!;
   const linesEl = root.querySelector<HTMLUListElement>('[data-checkout-lines]')!;
   const totalEl = root.querySelector<HTMLElement>('[data-checkout-total]')!;
@@ -86,6 +86,7 @@ if (root) {
     }
   });
 
+  onCurrencyChange(render);
   render();
 }
 

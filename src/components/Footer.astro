@@ -5,11 +5,12 @@ import { SITE } from '../config/site';
 import Wordmark from './Wordmark.astro';
 import EmailCapture from './EmailCapture.astro';
 import CurrencySwitcher from './CurrencySwitcher.astro';
+import { formatNumber } from '../lib/currency';
 
 interface Props { lang: Locale; }
 const { lang } = Astro.props;
 const t = getDict(lang);
-const year = new Date().getFullYear();
+const year = formatNumber(new Date().getFullYear(), lang, { useGrouping: false });
 
 const columns = [
   {

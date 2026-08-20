@@ -1,12 +1,12 @@
 import { addItem } from '../lib/cart';
 import { UPSELL } from '../config/pricing';
-import { money, locale, COPY } from './money';
+import { money, locale, strings } from './money';
 
 const root = document.querySelector<HTMLElement>('[data-thankyou]');
 
 if (root) {
-  const { lang, intl } = locale();
-  const copy = COPY[lang];
+  const { intl } = locale();
+  const copy = strings();
   const params = new URLSearchParams(window.location.search);
   const downloadList = root.querySelector<HTMLUListElement>('[data-download-list]')!;
   const upsell = root.querySelector<HTMLElement>('[data-upsell]')!;
@@ -35,7 +35,7 @@ if (root) {
   downloadList.querySelectorAll<HTMLAnchorElement>('[data-download]').forEach((link) => {
     link.addEventListener('click', (event) => {
       event.preventDefault();
-      link.textContent = lang === 'ar' ? 'وضع تجريبي' : 'Demo mode';
+      link.textContent = copy.demoMode;
     });
   });
 
@@ -48,9 +48,9 @@ if (root) {
     const credit = money(spent, intl);
     upsell.hidden = false;
     upsellBody.textContent = upsellBody.textContent?.replace('{amount}', credit) ?? '';
-    if (!upsellBody.textContent) upsellBody.textContent = copy.spent.replace('{a}', credit);
-    upsellCredit.textContent = copy.creditLine.replace('{a}', credit);
-    accept.textContent = copy.applyCredit.replace('{a}', credit);
+    if (!upsellBody.textContent) upsellBody.textContent = copy.spent.replace('{amount}', credit);
+    upsellCredit.textContent = `− ${credit}`;
+    accept.textContent = copy.applyCredit.replace('{amount}', credit);
 
     accept.addEventListener('click', () => {
       const cents = Number(root.dataset.membershipCents ?? 0) - spent;

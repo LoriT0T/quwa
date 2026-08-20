@@ -1,0 +1,29 @@
+---
+import { getDict, type Locale } from '../i18n';
+/**
+ * Client-rendered UI (cart rows, checkout messages, download buttons) cannot read
+ * the Astro dictionary, and importing it would ship both locales to every visitor.
+ * This serialises only the keys those scripts need, from the same locale files as
+ * everything else — so there is still no copy written inside a component.
+ */
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const t = getDict(lang);
+
+const strings = {
+  lang,
+  intl: lang === 'ar' ? 'ar-u-nu-arab' : 'en-US',
+  remove: t.cart.remove,
+  qty: t.cart.qty,
+  download: t.thankYou.download,
+  empty: t.cart.empty,
+  processing: t.cart.processing,
+  emailInvalid: t.common.emailInvalid,
+  emailSent: t.tools.emailGateSent,
+  demoMode: t.thankYou.downloadDemo,
+  applyCredit: t.thankYou.upsellCta,
+  spent: t.thankYou.upsellBody,
+  creditLine: t.cart.discount,
+};
+---
+<script is:inline type="application/json" data-strings set:html={JSON.stringify(strings)}></script>

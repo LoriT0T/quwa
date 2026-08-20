@@ -1,12 +1,12 @@
 import { getCart, removeItem, setQuantity, addItem, getReferral, CART_EVENT, type CartLine } from '../lib/cart';
 import { ORDER_BUMP, REFERRAL } from '../config/pricing';
-import { money, locale, COPY } from './money';
+import { money, locale, strings, onCurrencyChange } from './money';
 
 const page = document.querySelector<HTMLElement>('[data-cart-page]');
 
 if (page) {
-  const { lang, intl } = locale();
-  const copy = COPY[lang];
+  const { intl } = locale();
+  const copy = strings();
   const list = page.querySelector<HTMLUListElement>('[data-cart-items]')!;
   const empty = page.querySelector<HTMLElement>('[data-cart-empty]')!;
   const summary = page.querySelector<HTMLElement>('[data-cart-summary]')!;
@@ -77,6 +77,7 @@ if (page) {
   });
 
   window.addEventListener(CART_EVENT, (event) => render((event as CustomEvent<CartLine[]>).detail));
+  onCurrencyChange(() => render());
   render();
 }
 
