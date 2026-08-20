@@ -13,7 +13,7 @@ daysPerWeek: 4
 minutesPerSession: 65
 pages: 68
 image: ../../../assets/images/program-hypertrophy-foundations.jpg
-imageAlt: "رفّ دمبلات في صالة تدريب خافتة الإضاءة"
+imageAlt: "رفّ دمبلات في صالة تدريب"
 order: 10
 featured: true
 isNew: true

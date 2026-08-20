@@ -135,31 +135,33 @@ const schema = [
 </Layout>
 <style>
   .gap { margin-block-start: var(--space-8); }
-  .plans { display: grid; gap: var(--space-4); max-inline-size: 900px; margin-inline: auto; }
+  /* 900px was the last hand-typed measure on the site. Two card measures plus
+     the gap is the same figure, expressed in tokens. */
+  .plans { display: grid; gap: var(--space-4); max-inline-size: calc(var(--measure-card) * 2 + var(--space-4)); margin-inline: auto; }
   .plan { padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-3); }
   .plan-annual { border-color: var(--c-accent); box-shadow: var(--shadow-lift); order: -1; }
   .badge { align-self: flex-start; padding: 4px 10px; border-radius: var(--r-pill); background: var(--c-accent); color: var(--c-accent-ink); font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); }
   .plan-name { font-size: var(--fs-card-title); }
   .amount { display: flex; align-items: baseline; gap: var(--space-2); font-size: var(--fs-h2); font-weight: var(--fw-bold); }
   .per { font-size: var(--fs-body); color: var(--c-muted); font-weight: 400; }
-  .billed, .saving { font-size: var(--fs-small); color: var(--c-muted); }
+  .billed, .saving { font-size: var(--fs-body); color: var(--c-muted); }
   .saving { color: var(--c-accent); font-weight: var(--fw-bold); }
   .saving-muted { visibility: hidden; }
   .trial-badge { font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-paper); }
   :global(:root[lang="ar"]) .trial-badge { text-transform: none; }
   .trial-none { visibility: hidden; }
   .plan .btn { margin-block-start: var(--space-4); }
-  .terms { font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.5; }
+  .terms { font-size: var(--fs-small); color: var(--c-faint); line-height: 1.5; }
 
   .features { margin-block-start: var(--space-16); max-inline-size: var(--measure-prose); margin-inline: auto; }
   .flist { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: grid; gap: var(--space-3); }
-  .flist li { font-size: var(--fs-small); color: var(--c-muted); padding-inline-start: var(--space-6); position: relative; line-height: 1.6; }
+  .flist li { font-size: var(--fs-body); color: var(--c-muted); padding-inline-start: var(--space-6); position: relative; line-height: 1.6; }
   .flist li::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 7px; inline-size: 8px; block-size: 8px; border-radius: 2px; background: var(--c-accent); }
 
   .mb { margin-block-end: var(--space-8); }
   .table-wrap { overflow-x: auto; }
   .cmp { inline-size: 100%; min-inline-size: 480px; border-collapse: collapse; }
-  .cmp th, .cmp td { padding: var(--space-4); text-align: start; border-block-end: 1px solid var(--c-line); font-size: var(--fs-small); }
+  .cmp th, .cmp td { padding: var(--space-4); text-align: start; border-block-end: 1px solid var(--c-line); font-size: var(--fs-body); }
   .cmp thead th { font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-faint); }
   :global(:root[lang="ar"]) .cmp thead th { text-transform: none; }
   .cmp tbody th { font-weight: 400; color: var(--c-muted); }
@@ -171,8 +173,8 @@ const schema = [
   .cancel { padding: var(--space-8); max-inline-size: var(--measure-prose); }
   .cancel-b { margin-block-start: var(--space-3); color: var(--c-muted); line-height: 1.7; }
   .faq-h { margin-block-start: var(--space-16); }
-  .faq-wrap { max-inline-size: 72ch; }
-  .vary { margin-block-start: var(--space-6); font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.6; }
+  .faq-wrap { max-inline-size: var(--measure-prose); }
+  .vary { margin-block-start: var(--space-6); font-size: var(--fs-small); color: var(--c-faint); line-height: 1.6; max-inline-size: var(--measure-prose); }
   .closing { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); text-align: center; }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   @media (min-width: 768px) { .plans { grid-template-columns: 1fr 1fr; } .plan-annual { order: 0; } }

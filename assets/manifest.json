@@ -29,7 +29,9 @@
       "source": "stock",
       "why": "A real gym environment. Generated gym interiors reliably produce impossible equipment geometry, and equipment that a lifter can see is wrong undermines the one thing this brand sells.",
       "query": [
-        "barbell weight plates gym"
+        "barbell gymnasium training",
+        "weight training gym equipment",
+        "fitness centre weights room"
       ],
       "prompt": "A loaded Olympic barbell resting on rubber gym flooring, shot low and close at 35mm, hard directional light raking from the upper left, deep shadow filling the right third of the frame. Cool near-black environment, one warm highlight on the knurling. Negative space reserved in the upper third for a headline. No people, no faces, no visible branding.",
       "alt": "home.heroAlt"
@@ -83,13 +85,16 @@
       "height": 900,
       "source": "stock",
       "query": [
-        "grilled chicken vegetables plate",
-        "healthy dinner plate",
-        "salad chicken protein"
+        "healthy meal vegetables chicken",
+        "grilled chicken vegetables dinner",
+        "salad plate lunch healthy"
       ],
-      "why": "Food photography. Generated food is the single most obvious failure case in image models.",
+      "why": "Three licensed candidates were rejected on review: a restaurant dining room, a museum ceramic accession, and Marines grilling chicken at a field barbecue. None is a plate of food a dieting person would eat. Free licensed aggregators do not reliably return commercial-grade food photography; this needs an Unsplash or Pexels key, or the shoot.",
       "prompt": "An overhead plate of grilled chicken, rice and green vegetables on a dark surface, single soft window light from the left.",
-      "alt": "program.lean-recomposition.imageAlt"
+      "alt": "program.lean-recomposition.imageAlt",
+      "note": "Rejected three licensed candidates on review: a restaurant dining room, a museum ceramic accession, and Marines grilling chicken at a field barbecue. None of them is a plate of food a person would eat while dieting. Needs an Unsplash/Pexels key or the shoot in docs/SHOT-LIST.md.",
+      "blocked": true,
+      "shotList": "docs/SHOT-LIST.md#food"
     },
     {
       "id": "program-minimal-kit",
@@ -177,7 +182,9 @@
       "height": 720,
       "source": "stock",
       "query": [
-        "chicken rice bowl vegetables"
+        "chicken rice dish cooked",
+        "rice with chicken meal",
+        "cooked rice chicken vegetables dish"
       ],
       "why": "Food.",
       "prompt": "A bowl of chicken, rice and vegetables, three-quarter view, soft key light, dark background.",

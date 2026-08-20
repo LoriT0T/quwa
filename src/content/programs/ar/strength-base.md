@@ -12,6 +12,8 @@ weeks: 16
 daysPerWeek: 4
 minutesPerSession: 80
 pages: 74
+image: ../../../assets/images/program-strength-base.jpg
+imageAlt: "رافع يؤدي ضغطاً ببار محمّل على مقعد"
 order: 20
 featured: true
 rating: { value: 4.68, count: 143 }

@@ -16,7 +16,10 @@ import { localeParams, getPrograms } from '../../lib/content';
 import { TOOLS, toolStrings } from '../../lib/tools';
 import { MEMBERSHIP, GUARANTEE_DAYS } from '../../config/pricing';
 import * as S from '../../lib/schema';
+import { getImage } from 'astro:assets';
 import heroImage from '../../assets/images/home-hero.jpg';
+import libraryImage from '../../assets/images/program-recipe-pack.jpg';
+import toolsImage from '../../assets/images/starter-cover.jpg';
 
 export const getStaticPaths = localeParams;
 
@@ -25,6 +28,12 @@ const t = getDict(lang);
 const programs = (await getPrograms(lang)).filter((p) => p.data.featured).slice(0, 3);
 const tools = TOOLS.slice(0, 4);
 const schema = [S.faqPage(t.homeFaq)];
+
+const HERO_SIZES = '(min-width: 1024px) 520px, 100vw';
+const HERO_WIDTHS = [400, 560, 760, 1040];
+const heroOptimised = await getImage({
+  src: heroImage, widths: HERO_WIDTHS, sizes: HERO_SIZES, format: 'avif',
+});
 ---
 <Layout
   lang={lang}
@@ -32,6 +41,7 @@ const schema = [S.faqPage(t.homeFaq)];
   description={t.brand.description}
   path="/"
   schema={schema}
+  preloadImage={{ href: heroOptimised.src, srcset: heroOptimised.srcSet.attribute, sizes: HERO_SIZES }}
 >
   <!-- ── Hero ─────────────────────────────────────────────────────────── -->
   <section class="hero">
@@ -54,11 +64,12 @@ const schema = [S.faqPage(t.homeFaq)];
         <Media
           src={heroImage}
           alt={t.home.heroAlt}
+          class="hero-img"
           ratio="4 / 5"
           slot_id="home-hero"
           priority
-          sizes="(min-width: 1024px) 520px, 100vw"
-          widths={[420, 640, 1040]}
+          sizes={HERO_SIZES}
+          widths={HERO_WIDTHS}
         />
       </div>
     </div>
@@ -66,7 +77,11 @@ const schema = [S.faqPage(t.homeFaq)];
 
   <!-- ── Free tools: the acquisition layer, promoted above the products ── -->
   <Section>
-    <SectionHead eyebrow={t.home.tools.eyebrow} title={t.home.tools.title} body={t.home.tools.body} />
+    <div class="tools-head">
+      <SectionHead eyebrow={t.home.tools.eyebrow} title={t.home.tools.title} body={t.home.tools.body} />
+      <Media src={toolsImage} alt={t.starter.coverAlt} ratio="3 / 2" slot_id="starter-cover"
+             sizes="(min-width: 1024px) 380px, 100vw" widths={[380, 640, 900]} class="tools-media" />
+    </div>
     <ul class="tool-grid">
       {tools.map((tool) => {
         const s = toolStrings(t, tool);
@@ -134,11 +149,14 @@ const schema = [S.faqPage(t.homeFaq)];
   <!-- ── Proof, attached to the specific programs it is about ─────────── -->
   <Section tight surface>
     <SectionHead eyebrow={t.home.proof.eyebrow} title={t.home.proof.title} />
-    <div class="proof-stack">
-      <Proof lang={lang} product="hypertrophy-foundations" limit={1} columns={3} linkLabel={t.cta.viewProgram} />
-      <Proof lang={lang} product="strength-base" limit={1} columns={3} linkLabel={t.cta.viewProgram} />
-      <Proof lang={lang} product="membership" limit={1} columns={3} linkLabel={t.cta.joinMembership} />
-    </div>
+    <Proof
+      lang={lang}
+      product="hypertrophy-foundations"
+      also={['strength-base', 'membership']}
+      limit={3}
+      columns={3}
+      linkLabel={t.cta.viewProgram}
+    />
     <p class="vary">{t.common.resultsVary}</p>
   </Section>
 
@@ -151,12 +169,20 @@ const schema = [S.faqPage(t.homeFaq)];
           title={t.home.membershipSection.title}
           body={t.home.membershipSection.body}
         />
+        {/* The price card below carries the primary action. Two accent-filled
+            CTAs in one section spends the accent budget without adding a
+            decision — REFERENCE-SPEC §3.3 rations it to roughly one per 2000px. */}
         <CTA
           lang={lang}
           href={localePath(lang, 'membership')}
-          label={t.cta.primary}
+          label={t.cta.viewPrograms}
+          variant="secondary"
           terms={t.membership.trialLine}
         />
+      </div>
+      <div class="member-media">
+        <Media src={libraryImage} alt={t.recipes.indexTitle} ratio="4 / 3" slot_id="program-recipe-pack"
+               sizes="(min-width: 1024px) 420px, 100vw" widths={[420, 640, 900]} />
       </div>
       <div class="card price-card">
         <p class="pc-badge">{t.membership.annualBadge}</p>
@@ -200,40 +226,54 @@ const schema = [S.faqPage(t.homeFaq)];
 </Layout>
 
 <style>
-  .hero { padding-block: var(--space-12) var(--space-16); }
-  .hero-grid { display: grid; gap: var(--space-8); align-items: center; }
+  /* jeffnippard's hero is min-h-svh — exactly one viewport, so the fold belongs
+     to the headline. Ours measured 819px inside a 900px viewport. */
+  .hero {
+    padding-block: var(--space-8) var(--space-12);
+    min-block-size: calc(100svh - var(--header-h));
+    display: flex; align-items: center;
+  }
+  .hero-grid { display: grid; gap: var(--space-6); align-items: center; inline-size: 100%; }
   .hero-copy { display: flex; flex-direction: column; gap: var(--space-4); }
   .hero-copy h1 { margin-block: var(--space-2) var(--space-1); }
-  .hero-actions { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: flex-start; margin-block-start: var(--space-4); }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: flex-start; margin-block-start: var(--space-2); }
   .hero-media { order: -1; }
+  /* A 4:5 image is 488px tall at 390 and eats the fold on its own. Landscape on
+     the phone, portrait from the point the grid goes two-column. */
+  .hero-media :global(.hero-img) { aspect-ratio: 16 / 10 !important; max-block-size: 34svh; }
 
   .tool-grid, .prog-grid, .props, .stats, .proof-stack {
     list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4);
   }
   .tool { padding: 0; transition: border-color .16s var(--ease), transform .16s var(--ease); }
   .tool:hover { border-color: var(--c-accent); transform: translateY(-2px); }
-  .tool a { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-6); block-size: 100%; }
+  .tool a { display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-6); block-size: 100%; }
   .tool-free {
     font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); color: var(--c-accent);
     letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
   }
   :global(:root[lang="ar"]) .tool-free { text-transform: none; }
   .tool-name { font-size: var(--fs-card-title); }
-  .tool-line { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.55; flex: 1; }
+  .tool-line { font-size: var(--fs-body); color: var(--c-muted); line-height: 1.55; flex: 1; }
   .tool-cta { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--c-paper); margin-block-start: var(--space-2); }
   .tool-all { margin-block-start: var(--space-8); }
   .tool-all a { font-weight: var(--fw-bold); color: var(--c-accent); text-decoration: underline; text-underline-offset: 4px; }
 
   .props { counter-reset: prop; }
-  .prop { display: flex; flex-direction: column; gap: var(--space-2); padding-block-start: var(--space-4); border-block-start: 2px solid var(--c-accent); }
+  .prop { display: flex; flex-direction: column; gap: var(--space-4); padding-block-start: var(--space-4); border-block-start: 2px solid var(--c-line-strong); }
   .prop-n { font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); color: var(--c-accent); font-variant-numeric: tabular-nums; }
   .prop-t { font-size: var(--fs-card-title); }
-  .prop-b { color: var(--c-muted); line-height: 1.6; font-size: var(--fs-small); }
+  .prop-b { color: var(--c-muted); line-height: 1.6; font-size: var(--fs-body); }
 
   .proof-stack { gap: var(--space-4); }
-  .vary { margin-block-start: var(--space-8); font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.6; max-inline-size: 80ch; }
+  .vary { margin-block-start: var(--space-8); font-size: var(--fs-small); color: var(--c-faint); line-height: 1.6; max-inline-size: var(--measure-prose); }
 
   .member { display: grid; gap: var(--space-8); align-items: start; }
+  /* Mobile-first means the imagery ships on the phone too. Hiding it under
+     1024 left the viewport that dominates this category's traffic with a
+     text-only page. */
+  .member-media, .tools-media { display: block; }
+  .tools-head { display: grid; gap: var(--space-8); align-items: end; }
   .price-card { padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-3); }
   .pc-badge {
     align-self: flex-start; padding: 4px 10px; border-radius: var(--r-pill);
@@ -245,16 +285,16 @@ const schema = [S.faqPage(t.homeFaq)];
   .pc-billed { font-size: var(--fs-small); color: var(--c-muted); }
   .pc-annual { font-size: var(--fs-card-title); font-weight: var(--fw-bold); }
   .pc-list { list-style: none; margin: var(--space-4) 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
-  .pc-list li { font-size: var(--fs-small); color: var(--c-muted); padding-inline-start: var(--space-6); position: relative; line-height: 1.5; }
+  .pc-list li { font-size: var(--fs-body); color: var(--c-muted); padding-inline-start: var(--space-6); position: relative; line-height: 1.5; }
   .pc-list li::before {
     content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 7px;
     inline-size: 8px; block-size: 8px; border-radius: 2px; background: var(--c-accent);
   }
   .pc-terms { font-size: var(--fs-eyebrow); color: var(--c-faint); text-align: center; }
 
-  .faq-wrap { max-inline-size: 72ch; }
+  .faq-wrap { max-inline-size: var(--measure-prose); }
   .closing { display: flex; flex-direction: column; gap: var(--space-4); align-items: center; text-align: center; }
-  .closing .lead { max-inline-size: 48ch; }
+  .closing .lead { max-inline-size: var(--measure-card); }
 
   @media (min-width: 640px) {
     .tool-grid { grid-template-columns: 1fr 1fr; }
@@ -262,12 +302,14 @@ const schema = [S.faqPage(t.homeFaq)];
     .stats { grid-template-columns: repeat(3, 1fr); }
   }
   @media (min-width: 1024px) {
-    .hero { padding-block: var(--space-24) var(--space-32); }
+    .hero { padding-block: var(--space-16) var(--space-24); }
     .hero-grid { grid-template-columns: 1.15fr 0.85fr; gap: var(--space-16); }
     .hero-media { order: 0; }
+    .hero-media :global(.hero-img) { aspect-ratio: 4 / 5 !important; max-block-size: none; }
     .tool-grid { grid-template-columns: repeat(4, 1fr); }
     .prog-grid { grid-template-columns: repeat(3, 1fr); }
     .props { grid-template-columns: repeat(4, 1fr); }
-    .member { grid-template-columns: 1.1fr 0.9fr; gap: var(--space-16); }
+    .member { grid-template-columns: 1fr 0.75fr 0.85fr; gap: var(--space-12); align-items: center; }
+    .tools-head { grid-template-columns: 1fr 380px; gap: var(--space-12); }
   }
 </style>

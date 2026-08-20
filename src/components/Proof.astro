@@ -8,15 +8,20 @@ import { localePath } from '../lib/url';
 interface Props {
   lang: Locale;
   product: string;
+  /** Extra products, so one grid can carry proof for several things at once.
+      Stacking three single-item <Proof> blocks tripled the height for the same
+      words — REFERENCE-SPEC §1.12 puts the proof band at 441 words/1000px,
+      six times denser than any other section. */
+  also?: string[];
   /** Where the proof links to. Omit for the product's own page. */
   href?: string;
   linkLabel?: string;
   limit?: number;
   columns?: 1 | 2 | 3;
 }
-const { lang, product, href, linkLabel, limit = 3, columns = 3 } = Astro.props;
+const { lang, product, also = [], href, linkLabel, limit = 3, columns = 3 } = Astro.props;
 const t = getDict(lang);
-const items = testimonialsFor(lang, product).slice(0, limit);
+const items = [product, ...also].flatMap((id) => testimonialsFor(lang, id).slice(0, limit)).slice(0, limit);
 const target = href ?? (product === 'membership' ? localePath(lang, 'membership') : localePath(lang, `programs/${product}`));
 ---
 {items.length > 0 && (
@@ -31,7 +36,11 @@ const target = href ?? (product === 'membership' ? localePath(lang, 'membership'
         <footer class="attrib">
           <p class="name">{entry.name}</p>
           <p class="meta">{entry.location} · {entry.context}</p>
-          {linkLabel && <a class="link" href={target}>{linkLabel}</a>}
+          {linkLabel && (
+            <a class="link" href={entry.product === 'membership'
+              ? localePath(lang, 'membership')
+              : localePath(lang, `programs/${entry.product}`)}>{linkLabel}</a>
+          )}
         </footer>
       </li>
     ))}
@@ -39,10 +48,12 @@ const target = href ?? (product === 'membership' ? localePath(lang, 'membership'
 )}
 <style>
   .proof { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
-  .proof-item { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
+  .proof-item { padding: var(--space-5, 1.25rem) var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
   .rating { display: flex; align-items: center; gap: var(--space-2); font-size: var(--fs-small); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums; }
   .rating-bar { inline-size: 56px; block-size: 4px; background: var(--c-line-strong); border-radius: var(--r-pill); overflow: hidden; }
-  .rating-bar > span { display: block; block-size: 100%; background: var(--c-accent); }
+  /* A data bar is not a call to action. REFERENCE-SPEC §3.3: joinladder spends
+     its accent about once per 2000px; ours was running at roughly twice that. */
+  .rating-bar > span { display: block; block-size: 100%; background: rgb(245 247 250 / 0.55); }
   .quote { margin: 0; font-size: var(--fs-body); line-height: 1.62; color: var(--c-paper); }
   .attrib { display: flex; flex-direction: column; gap: var(--space-1); margin-block-start: auto; }
   .name { font-weight: var(--fw-bold); font-size: var(--fs-small); }

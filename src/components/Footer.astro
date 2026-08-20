@@ -4,6 +4,7 @@ import { localePath } from '../lib/url';
 import { SITE } from '../config/site';
 import Wordmark from './Wordmark.astro';
 import EmailCapture from './EmailCapture.astro';
+import CurrencySwitcher from './CurrencySwitcher.astro';
 
 interface Props { lang: Locale; }
 const { lang } = Astro.props;
@@ -73,7 +74,14 @@ const columns = [
 
     <div class="bottom">
       <p class="rights">{fill(t.footer.rights, { year, brand: t.brand.wordmark })}</p>
-      <p class="built">{t.footer.builtIn}</p>
+      <div class="bottom-right">
+        {/* On a phone the header switcher lives behind the menu button, which
+            makes the currency control invisible to the viewport that dominates
+            this category's traffic. The footer control is always reachable. */}
+        <span class="cur-label">{t.nav.currencyLabel}</span>
+        <CurrencySwitcher lang={lang} />
+        <p class="built">{t.footer.builtIn}</p>
+      </div>
     </div>
     <p class="disclaimer">{t.footer.disclaimer}</p>
   </div>
@@ -86,7 +94,7 @@ const columns = [
   }
   .top { display: grid; gap: var(--space-8); }
   .brand-col { display: flex; flex-direction: column; gap: var(--space-4); }
-  .tagline { color: var(--c-muted); font-size: var(--fs-small); max-inline-size: 30ch; }
+  .tagline { color: var(--c-muted); font-size: var(--fs-body); max-inline-size: var(--measure-card); }
   .social { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-4); }
   .social a { font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-muted); }
   .social a:hover { color: var(--c-accent); }
@@ -105,9 +113,11 @@ const columns = [
     padding-block-start: var(--space-8); border-block-start: 1px solid var(--c-line);
   }
   .rights, .built { font-size: var(--fs-eyebrow); color: var(--c-faint); }
+  .bottom-right { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .cur-label { font-size: var(--fs-eyebrow); color: var(--c-faint); }
   .disclaimer {
     margin-block-start: var(--space-6); font-size: var(--fs-eyebrow);
-    color: var(--c-faint); line-height: 1.6; max-inline-size: 90ch;
+    color: var(--c-faint); line-height: 1.6; max-inline-size: var(--measure-prose);
   }
   @media (min-width: 768px) { .top { grid-template-columns: 1.4fr repeat(3, 1fr); gap: var(--space-12); } }
 </style>

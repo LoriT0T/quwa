@@ -26,7 +26,10 @@ const current = path.split('/')[0];
 
 <header class="site-header">
   <div class="container-page bar">
-    <a class="brand" href={localePath(lang, '/')} aria-label={t.brand.wordmark}>
+    {/* No aria-label: in `ar` the wordmark renders "قوّة" alongside the Latin
+        "QUWA", and an aria-label of just the Arabic hid half its own visible
+        text from the accessible name. The text content is the better name. */}
+    <a class="brand" href={localePath(lang, '/')}>
       <Wordmark lang={lang} />
     </a>
 
@@ -65,13 +68,17 @@ const current = path.split('/')[0];
 </header>
 
 <style>
+  /* joinladder's announcement bar is black with plain text — the accent is
+     rationed to about one use per 2000px (REFERENCE-SPEC §3.3). A full-bleed
+     accent bar was the single largest accent area on every page. */
   .announce {
-    display: block; padding-block: var(--space-2); padding-inline: var(--space-4);
-    background: var(--c-accent); color: var(--c-accent-ink);
-    font-size: var(--fs-eyebrow); font-weight: var(--fw-bold);
+    display: block; padding-block: var(--space-3); padding-inline: var(--space-4);
+    background: var(--c-surface); color: var(--c-paper);
+    border-block-end: 1px solid var(--c-line);
+    font-size: var(--fs-small); font-weight: var(--fw-bold);
     text-align: center; line-height: 1.4;
   }
-  .announce:hover { background: #ff7f4a; }
+  .announce:hover { color: var(--c-accent); }
 
   .site-header {
     position: sticky; inset-block-start: 0; z-index: 40;
@@ -100,7 +107,7 @@ const current = path.split('/')[0];
   .actions { display: flex; align-items: center; gap: var(--space-2); }
   .cart-link {
     position: relative; display: inline-flex; align-items: center; justify-content: center;
-    inline-size: 40px; block-size: 40px; border-radius: var(--r-pill); color: var(--c-muted);
+    inline-size: 44px; block-size: 44px; border-radius: var(--r-pill); color: var(--c-muted);
   }
   .cart-link:hover { color: var(--c-paper); background: rgb(245 247 250 / .06); }
   .cart-count {
@@ -113,7 +120,7 @@ const current = path.split('/')[0];
   }
   .menu-btn {
     display: inline-flex; align-items: center; justify-content: center;
-    inline-size: 40px; block-size: 40px; background: transparent;
+    inline-size: 44px; block-size: 44px; background: transparent;
     border: 1px solid var(--c-line); border-radius: var(--r-pill);
     color: var(--c-paper); cursor: pointer;
   }

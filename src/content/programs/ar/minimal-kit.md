@@ -12,6 +12,8 @@ weeks: 8
 daysPerWeek: 3
 minutesPerSession: 40
 pages: 48
+image: ../../../assets/images/program-minimal-kit.jpg
+imageAlt: "شخص يتدرّب بدمبل في غرفة مضيئة في البيت"
 order: 40
 rating: { value: 4.77, count: 94 }
 whatsInside:

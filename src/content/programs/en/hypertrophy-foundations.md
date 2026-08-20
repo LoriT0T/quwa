@@ -13,7 +13,7 @@ daysPerWeek: 4
 minutesPerSession: 65
 pages: 68
 image: ../../../assets/images/program-hypertrophy-foundations.jpg
-imageAlt: "A rack of dumbbells in a dimly lit gym"
+imageAlt: "A rack of dumbbells in a gym"
 order: 10
 featured: true
 isNew: true

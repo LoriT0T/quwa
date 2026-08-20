@@ -15,8 +15,13 @@
 
   /* Secondary values are alpha derivatives of the foreground only — the same
      device jeffnippard uses (rgba(28,28,28,α) at α = .1 / .5 / .6 / .8). */
-  --c-muted: rgb(245 247 250 / 0.62);
-  --c-faint: rgb(245 247 250 / 0.42);
+  /* Alpha values chosen against the two grounds they actually sit on, not by eye.
+     At 0.42 --c-faint composited to #74777d on --c-surface, a contrast of 3.85:1
+     against the 4.5:1 AA threshold, and Lighthouse flagged it in 14 places.
+     0.56 → 5.29:1 on surface and 5.73:1 on ink; 0.74 → 9.5:1, which keeps the
+     two greys visibly distinct (142 vs 184) rather than collapsing them. */
+  --c-muted: rgb(245 247 250 / 0.74);
+  --c-faint: rgb(245 247 250 / 0.56);
   --c-line: rgb(245 247 250 / 0.12);
   --c-line-strong: rgb(245 247 250 / 0.22);
   --c-surface-2: #1c232c;
@@ -34,9 +39,14 @@
   --fs-lead: 1.125rem;                /* 18 — joinladder×48 */
   --fs-card-title: 1.25rem;           /* 20 — jeffnippard×8, joinladder×6 */
   --fs-h3: 1.5rem;                    /* 24 — jeffnippard×6, joinladder×6 */
-  --fs-h2: clamp(1.875rem, 1.55rem + 1.4vw, 2.25rem);   /* 30→36, joinladder exactly */
-  --fs-display: clamp(2.25rem, 1.35rem + 4.5vw, 3.75rem); /* 36→60 */
-  --fs-stat: clamp(3.5rem, 1.9rem + 8vw, 7.5rem);       /* 56→120 */
+  /* The preferred term has to fall *below* the clamp minimum at 390, or the
+     minimum never applies and mobile lands on 30.26 / 39.15 instead of the
+     30 / 36 the references measure. */
+  --fs-h2: clamp(1.875rem, 1.5rem + 1.4vw, 2.25rem);     /* 30 at 390 → 36 at 1440 */
+  --fs-display: clamp(2.25rem, 1.35rem + 3.3vw, 3.75rem); /* 36 at 390 → 60 at 1440 */
+  /* 1.9rem + 8vw evaluated to 61.6 at 390, above the 3.5rem floor, so mobile
+     never landed on the token. 1.2rem keeps the floor reachable. */
+  --fs-stat: clamp(3.5rem, 1.2rem + 8vw, 7.5rem);       /* 56 at 390 → 120 at 1440 */
 
   --fw-body: 400;
   --fw-bold: 700;
@@ -59,8 +69,11 @@
   --space-16: 4rem;     /* 64 */
   --space-24: 6rem;     /* 96 */
   --space-32: 8rem;     /* 128 */
-  --space-section: clamp(4rem, 8vw, 8rem);         /* 64→128, joinladder measured */
-  --space-section-tight: clamp(3rem, 5vw, 6rem);   /* 48→96, proof/stat bands */
+  /* 8vw topped out at 115.2px at 1440 — the 8rem cap was never reached, so we
+     shipped 115.2 against a spec of 128. 8.9vw lands on 128.16 at 1440 and
+     clamps to 64 at 390, which is what joinladder actually measures. */
+  --space-section: clamp(4rem, 8.9vw, 8rem);       /* 64 → 128 at 1440 */
+  --space-section-tight: clamp(3rem, 6.7vw, 6rem); /* 48 → 96 at 1440 */
 
   /* ── Grid */
   --container: 80rem;                              /* 1280 — joinladder & bodyboost */
@@ -83,8 +96,6 @@
 
   /* Latin is the default body face; overridden per locale below. */
   --font-body: var(--font-latin), system-ui, -apple-system, "Segoe UI", sans-serif;
-  /* Optical size match between the two families; measured, see DECISIONS.md #7. */
-  --font-scale: 1;
 }
 
 :root[lang="ar"] {
@@ -92,7 +103,14 @@
   /* IBM Plex Sans Arabic sets ~4% smaller on the x-height than Inter at the same
      px size. Correcting here keeps the two locales reading as one brand rather
      than two sites. Measured value recorded in DECISIONS.md. */
-  --font-scale: 1.04;
+  /* Measured at 200px with both faces loaded: Inter's x-height is 109.18px
+     (ratio 0.546); IBM Plex Sans Arabic's is 103.20px (ratio 0.516) — 5.8%
+     smaller. font-size-adjust corrects the glyph without touching the rem
+     basis. Scaling the root font-size instead dragged every spacing token off
+     the 4px grid (24 → 24.96) and pushed the ar container from 1280 to 1331 —
+     precisely the fractional-token anti-pattern REFERENCE-SPEC §2 records on
+     rpstrength and tells us not to copy. */
+  font-size-adjust: 0.546;
   --tracking-eyebrow: 0.06em;   /* Arabic is joined; wide tracking breaks ligatures */
   --tracking-display: 0;
   --lh-heading: 1.3;            /* Arabic ascenders/descenders need more leading */

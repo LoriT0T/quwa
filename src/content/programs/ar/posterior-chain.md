@@ -13,7 +13,7 @@ daysPerWeek: 3
 minutesPerSession: 50
 pages: 56
 image: ../../../assets/images/program-posterior-chain.jpg
-imageAlt: "كرات حديدية مصفوفة على أرضية صالة تدريب"
+imageAlt: "متدرّبة تستريح على أرضية الصالة بجانب كرة حديدية"
 order: 50
 rating: { value: 4.65, count: 129 }
 whatsInside:

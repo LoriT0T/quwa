@@ -25,7 +25,7 @@ method:
   - Stir the soy sauce and honey through with a splash of water. It will thicken in under a minute.
   - Serve over the rice with spring onion and sesame.
 image: ../../../assets/images/recipe-chicken-rice-bowl.jpg
-imageAlt: "A bowl of chicken and rice with vegetables"
+imageAlt: "Sesame chicken served over rice"
 order: 20
 seoDescription: "A 15-minute chicken and rice bowl with 52 g of protein per serving, cooked in one pan."
 ---

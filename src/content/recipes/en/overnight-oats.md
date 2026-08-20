@@ -21,6 +21,8 @@ method:
   - Fold the berries through, or keep them on top if you prefer them intact.
   - Cover and refrigerate for at least six hours.
   - Loosen with a splash of milk in the morning if it has set too firm.
+image: ../../../assets/images/recipe-overnight-oats.jpg
+imageAlt: "Two bowls of oats topped with banana and nuts"
 order: 30
 seoDescription: "Protein overnight oats with 38 g of protein per serving — three minutes of assembly, no cooking."
 ---

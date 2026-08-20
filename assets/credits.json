@@ -1,1 +1,112 @@
-{}
+{
+  "program-hypertrophy-foundations": {
+    "slot": "program-hypertrophy-foundations",
+    "title": "Sporty girl posing in gym on weigh rack",
+    "creator": "Nenad Stojkovic",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sporty_girl_posing_in_gym_on_weigh_rack.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "4600×3071"
+  },
+  "program-strength-base": {
+    "slot": "program-strength-base",
+    "title": "MCAS Iwakuni Women’s Power Lifting (9352356)",
+    "creator": "U.S. Marine Corps photo by Lance Cpl. Siwan Lewis",
+    "licence": "Public domain",
+    "licenceUrl": "",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:MCAS_Iwakuni_Women%E2%80%99s_Power_Lifting_(9352356).jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "6720×4480"
+  },
+  "program-minimal-kit": {
+    "slot": "program-minimal-kit",
+    "title": "Woman exercising with dumbbell in a bright living",
+    "creator": "Shixart1985",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Woman_exercising_with_dumbbell_in_a_bright_living.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "6016×4016"
+  },
+  "program-posterior-chain": {
+    "slot": "program-posterior-chain",
+    "title": "Young athlete sits on the gym floor",
+    "creator": "Shixart1985",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Young_athlete_sits_on_the_gym_floor.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "6016×4016"
+  },
+  "program-push-pull-legs": {
+    "slot": "program-push-pull-legs",
+    "title": "USMC-090608-M-7097L-212",
+    "creator": "Lance Cpl. Melissa A. Latty",
+    "licence": "Public domain",
+    "licenceUrl": "",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:USMC-090608-M-7097L-212.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "2000×1386"
+  },
+  "program-recipe-pack": {
+    "slot": "program-recipe-pack",
+    "title": "Meal prep glass container (45165270525)",
+    "creator": "Ella Olsson from Stockholm, Sweden",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Meal_prep_glass_container_(45165270525).jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "5132×3849"
+  },
+  "recipe-shakshuka": {
+    "slot": "recipe-shakshuka",
+    "title": "Shakshuka1",
+    "creator": "Joe Mahoney",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Shakshuka1.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "2048×1344"
+  },
+  "recipe-chicken-rice-bowl": {
+    "slot": "recipe-chicken-rice-bowl",
+    "title": "Sesame oil chicken (4849352485)",
+    "creator": "jeffreyw",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sesame_oil_chicken_(4849352485).jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "1600×1063"
+  },
+  "recipe-overnight-oats": {
+    "slot": "recipe-overnight-oats",
+    "title": "Banana Oatmeal Breakfast Bowl (44302857265)",
+    "creator": "Ella Olsson from Stockholm, Sweden",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Banana_Oatmeal_Breakfast_Bowl_(44302857265).jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "6000×4000"
+  },
+  "starter-cover": {
+    "slot": "starter-cover",
+    "title": "USVI IMG 5202 - Minimalist desk with colorful pencils in a cardboard holder a cup holding pens and scissors and a notebook with botanical patterns all under soft light",
+    "creator": "Category:Government of the United States Virgin Islands",
+    "licence": "Public domain",
+    "licenceUrl": "",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:USVI_IMG_5202_-_Minimalist_desk_with_colorful_pencils_in_a_cardboard_holder_a_cup_holding_pens_and_scissors_and_a_notebook_with_botanical_patterns_all_under_soft_light.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "6240×4160"
+  },
+  "home-hero": {
+    "slot": "home-hero",
+    "title": "Young attractive man doing leg with machine in gym. Back view closeup",
+    "creator": "Nenad Stojkovic",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Young_attractive_man_doing_leg_with_machine_in_gym._Back_view_closeup.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "4016×6016"
+  }
+}

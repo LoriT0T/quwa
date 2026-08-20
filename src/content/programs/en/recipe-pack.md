@@ -9,6 +9,8 @@ level: all
 goal: nutrition
 equipment: none
 pages: 164
+image: ../../../assets/images/program-recipe-pack.jpg
+imageAlt: "Prepared meals portioned into glass containers"
 order: 70
 featured: true
 rating: { value: 4.69, count: 311 }

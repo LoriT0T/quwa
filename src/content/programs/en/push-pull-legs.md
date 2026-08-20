@@ -12,6 +12,8 @@ weeks: 12
 daysPerWeek: 6
 minutesPerSession: 70
 pages: 82
+image: ../../../assets/images/program-push-pull-legs.jpg
+imageAlt: "Hands gripping a cast-iron weight plate"
 order: 60
 rating: { value: 4.58, count: 87 }
 whatsInside:

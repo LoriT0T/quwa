@@ -15,7 +15,7 @@ const { eyebrow, title, body, center = false, as: Tag = 'h2' }: Props = Astro.pr
   {body && <p class="lead measure-prose">{body}</p>}
 </header>
 <style>
-  .head { display: flex; flex-direction: column; gap: var(--space-3); margin-block-end: var(--space-12); }
+  .head { display: flex; flex-direction: column; gap: var(--space-4); margin-block-end: var(--space-12); }
   .head-center { align-items: center; text-align: center; }
   .head-center :global(.measure-prose) { margin-inline: auto; }
 </style>

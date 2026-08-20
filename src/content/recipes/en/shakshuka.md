@@ -26,6 +26,8 @@ method:
   - Pour in the tomatoes, season, and simmer for 6 minutes until it thickens.
   - Make four wells and crack an egg into each. Cover and cook 5–7 minutes for a set white and a soft yolk.
   - Scatter the feta and parsley over the top and serve straight from the pan.
+image: ../../../assets/images/recipe-shakshuka.jpg
+imageAlt: "Shakshuka cooking in a pan, topped with herbs and feta"
 order: 10
 seoDescription: "A high-protein shakshuka with 34 g of protein per serving — eggs, lean mince and tomato, ready in under 30 minutes."
 ---

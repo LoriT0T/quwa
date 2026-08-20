@@ -13,25 +13,67 @@ export const GENERATED_IMAGES = {
     "width": 1040,
     "height": 1300,
     "ratio": "4:5",
-    "lqip": "data:image/webp;base64,UklGRsIAAABXRUJQVlA4ILYAAADwBQCdASoYAB4APxF4tlOsJyUiqAqpgCIJYwDCgBDhOW4L0TDv8AuQgw21E+qCvQmh9/9gMwgtQAD+2O9piXs3uufI2fCa5U3qrzSMRkXhoYFvnPfqpQ8Dqz54TuXKCIaV1hfail6g1l+0oa8R3qW3+i+w0aHsJTirp6vVRAput6MnFJ9dSR7FBhjliG+tA8IwxCJyHD4lmdX5zOZaXXR54JFS4skuoHIjOxiBsk/R9ZOnYqAAAA=="
+    "lqip": "data:image/webp;base64,UklGRhIBAABXRUJQVlA4IAYBAACQBgCdASoYAB4APxF2s1KsJySisBgIAYAiCWcAzYXdI4HTOZW9LOtEizYmcpXc4hJG2L8iTD2Lre+x2QAAAMscWdKOqulGslo5bu+DKI5hfj+3nYUVAtIydBLiXe5SzrZlOki1UV1ze43E12O4LY+GTJLg5Ft8qiClVLeHjA/N7Os1RBbrFfyZ5CGuNSc/mKOGOSLN6zybz5sMnnfG+nwn661r9YrahyfWEdMbspMfgn7HCpOeqqxgPGF4CojiSh3U1XxgRwjpHcjNKdrUIkguyqr7Crnff6MBII6NJhUnAizAsAPgn1WHXBiCPyECQMO+w1FxvK4roJzTKJIi5Yc/RFg5gAAA"
   },
   "program-hypertrophy-foundations": {
     "width": 1200,
     "height": 900,
     "ratio": "4:3",
-    "lqip": "data:image/webp;base64,UklGRrgAAABXRUJQVlA4IKwAAADwBACdASoYABIAPxGAt1WsJ6UjKAgBgCIJZwAAKvMgRjtipZsduYoiRt9GXT9aQAAA/tBxb2NcdWAUZvb4K2yeok8/UdNlUlv2loutCtsVKI9dXfHfENRlGKAnGNDMzO/qWXi7Pu/0futDgeqGlBeV4P7g5JcUBeMlW/PSIZRsl48UdiHIHCxO5bSdVFkyVLkpwTWAOigOeQKLzibN8L2pcI6G2IBd4JCAgQAA"
+    "lqip": "data:image/webp;base64,UklGRs4AAABXRUJQVlA4IMIAAABQBQCdASoYABIAPxF8slQsJ6QjKAqpgCIJYwDImywTogJrpSXzmK1inQPxp7a54qqRdQAA4dQnajaU8t95XL231s/XoNWqfgYeCpGQ1VCEdLPTwfp0hHVEwCpfS8F2PVY6v7v71ay/ROWvALN4o3Q+pzU8ZHfGZtpHJXC/r6kVtnlLNj+Oh7NUCThTGoJlBLKxyRQ83W86dbExM17fJnfmL7r+HSksByD9UUz/ePEGslxRE/lQcyXL5uIORDaANTAAAA=="
+  },
+  "program-strength-base": {
+    "width": 1200,
+    "height": 900,
+    "ratio": "4:3",
+    "lqip": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAADwBACdASoYABIAPxF+tlWsJ6SjKAgBgCIJQBibAiSZbUZaPWyv/rKk0Hg70/d9ZwAA/tvC38Ao0jDan49ZQ2xa3iML8Yn5aW16iatUVob/EEJrW8dCjoO+a6KDAy2nMcC2mBp9AtYcPS12SWHyGGDUOdbF7nPQYuXy3Z5KOEsKSIAAAAA="
+  },
+  "program-minimal-kit": {
+    "width": 1200,
+    "height": 900,
+    "ratio": "4:3",
+    "lqip": "data:image/webp;base64,UklGRqoAAABXRUJQVlA4IJ4AAAAwBQCdASoYABIAPxGAt1WsJ6UjKAgBgCIJZQC/OBDe8ld8bDsJPVbTys2IN9dVdJbyAAD+aXFwz2duEaFeFmLl5AwXVlyR2XWh3JDBNw+M1/KVVrNWrVyoQy+SV4NLMvzxTdT7nB5po+QM+EQpj/N84/AL4BL6vuQTJQdxOe6mDbtn3sp9GJ6X+ggpVP8BYgCWLytdch/uFDycYxAAAA=="
   },
   "program-posterior-chain": {
     "width": 1200,
     "height": 900,
     "ratio": "4:3",
-    "lqip": "data:image/webp;base64,UklGRqQAAABXRUJQVlA4IJgAAAAQBQCdASoYABIAPxF6tVOsJ6UiqAqpgCIJZwAD5YjDSEKE9EYhHgrFrEWZbj3iA5uAAP3SOymjuYH+8XZPcCKK4zvX4pKZnOgbxJ30LSQR2c32OoRoZlw+IXGN/u16lN9xSx2g+9SfQeXxowpdlhB7vPu4yMUtv7SHdmVANmHDmCxBroWgpZjSE3OHN9ZY9TUp+I2lMwwAAA=="
+    "lqip": "data:image/webp;base64,UklGRq4AAABXRUJQVlA4IKIAAAAwBQCdASoYABIAPxF6tFQsJySjKAqpgCIJaADCgA/QXjFbr+vcJ99kDYFaWJAfIXTCoAD+3aJryYFGLJBKTXCHb0uoerBzg4MSgv/ll87GmG/Bxt0YnR1HMyEtJX3OzbW4e1nwJB+s85xuUlgLfHodiJS7GM1LGFCE2FfxoW5a+uUxbNrhiUpP8X5UU+Ter/EubXwtW33dPY/WjdhVwo4AAAA="
+  },
+  "program-push-pull-legs": {
+    "width": 1200,
+    "height": 900,
+    "ratio": "4:3",
+    "lqip": "data:image/webp;base64,UklGRqgAAABXRUJQVlA4IJwAAAAwBACdASoYABIAPxGAt1WsJ6UjKAgBgCIJQAAEq8yjOu5TrP5oa5f9xAAAyRHc6xyCqAa+siY8Uz355ntOlrnZdJ6KKlVs6A9FrAHXICBD0+x7aclJxuv/ZFnX66C4OAAcmB6tV2Hsjp9iYii4C7ObInvx0D8FnOKqJxcanhVV+2DmaSpdPW7pb9jtDmnNOZlEjkN80BDvD0AAAAA="
+  },
+  "program-recipe-pack": {
+    "width": 1200,
+    "height": 900,
+    "ratio": "4:3",
+    "lqip": "data:image/webp;base64,UklGRrwAAABXRUJQVlA4ILAAAACQBQCdASoYABIAPxF+tlWsJ6SjKAgBgCIJQBkXF/gxocIXj8L6QVMaav0bNu579QNwwMtygAD+5+4OaOmabruJx0KTtqlcx2Dh0xq1n+Nqu7rQaqXLgPJKvjzVnWQOp8Z89iG3ZgO7Wkq9zpXKXFrwzkQvwY6XB4qc6u4h0x7kGu7j3yrE9R/9rqekFO29SfRm22srsnYO/j417A9yz8I43FZSsIjCFGCIEqYjjQAAAA=="
+  },
+  "recipe-shakshuka": {
+    "width": 1280,
+    "height": 720,
+    "ratio": "16:9",
+    "lqip": "data:image/webp;base64,UklGRrQAAABXRUJQVlA4IKgAAABwBACdASoYAA4APxFysFAsJqSisAgBgCIJbACdH8At+0mkRVSOLiZx1zcOIAD+zYCeO+FH8r9wp3SZRBVrWWekvSaj+jf6aokMDS8wdhVMZyEWbIhFkv8NNPHteYNbnF35+MaZvnxRM3cpMsGenRqIRfyBRtGjArdzhuTglPbnxdDVy3q4vsorEUbf82W7p4q8ohUtCScrTPxFFGWzsGrBokVkdo3QAAA="
   },
   "recipe-chicken-rice-bowl": {
     "width": 1280,
     "height": 720,
     "ratio": "16:9",
-    "lqip": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAAAQBACdASoYAA4APxFysFAsJqSisAgBgCIJQBWABBqS43cLAuHwOKffAAD94aKBqYGfzIS5hts45qzaUyO7vSC5RZDl5nRuPH4kto8vb4Xam46P/cYvP/Ws+38PP6hhtnnLC6gDneWxSGYAvQTeDgAA"
+    "lqip": "data:image/webp;base64,UklGRsAAAABXRUJQVlA4ILQAAADwBACdASoYAA4APxFwsFAsJiSisAgBgCIJbACdMoR3FfqjeAF3oAQOfghkEa+l64AA/lX2pP9WpwSM0oSiCh4mg+Nto4DCBane6jCi9araauq6qgA2IBaDUATLpQhwnW3CbxGmE7SRKf5tMbcSpKiltwo/MJcbtNew4FBBpYS1OpP98L5FsxkzWoPQbhxJF2QBE/wDcyz8sLE08RrOazlPQaCr/vH5lCq+PJneHiLjUPvSAAA="
+  },
+  "recipe-overnight-oats": {
+    "width": 1280,
+    "height": 720,
+    "ratio": "16:9",
+    "lqip": "data:image/webp;base64,UklGRq4AAABXRUJQVlA4IKIAAAAQBQCdASoYAA4APxFysFAsJqSisAgBgCIJZgCdMoMYA0c12tsPqLQ657P/ofdVOsgAAP7V66BNgJ8OlwjnR4R3h2QTm3kB0D8H7k4Fqt4nk6A2shad3RK6pSI/L7xh3oOOcji4EJrwlBwplmDyntZWI8QLCssjoufSaJiUIq1vjEjXQGKjSKYPewZt8Rnsh7FQKsOzfh/qYUZjxYIW150+sgA="
+  },
+  "starter-cover": {
+    "width": 1200,
+    "height": 800,
+    "ratio": "3:2",
+    "lqip": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAADQAwCdASoYABAAPxFwsFAsJiSisAgBgCIJZwDMHCP+StO3wL6OgcAA++5FueF+2fqddma+ctF9XBZc8veKPKb8uLBl7c87oWO5ezjNr9X8GcrMwNsvQlaORt7pAPesQzTWUse1gAA="
   }
 } as const satisfies Record<string, GeneratedImage>;
 

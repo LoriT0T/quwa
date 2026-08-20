@@ -21,8 +21,8 @@ const termsLine = terms === false ? null : (terms ?? t.cta.trialTerms);
   {termsLine && <p class="cta-terms">{termsLine}</p>}
 </div>
 <style>
-  .cta { display: flex; flex-direction: column; gap: var(--space-3); align-items: flex-start; }
+  .cta { display: flex; flex-direction: column; gap: var(--space-4); align-items: flex-start; }
   .cta-center { align-items: center; text-align: center; }
   .cta-block { align-items: stretch; }
-  .cta-terms { font-size: var(--fs-eyebrow); color: var(--c-muted); line-height: 1.5; }
+  .cta-terms { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.5; }
 </style>

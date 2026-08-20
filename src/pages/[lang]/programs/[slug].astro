@@ -205,19 +205,19 @@ const meta = [
   .meta { margin: var(--space-4) 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
   .meta dt { font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-faint); font-weight: var(--fw-bold); }
   :global(:root[lang="ar"]) .meta dt { text-transform: none; }
-  .meta dd { margin: 0; font-size: var(--fs-small); font-weight: var(--fw-bold); }
+  .meta dd { margin: 0; font-size: var(--fs-body); font-weight: var(--fw-bold); }
   .buy { margin-block-start: var(--space-6); padding-block-start: var(--space-6); border-block-start: 1px solid var(--c-line); display: flex; flex-direction: column; gap: var(--space-3); align-items: flex-start; }
   .buy-price { display: flex; align-items: baseline; gap: var(--space-3); font-size: var(--fs-h2); font-weight: var(--fw-bold); }
-  .buy-rating { font-size: var(--fs-small); color: var(--c-muted); font-variant-numeric: tabular-nums; display: flex; gap: var(--space-2); }
+  .buy-rating { font-size: var(--fs-body); color: var(--c-muted); font-variant-numeric: tabular-nums; display: flex; gap: var(--space-2); }
   .buy .btn { min-inline-size: 240px; }
-  .buy-terms { font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.5; }
+  .buy-terms { font-size: var(--fs-small); color: var(--c-faint); line-height: 1.5; }
 
   .mb { margin-block-end: var(--space-8); }
   .cols { display: grid; gap: var(--space-12); }
   .fit { display: flex; flex-direction: column; gap: var(--space-8); }
   .fit-block h3 { margin-block-end: var(--space-4); }
   .ticks, .crosses { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
-  .ticks li, .crosses li { font-size: var(--fs-small); color: var(--c-muted); padding-inline-start: var(--space-6); position: relative; line-height: 1.6; }
+  .ticks li, .crosses li { font-size: var(--fs-body); color: var(--c-muted); padding-inline-start: var(--space-6); position: relative; line-height: 1.6; }
   .ticks li::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 7px; inline-size: 8px; block-size: 8px; border-radius: 2px; background: var(--c-accent); }
   .crosses li::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 10px; inline-size: 10px; block-size: 2px; background: var(--c-line-strong); }
   .saving { margin-block-start: var(--space-6); font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--c-accent); }
@@ -226,11 +226,11 @@ const meta = [
   .day { padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-1); }
   .day-name { font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-accent); font-weight: var(--fw-bold); }
   :global(:root[lang="ar"]) .day-name { text-transform: none; }
-  .day-focus { font-weight: var(--fw-bold); font-size: var(--fs-small); }
-  .day-detail { font-size: var(--fs-eyebrow); color: var(--c-muted); line-height: 1.6; }
+  .day-focus { font-weight: var(--fw-bold); font-size: var(--fs-body); }
+  .day-detail { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.6; }
 
-  .vary { margin-block-start: var(--space-8); font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.6; max-inline-size: 80ch; }
-  .faq-wrap { max-inline-size: 72ch; }
+  .vary { margin-block-start: var(--space-8); font-size: var(--fs-small); color: var(--c-faint); line-height: 1.6; max-inline-size: var(--measure-prose); }
+  .faq-wrap { max-inline-size: var(--measure-prose); }
   .rel { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
 
   @media (min-width: 640px) {

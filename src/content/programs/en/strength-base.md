@@ -12,6 +12,8 @@ weeks: 16
 daysPerWeek: 4
 minutesPerSession: 80
 pages: 74
+image: ../../../assets/images/program-strength-base.jpg
+imageAlt: "A lifter pressing a loaded barbell on a bench"
 order: 20
 featured: true
 rating: { value: 4.68, count: 143 }

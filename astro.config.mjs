@@ -38,7 +38,10 @@ export default defineConfig({
   base: BASE,
   output: 'static',
   trailingSlash: 'ignore',
-  build: { format: 'directory', inlineStylesheets: 'auto' },
+  // 'always' removes the two render-blocking stylesheet requests that were
+  // costing 454ms of LCP render delay. Our CSS is small enough that inlining it
+  // is cheaper than a round trip.
+  build: { format: 'directory', inlineStylesheets: 'always' },
   vite: { plugins: [tailwindcss()] },
   markdown: { rehypePlugins: [rehypeBasePaths()] },
   integrations: [

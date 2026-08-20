@@ -22,11 +22,16 @@ interface Props {
   schema?: Record<string, unknown>[];
   /** Suppresses the exit-intent offer on checkout and legal routes. */
   noOffers?: boolean;
+  /** Preload descriptor for the LCP image, from `getImage()`. Without it the
+      browser does not discover the hero until it has parsed the markup, which
+      measured as 837ms of LCP "load delay". */
+  preloadImage?: { href: string; srcset?: string; sizes?: string };
 }
 
 const {
   lang, title, description, path,
   ogImage, ogType = 'website', noindex = false, schema = [], noOffers = false,
+  preloadImage,
 } = Astro.props;
 
 const t = getDict(lang);
@@ -77,8 +82,23 @@ const graph = S.graph([
     <link rel="apple-touch-icon" href={rootPath('apple-touch-icon.png')} />
     <link rel="sitemap" href={rootPath('sitemap-index.xml')} />
 
-    <Font cssVariable="--font-latin" preload />
-    <Font cssVariable="--font-arabic" preload />
+    {/* Preload only the face this page will actually paint with. Preloading
+        both shipped ~130KB of unused woff2 on every request. The @font-face
+        rules for the other family are still emitted, so a locale switch has
+        them ready without a second round trip. */}
+    {preloadImage && (
+      <link
+        rel="preload"
+        as="image"
+        href={preloadImage.href}
+        imagesrcset={preloadImage.srcset}
+        imagesizes={preloadImage.sizes}
+        fetchpriority="high"
+      />
+    )}
+
+    <Font cssVariable="--font-latin" preload={lang === 'en'} />
+    <Font cssVariable="--font-arabic" preload={lang === 'ar'} />
 
     <script is:inline set:html={graph} type="application/ld+json" />
 

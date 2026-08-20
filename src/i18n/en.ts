@@ -129,7 +129,7 @@ export const en = {
     eyebrow: 'Evidence-led training',
     h1: 'Train with a plan,\nnot a guess.',
     sub: 'Structured programs, free tools that actually do the maths, and a library that grows every month. In English and Arabic, built equally in both.',
-    heroAlt: 'A loaded barbell resting on a gym floor',
+    heroAlt: 'A lifter training on a leg machine in a gym',
     trustline: 'Free tools · No card required',
     props: {
       eyebrow: 'Why this works',
@@ -363,6 +363,7 @@ export const en = {
     sub: 'Two full training sessions, three recipes, and a one-page guide to setting your calories. Free, no card.',
     body: 'It is the first four weeks of Hypertrophy Foundations, unedited. If it suits you, the rest is there. If it does not, you have lost nothing.',
     includes: ['Two complete training sessions with substitutions', 'Three recipes with the macros worked out', 'A one-page calorie and protein guide', 'The tracking sheet'],
+    coverAlt: 'A notebook and pencils on a plain desk',
     formTitle: 'Where do we send it?',
     success: 'Check your inbox. If nothing arrives in five minutes, look in spam once.',
   },
