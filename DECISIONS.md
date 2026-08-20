@@ -182,6 +182,18 @@ Reasoning in `out/round-5/CRITIQUE.md`.
 
 ## Architecture
 
+### 16b. `font-display: optional`, not `swap`
+Swapping the webfont in at ~1.3s reflowed the page and cost 0.083 CLS on the Arabic
+templates — Arabic fallback metrics diverge from IBM Plex Sans Arabic far more than
+Arial's do from Inter. `optional` gives the font a short block period and then declines
+to swap.
+
+The trade-off: on a genuinely slow first visit the page renders in the system fallback
+and stays there until the next navigation. Verified under 4× CPU throttling on a
+simulated 4G connection that the per-locale preload wins that race — the real fonts
+rendered on all five templates tested. If you would rather guarantee the typeface at the
+cost of a visible reflow, change `display` back to `'swap'` in `astro.config.mjs`.
+
 ### 17. No UI framework
 Astro with vanilla TypeScript islands. No React, no Vue, no Svelte. The interactive
 surface is seven calculators, a cart and a checkout — none of which needs a virtual DOM,

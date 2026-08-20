@@ -23,7 +23,14 @@ only server-side piece.
 
 Design decisions are derived from a measured Playwright sweep of four reference
 sites — see [`docs/REFERENCE-SPEC.md`](docs/REFERENCE-SPEC.md). Every judgement call and
-every stub is recorded in [`DECISIONS.md`](DECISIONS.md).
+every stub is recorded in [`DECISIONS.md`](DECISIONS.md). Five critique rounds with the
+before/after numbers are in [`out/round-*/CRITIQUE.md`](out/).
+
+### Measured, live, Lighthouse mobile across 15 pages
+
+| Performance | Accessibility | Best practices | SEO | LCP | CLS | TBT |
+|---|---|---|---|---|---|---|
+| 100 on 13, 99 on 2 | **100** | **100** | **100** | 1.0–2.0s | **0.000** | **0ms** |
 
 ---
 

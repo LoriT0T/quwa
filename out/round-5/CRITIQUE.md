@@ -76,3 +76,54 @@ This is a photo-budget problem. Eleven of fourteen image slots are filled from l
 public-domain and CC BY sources; one could not be filled with anything usable and is
 flagged; two require a shoot and are blocked by design. Closing this gap needs an
 Unsplash or Pexels key, or the shot list in `docs/SHOT-LIST.md`.
+
+---
+
+## Post-round: Lighthouse pass on the live site
+
+Run after the five critique rounds, against `https://lorit0t.github.io/quwa/`, mobile
+preset. Four defects found and fixed, none of them visible in the structural sweep:
+
+1. **`--c-faint` failed WCAG AA at 3.85:1 in fourteen places.** The alpha values were
+   chosen by eye. Recomputed against both grounds they actually sit on: `--c-faint` 0.42
+   → 0.56 (5.29:1 on surface), `--c-muted` 0.62 → 0.74. Accessibility 97 → 100.
+
+2. **Both font families were preloaded on every page** — about 130KB of unused woff2 per
+   request. Now only the active locale's face is preloaded; the other family's
+   `@font-face` rules still ship so a locale switch needs no extra round trip.
+
+3. **`font-display: swap` cost 0.083 CLS on the Arabic templates.** The webfont arriving
+   at ~1.3s reflowed the page, and Arabic fallback metrics diverge from IBM Plex Sans
+   Arabic far more than Arial's do from Inter — the English templates shifted 0.014 for
+   the same cause. `optional` declines to swap after a short block period. Verified under
+   4× CPU throttling on a simulated 4G connection: CLS 0.000 on five templates, with the
+   real fonts still rendering.
+
+4. **Every internal link paid a 301.** GitHub Pages serves directory indexes, so
+   `/quwa/en` redirects to `/quwa/en/`. Lighthouse attributed 757ms of LCP on `/en` and
+   967ms on `/ar` to it. `localePath()` now emits the trailing slash, so canonicals,
+   `hreflang` alternates, the sitemap and every internal link point at the URL that
+   actually exists.
+
+Two functional bugs also surfaced during the Arabic flow check, neither visible in the
+English pass:
+
+5. **Cart and checkout totals rendered in USD and then flipped to the detected currency.**
+   Page scripts are emitted inside `<main>` and therefore execute *before* the layout's
+   `app.ts`, so they read `data-currency` before it was set. `applyCurrency` now
+   dispatches an event the money-rendering pages listen for.
+
+6. **The product meta row was labelled `Format / Programs / Training minutes per day /
+   Format`** — two rows sharing a label, and one borrowing the navigation string.
+
+### Final measurements, 15 live pages, Lighthouse mobile
+
+| | |
+|---|---|
+| Performance | 100 on 13 pages, 99 on 2 |
+| Accessibility | **100 on all 15** |
+| Best practices | **100 on all 15** |
+| SEO | **100 on all 15** |
+| LCP | 995ms – 2013ms |
+| CLS | **0.000 on all 15** |
+| TBT | **0ms on all 15** |
