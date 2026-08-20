@@ -58,7 +58,13 @@ export default defineConfig({
       weights: [400, 700],
       styles: ['normal'],
       subsets: ['latin', 'latin-ext'],
-      display: 'swap',
+      // 'optional' rather than 'swap'. With swap, the webfont arriving at ~1.3s
+      // reflowed the page and cost 0.083 CLS on the Arabic tool template — the
+      // Arabic fallback metrics diverge from IBM Plex Sans Arabic more than
+      // Arial's do from Inter. 'optional' gives the font a short block period
+      // and then declines to swap, so there is no reflow either way; the
+      // preload above wins that race on anything but a very slow first visit.
+      display: 'optional',
       fallbacks: ['system-ui', 'Segoe UI', 'sans-serif'],
       optimizedFallbacks: true,
     },
@@ -69,7 +75,7 @@ export default defineConfig({
       weights: [400, 700],
       styles: ['normal'],
       subsets: ['arabic', 'latin'],
-      display: 'swap',
+      display: 'optional',
       fallbacks: ['system-ui', 'Segoe UI', 'sans-serif'],
       optimizedFallbacks: true,
     },
