@@ -37,7 +37,7 @@ export default defineConfig({
   site: SITE,
   base: BASE,
   output: 'static',
-  trailingSlash: 'ignore',
+  trailingSlash: 'always',
   // 'always' removes the two render-blocking stylesheet requests that were
   // costing 454ms of LCP render delay. Our CSS is small enough that inlining it
   // is cheaper than a round trip.

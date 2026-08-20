@@ -3,10 +3,17 @@ import { DEFAULT_LOCALE, LOCALES, type Locale } from '../config/site';
 /** Astro injects BASE_URL from `base` in astro.config. Normalised to no trailing slash. */
 const BASE = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '');
 
-/** A path inside a locale: localePath('ar', '/programs') → '/quwa/ar/programs' */
+/**
+ * A path inside a locale: localePath('ar', '/programs') → '/quwa/ar/programs/'
+ *
+ * The trailing slash is deliberate. GitHub Pages serves directory indexes, so
+ * a link to `/quwa/ar/programs` 301s to `/quwa/ar/programs/` — a redirect on
+ * every internal navigation, and on the canonical and sitemap URLs a crawler
+ * follows first.
+ */
 export function localePath(lang: string, path = '/'): string {
   const clean = path === '/' ? '' : `/${path.replace(/^\/+|\/+$/g, '')}`;
-  return `${BASE}/${lang}${clean}` || '/';
+  return `${BASE}/${lang}${clean}/`;
 }
 
 /** A path outside the locale tree (assets, root files). */
