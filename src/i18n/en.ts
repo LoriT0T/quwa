@@ -573,10 +573,10 @@ export const en = {
   bands: {
     eyebrow: 'What you actually get',
     items: [
-      { eyebrow: 'Written, not implied', title: 'The rationale, in two pages', body: 'Why the sets, the reps, the rest and the progression are what they are — so when week seven goes badly you can adapt instead of quitting.' , alt: 'A fountain pen writing on lined paper', alt: 'A fountain pen writing on lined paper' },
-      { eyebrow: 'Two per movement', title: 'Substitutions that keep the session', body: 'Chosen for the same joint action, not the same muscle name. A busy cable stack stops being a reason to go home.' , alt: 'A fountain pen writing on lined paper', alt: 'A lifter using a seated cable row machine' },
-      { eyebrow: 'Carries forward', title: 'A tracking sheet that does the maths', body: 'Your loads move week to week automatically, and the progression rule applies itself. No percentages calculated between sets.' , alt: 'A fountain pen writing on lined paper', alt: 'A load-progression chart rising week by week' },
-      { eyebrow: 'In the plan', title: 'Deloads you did not have to decide on', body: 'Scheduled into weeks 4, 8 and 12. The adaptation happens in recovery, so the recovery is programmed rather than negotiated.' , alt: 'A fountain pen writing on lined paper', alt: 'A lifter benching under a loaded barbell' },
+      { eyebrow: 'Written, not implied', title: 'The rationale, in two pages', body: 'Why the sets, the reps, the rest and the progression are what they are — so when week seven goes badly you can adapt instead of quitting.' , alt: 'A fountain pen writing on lined paper' },
+      { eyebrow: 'Two per movement', title: 'Substitutions that keep the session', body: 'Chosen for the same joint action, not the same muscle name. A busy cable stack stops being a reason to go home.' , alt: 'A lifter using a seated cable row machine' },
+      { eyebrow: 'Carries forward', title: 'A tracking sheet that does the maths', body: 'Your loads move week to week automatically, and the progression rule applies itself. No percentages calculated between sets.' , alt: 'A load-progression chart rising week by week' },
+      { eyebrow: 'In the plan', title: 'Deloads you did not have to decide on', body: 'Scheduled into weeks 4, 8 and 12. The adaptation happens in recovery, so the recovery is programmed rather than negotiated.' , alt: 'A lifter benching under a loaded barbell' },
     ],
   },
   tracker: {
