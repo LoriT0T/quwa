@@ -1,0 +1,44 @@
+---
+import { getDict, fill, type Locale } from '../i18n';
+import { overallRating, ratingBreakdown, TESTIMONIALS } from '../data/testimonials';
+/** Juggernaut and AG1 both surface an aggregate rating. Ours is computed from the
+    same testimonial data the proof blocks render, to two decimals — jeffnippard's
+    device, which shows 4.61 rather than five stars. */
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const t = getDict(lang);
+const rating = overallRating(lang);
+const breakdown = ratingBreakdown(lang).filter((row) => row.count > 0);
+const productCount = new Set(TESTIMONIALS[lang].map((entry) => entry.product)).size;
+---
+<div class="rating">
+  <div class="headline">
+    <p class="value"><bdi>{rating.value.toFixed(2)}</bdi><span class="of">/ 5</span></p>
+    <p class="title">{fill(t.rating.title, { value: rating.value.toFixed(2) })}</p>
+    <p class="based">{fill(t.rating.basedOn, { n: rating.count, p: productCount }, lang)}</p>
+  </div>
+  <ul class="bars">
+    {breakdown.map((row) => (
+      <li>
+        <span class="stars">{fill(t.rating.stars, { n: row.stars }, lang)}</span>
+        <span class="track" aria-hidden="true"><span class="fill" style={`inline-size:${row.pct}%`}></span></span>
+        <span class="count"><bdi>{row.count}</bdi></span>
+      </li>
+    ))}
+  </ul>
+</div>
+<style>
+  .rating { display: grid; gap: var(--space-8); align-items: center; }
+  .headline { display: flex; flex-direction: column; gap: var(--space-2); }
+  .value { font-size: var(--fs-stat); font-weight: var(--fw-bold); line-height: 1; font-variant-numeric: tabular-nums; display: flex; align-items: baseline; gap: var(--space-2); }
+  .of { font-size: 0.28em; color: var(--c-faint); font-weight: 400; }
+  .title { font-size: var(--fs-card-title); font-weight: var(--fw-bold); }
+  .based { font-size: var(--fs-body); color: var(--c-muted); }
+  .bars { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+  .bars li { display: grid; grid-template-columns: 5.5rem 1fr 2.5rem; gap: var(--space-3); align-items: center; }
+  .stars { font-size: var(--fs-small); color: var(--c-muted); }
+  .track { block-size: 8px; background: var(--c-line); border-radius: var(--r-pill); overflow: hidden; }
+  .fill { display: block; block-size: 100%; background: var(--c-accent); border-radius: var(--r-pill); }
+  .count { font-size: var(--fs-small); color: var(--c-faint); text-align: end; font-variant-numeric: tabular-nums; }
+  @media (min-width: 768px) { .rating { grid-template-columns: auto 1fr; gap: var(--space-16); } }
+</style>

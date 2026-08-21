@@ -13,16 +13,13 @@ interface Props {
       words — REFERENCE-SPEC §1.12 puts the proof band at 441 words/1000px,
       six times denser than any other section. */
   also?: string[];
-  /** Where the proof links to. Omit for the product's own page. */
-  href?: string;
   linkLabel?: string;
   limit?: number;
   columns?: 1 | 2 | 3;
 }
-const { lang, product, also = [], href, linkLabel, limit = 3, columns = 3 } = Astro.props;
+const { lang, product, also = [], linkLabel, limit = 3, columns = 3 } = Astro.props;
 const t = getDict(lang);
 const items = [product, ...also].flatMap((id) => testimonialsFor(lang, id).slice(0, limit)).slice(0, limit);
-const target = href ?? (product === 'membership' ? localePath(lang, 'membership') : localePath(lang, `programs/${product}`));
 ---
 {items.length > 0 && (
   <ul class="proof" style={`--cols:${columns}`}>

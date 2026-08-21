@@ -2,13 +2,14 @@
 import { Font } from 'astro:assets';
 import '../styles/global.css';
 import { getDict, type Locale } from '../i18n';
-import { DIR, OG_LOCALE, LOCALES } from '../config/site';
+import { DIR, OG_LOCALE, LOCALES, SAMPLE_MODE } from '../config/site';
 import { localePath, rootPath, alternates, absoluteUrl } from '../lib/url';
 import * as S from '../lib/schema';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ExitIntent from '../components/ExitIntent.astro';
 import ClientStrings from '../components/ClientStrings.astro';
+import SampleBanner from '../components/SampleBanner.astro';
 
 interface Props {
   lang: Locale;
@@ -57,7 +58,9 @@ const graph = S.graph([
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {/* A portfolio sample must not compete in search with anyone's real store,
+        and must not be mistaken for one. noindex is sitewide, not per route. */}
+    {(noindex || SAMPLE_MODE) && <meta name="robots" content="noindex, nofollow" />}
     {alts.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
 
     <meta property="og:type" content={ogType} />
@@ -114,6 +117,7 @@ const graph = S.graph([
 
   <body>
     <a class="skip-link" href="#main">{t.nav.skipToContent}</a>
+    <SampleBanner lang={lang} />
     <Header lang={lang} path={path} />
     <main id="main">
       <slot />

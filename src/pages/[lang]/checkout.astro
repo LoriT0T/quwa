@@ -5,7 +5,7 @@ import SectionHead from '../../components/SectionHead.astro';
 import { getDict, type Locale } from '../../i18n';
 import { localePath } from '../../lib/url';
 import { localeParams } from '../../lib/content';
-import { COMMERCE_MODE, PAYMENT_PROVIDER } from '../../config/site';
+import { COMMERCE_MODE, PAYMENT_PROVIDER, SAMPLE_MODE } from '../../config/site';
 
 export const getStaticPaths = localeParams;
 const lang = Astro.params.lang as Locale;
@@ -37,6 +37,12 @@ const methods = [
           <p class="hint">{t.checkout.emailHelp}</p>
         </div>
 
+        {SAMPLE_MODE && (
+          <p class="sample-notice">
+            <strong>{t.sample.badge}.</strong> {t.sample.checkoutNotice}
+          </p>
+        )}
+
         <fieldset class="grp">
           <legend class="lbl">{t.checkout.payWith}</legend>
           <div class="methods">
@@ -49,7 +55,9 @@ const methods = [
           </div>
         </fieldset>
 
-        <button class="btn btn-primary btn-block" type="submit" data-place-order>{t.checkout.place}</button>
+        <button class="btn btn-primary btn-block" type="submit" data-place-order>
+          {SAMPLE_MODE ? `${t.checkout.place} — ${t.sample.bannerShort}` : t.checkout.place}
+        </button>
         <p class="msg" data-checkout-message role="status" aria-live="polite" hidden></p>
         <p class="note">{t.checkout.terms}</p>
         <p class="note">{t.cart.checkoutNote} · {t.checkout.secure}</p>
@@ -95,6 +103,12 @@ const methods = [
   .grand dd { margin: 0; font-variant-numeric: tabular-nums; }
   .note { font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.5; }
   .mock { font-size: var(--fs-eyebrow); color: var(--c-accent); font-weight: var(--fw-bold); }
+  .sample-notice {
+    padding: var(--space-4); border: 1px solid var(--c-accent);
+    background: var(--c-accent-soft); border-radius: var(--r-control);
+    font-size: var(--fs-small); line-height: 1.6; color: var(--c-paper);
+  }
+  .sample-notice strong { color: var(--c-accent); }
   .msg { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--c-accent); }
   .empty { font-size: var(--fs-small); color: var(--c-muted); }
   .empty a { color: var(--c-accent); font-weight: var(--fw-bold); }

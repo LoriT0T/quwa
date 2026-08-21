@@ -10,6 +10,8 @@ npm-debug.log*
 public/images/source/
 tools/node_modules/
 out/**/*.png
+!out/ads/*.png
+!out/comparison/*.jpg
 .vercel
 .netlify
 .wrangler/

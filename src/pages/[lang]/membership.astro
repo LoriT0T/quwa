@@ -7,6 +7,9 @@ import Price from '../../components/Price.astro';
 import Proof from '../../components/Proof.astro';
 import FAQ from '../../components/FAQ.astro';
 import CTA from '../../components/CTA.astro';
+import CompareApproach from '../../components/CompareApproach.astro';
+import Community from '../../components/Community.astro';
+import Guarantee from '../../components/Guarantee.astro';
 import { getDict, fill, type Locale } from '../../i18n';
 import { localePath, absoluteUrl } from '../../lib/url';
 import { localeParams } from '../../lib/content';
@@ -115,6 +118,21 @@ const schema = [
     <p class="vary">{t.common.individualResult} {t.common.resultsVary}</p>
   </Section>
 
+  <!-- ── Where the membership sits against the alternatives ─────────────── -->
+  <Section surface>
+    <CompareApproach lang={lang} />
+  </Section>
+
+  <!-- ── Community wall ─────────────────────────────────────────────────── -->
+  <Section tight>
+    <Community lang={lang} />
+  </Section>
+
+  <!-- ── Guarantee ──────────────────────────────────────────────────────── -->
+  <Section tight surface>
+    <Guarantee lang={lang} />
+  </Section>
+
   <!-- ── Cancelling, then FAQ ───────────────────────────────────────────── -->
   <Section>
     <div class="cancel card">
@@ -129,7 +147,7 @@ const schema = [
     <div class="closing">
       <h2 class="h2">{t.membership.trialBadge}</h2>
       <CTA lang={lang} href={localePath(lang, 'cart')} label={t.cta.primary} terms={t.membership.trialLine} center />
-      <p class="vary">{fill(t.common.guarantee, { n: GUARANTEE_DAYS })}</p>
+      <p class="vary">{fill(t.common.guarantee, { n: GUARANTEE_DAYS }, lang)}</p>
     </div>
   </Section>
 </Layout>

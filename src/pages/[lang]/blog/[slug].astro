@@ -63,7 +63,7 @@ const linkedTools = d.tools.map((s) => getTool(s)).filter(Boolean);
           <p class="meta">
             <time datetime={d.published.toISOString()}>{t.blog.published} {formatDate(d.published, lang)}</time>
             {d.updated && <span>· {t.blog.updated} {formatDate(d.updated, lang)}</span>}
-            <span>· {fill(t.blog.readingTime, { n: d.readingMinutes })}</span>
+            <span>· {fill(t.blog.readingTime, { n: d.readingMinutes }, lang)}</span>
           </p>
           <h1 class="h2">{d.title}</h1>
           <p class="lead measure-prose">{d.description}</p>

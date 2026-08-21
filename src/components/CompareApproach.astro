@@ -1,0 +1,50 @@
+---
+import { getDict, type Locale } from '../i18n';
+import SectionHead from './SectionHead.astro';
+/** AG1 is the only site in the set with a comparison table, and it compares its own
+    products. Ours compares approaches — and admits the two rows where a coaching
+    app beats us, because a comparison table that wins every row is an advert. */
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const t = getDict(lang);
+const cell = (on: boolean) => (on ? '✓' : '—');
+---
+<SectionHead eyebrow={t.compare.eyebrow} title={t.compare.title} body={t.compare.body} />
+<div class="wrap">
+  <table class="cmp">
+    <thead>
+      <tr>
+        <th scope="col">{t.compare.cols.feature}</th>
+        <th scope="col">{t.compare.cols.pdf}</th>
+        <th scope="col">{t.compare.cols.app}</th>
+        <th scope="col" class="hl">{t.compare.cols.quwa}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {t.compare.rows.map((r) => (
+        <tr>
+          <th scope="row">{r.feature}</th>
+          <td><span class="sr-only">{r.pdf ? t.common.included : t.common.notIncluded}</span><span aria-hidden="true" class={r.pdf ? 'y' : 'n'}>{cell(r.pdf)}</span></td>
+          <td><span class="sr-only">{r.app ? t.common.included : t.common.notIncluded}</span><span aria-hidden="true" class={r.app ? 'y' : 'n'}>{cell(r.app)}</span></td>
+          <td class="hl"><span class="sr-only">{r.quwa ? t.common.included : t.common.notIncluded}</span><span aria-hidden="true" class={r.quwa ? 'y' : 'n'}>{cell(r.quwa)}</span></td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<p class="note">{t.compare.note}</p>
+<style>
+  .wrap { overflow-x: auto; }
+  .cmp { inline-size: 100%; min-inline-size: 560px; border-collapse: collapse; }
+  .cmp th, .cmp td { padding: var(--space-4); text-align: start; border-block-end: 1px solid var(--c-line); font-size: var(--fs-body); }
+  .cmp thead th { font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-faint); }
+  :global(:root[lang="ar"]) .cmp thead th { text-transform: none; }
+  .cmp tbody th { font-weight: 400; color: var(--c-muted); }
+  .cmp td { text-align: center; }
+  .cmp .hl { background: var(--c-accent-soft); }
+  .cmp thead .hl { color: var(--c-accent); font-weight: var(--fw-bold); }
+  .y { color: var(--c-accent); font-weight: var(--fw-bold); }
+  .n { color: var(--c-faint); }
+  .note { margin-block-start: var(--space-8); font-size: var(--fs-body); color: var(--c-muted); line-height: 1.65; max-inline-size: var(--measure-prose); }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+</style>

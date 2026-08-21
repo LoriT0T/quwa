@@ -5,7 +5,7 @@ import { getDict, fill, type Locale } from '../../i18n';
 import { localePath } from '../../lib/url';
 import { localeParams } from '../../lib/content';
 import { MEMBERSHIP, UPSELL } from '../../config/pricing';
-import { COMMERCE_MODE } from '../../config/site';
+import { COMMERCE_MODE, SAMPLE_MODE } from '../../config/site';
 import Price from '../../components/Price.astro';
 
 export const getStaticPaths = localeParams;
@@ -26,6 +26,12 @@ const t = getDict(lang);
       <h1 class="display">{t.thankYou.title}</h1>
       <p class="lead measure-prose">{t.thankYou.sub}</p>
 
+      {SAMPLE_MODE && (
+        <p class="sample-notice">
+          <strong>{t.sample.badge}.</strong> {t.sample.orderNotice}
+        </p>
+      )}
+
       <section class="downloads card">
         <h2 class="h3">{t.thankYou.downloadTitle}</h2>
         <ul class="dl" data-download-list></ul>
@@ -44,7 +50,7 @@ const t = getDict(lang);
         </p>
         <button class="btn btn-primary" type="button" data-upsell-accept></button>
         <a class="decline" href={localePath(lang, 'programs')} data-upsell-decline>{t.thankYou.upsellDecline}</a>
-        <p class="note">{t.thankYou.upsellExpiry} · {fill(t.common.weeks, { n: UPSELL.windowHours / 24 })}</p>
+        <p class="note">{t.thankYou.upsellExpiry} · {fill(t.common.weeks, { n: UPSELL.windowHours / 24 }, lang)}</p>
       </section>
 
       <section class="next">
@@ -64,6 +70,13 @@ const t = getDict(lang);
   .upsell { border-color: var(--c-accent); align-items: flex-start; }
   .dl { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
   .note { font-size: var(--fs-eyebrow); color: var(--c-faint); line-height: 1.5; }
+  .sample-notice {
+    margin-block-start: var(--space-6); padding: var(--space-4);
+    border: 1px solid var(--c-accent); background: var(--c-accent-soft);
+    border-radius: var(--r-control); font-size: var(--fs-small);
+    line-height: 1.6; color: var(--c-paper);
+  }
+  .sample-notice strong { color: var(--c-accent); }
   .mock { font-size: var(--fs-eyebrow); color: var(--c-accent); font-weight: var(--fw-bold); }
   .up-body { color: var(--c-muted); line-height: 1.6; font-size: var(--fs-small); }
   .up-price { font-size: var(--fs-h3); font-weight: var(--fw-bold); display: flex; gap: var(--space-3); align-items: baseline; }

@@ -10,6 +10,8 @@ import Proof from '../../../components/Proof.astro';
 import FAQ from '../../../components/FAQ.astro';
 import StickyCTA from '../../../components/StickyCTA.astro';
 import ProgramCard from '../../../components/ProgramCard.astro';
+import TrackerPreview from '../../../components/TrackerPreview.astro';
+import Guarantee from '../../../components/Guarantee.astro';
 import { getDict, fill, type Locale } from '../../../i18n';
 import { localePath, absoluteUrl, rootPath } from '../../../lib/url';
 import { getPrograms } from '../../../lib/content';
@@ -68,10 +70,10 @@ const schema = [
 ];
 
 const meta = [
-  d.weeks && { k: t.common.length, v: fill(t.common.weeks, { n: d.weeks }) },
-  d.daysPerWeek && { k: t.common.schedule, v: fill(t.common.daysPerWeek, { n: d.daysPerWeek }) },
-  d.minutesPerSession && { k: t.common.perSession, v: fill(t.common.minutes, { n: d.minutesPerSession }) },
-  d.pages && { k: t.common.format, v: fill(t.common.pages, { n: d.pages }) },
+  d.weeks && { k: t.common.length, v: fill(t.common.weeks, { n: d.weeks }, lang) },
+  d.daysPerWeek && { k: t.common.schedule, v: fill(t.common.daysPerWeek, { n: d.daysPerWeek }, lang) },
+  d.minutesPerSession && { k: t.common.perSession, v: fill(t.common.minutes, { n: d.minutesPerSession }, lang) },
+  d.pages && { k: t.common.format, v: fill(t.common.pages, { n: d.pages }, lang) },
 ].filter(Boolean) as { k: string; v: string }[];
 ---
 <Layout lang={lang} title={d.title} description={d.seoDescription} path={path} ogType="product" schema={schema}>
@@ -104,7 +106,7 @@ const meta = [
               data-add-to-cart={d.product} data-title={d.title} data-cents={cents} data-kind="one_time"
               data-added-label={t.cta.added}>{t.cta.addToCart}</button>
             <p class="buy-terms">
-              {t.common.instantDownload} · {t.common.lifetimeAccess} · {fill(t.common.guarantee, { n: GUARANTEE_DAYS })}
+              {t.common.instantDownload} · {t.common.lifetimeAccess} · {fill(t.common.guarantee, { n: GUARANTEE_DAYS }, lang)}
             </p>
             <p class="buy-terms">{t.common.worksOn}</p>
           </div>
@@ -171,6 +173,16 @@ const meta = [
     <h2 class="h2 mb">{t.programs.proofTitle}</h2>
     <Proof lang={lang} product={d.product} limit={3} columns={3} />
     <p class="vary">{t.common.resultsVary}</p>
+  </Section>
+
+  <!-- ── The tracking sheet that ships with this program ───────────────── -->
+  <Section surface>
+    <TrackerPreview lang={lang} />
+  </Section>
+
+  <!-- ── Risk reversal, adjacent to the decision ───────────────────────── -->
+  <Section tight>
+    <Guarantee lang={lang} />
   </Section>
 
   <!-- ── FAQ for this specific program ────────────────────────────────── -->

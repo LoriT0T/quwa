@@ -250,3 +250,40 @@
   .dl-btn { min-block-size: 40px; padding-inline: var(--space-4); font-size: var(--fs-small); }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
+
+@layer components {
+  /* Plan-finder result card */
+  .r-eyebrow {
+    font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); color: var(--c-accent);
+    letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
+  }
+  :root[lang="ar"] .r-eyebrow { text-transform: none; }
+  .r-title { font-size: var(--fs-h2); margin-block: var(--space-3) var(--space-2); }
+  .r-line { font-size: var(--fs-lead); color: var(--c-muted); line-height: 1.55; max-inline-size: var(--measure-prose); }
+  .r-why {
+    margin-block-start: var(--space-6); font-size: var(--fs-eyebrow); font-weight: var(--fw-bold);
+    color: var(--c-faint); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
+  }
+  :root[lang="ar"] .r-why { text-transform: none; }
+  .r-tags { list-style: none; margin: var(--space-3) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .r-tags li {
+    font-size: var(--fs-small); padding: 4px 12px; border-radius: var(--r-pill);
+    background: var(--c-accent-soft); color: var(--c-accent); font-weight: var(--fw-bold);
+  }
+  .r-actions { margin-block-start: var(--space-6); }
+  .r-alt { margin-block-start: var(--space-8); padding-block-start: var(--space-6); border-block-start: 1px solid var(--c-line); }
+  .r-alt-label {
+    font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); color: var(--c-faint);
+    letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; margin-block-end: var(--space-3);
+  }
+  :root[lang="ar"] .r-alt-label { text-transform: none; }
+  .r-alt-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+  .r-alt-list a {
+    display: flex; justify-content: space-between; gap: var(--space-4);
+    padding: var(--space-3) var(--space-4); border: 1px solid var(--c-line);
+    border-radius: var(--r-control); font-size: var(--fs-body); font-weight: var(--fw-bold);
+  }
+  .r-alt-list a:hover { border-color: var(--c-accent); color: var(--c-accent); }
+  .r-alt-price { color: var(--c-muted); font-weight: 400; }
+  .none { color: var(--c-muted); font-size: var(--fs-body); }
+}

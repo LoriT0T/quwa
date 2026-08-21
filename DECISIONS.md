@@ -6,6 +6,39 @@ account before they do anything.
 
 ---
 
+## Sample mode
+
+### 0. This build is a portfolio sample, and says so — **CONFIRM**
+`PUBLIC_SAMPLE_MODE` defaults to `true`. That does four things:
+
+- `noindex, nofollow` on every route, and a `Disallow: /` robots.txt. A sample should
+  not compete in search with anyone's real store, and should not be mistaken for one.
+- A persistent, non-dismissible notice above the header on every page.
+- The checkout presents no payment form, collects no card details, and says so in a
+  bordered notice above the method selector.
+- The thank-you page states the order was simulated in the browser.
+
+The commerce flow still runs end to end, because demonstrating the flow is the point of
+a sample. What it cannot do is take money.
+
+Turn it off with a repository variable when and if this becomes real:
+`gh variable set PUBLIC_SAMPLE_MODE --repo LoriT0T/quwa --body "false"`.
+
+### 0b. Sections were chosen from measured industry adoption, not taste
+A second Playwright sweep of 12 leaders recorded which conversion devices each one
+actually ships. The home page now carries the eight most-adopted patterns we did not
+already have. Three were adapted rather than copied because copying them honestly was
+impossible — see `docs/ASSET-INVENTORY.md` §3:
+
+- A **press logo bar** became a **methodology bar**. We have no press, and fabricating
+  logos is a false claim.
+- A **founder story** became an **editorial standard**. We have no founder to name and
+  will not invent credentials.
+- **App screenshots** became a **rendered tracking sheet**. We have no app, so we show
+  the artefact we do ship.
+
+---
+
 ## Brand
 
 ### 1. The name is QUWA / قوّة — **CONFIRM**

@@ -9,6 +9,7 @@ import Media from '../../components/Media.astro';
 import { getDict, fill, type Locale } from '../../i18n';
 import { localePath, absoluteUrl } from '../../lib/url';
 import { localeParams, getRecipes } from '../../lib/content';
+import { GUARANTEE_DAYS } from '../../config/pricing';
 import * as S from '../../lib/schema';
 
 export const getStaticPaths = localeParams;
@@ -64,7 +65,7 @@ const schema = [S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUr
 
     <div class="pack">
       <CTA lang={lang} href={localePath(lang, 'programs/recipe-pack')} label={t.recipes.packCta}
-           terms={fill(t.common.guarantee, { n: 14 })} />
+           terms={fill(t.common.guarantee, { n: GUARANTEE_DAYS }, lang)} />
     </div>
   </Section>
 </Layout>

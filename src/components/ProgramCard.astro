@@ -42,9 +42,9 @@ const levelLabel: Record<string, string> = {
 };
 const goalLabel: Record<string, string> = {
   muscle: t.fields.goals.gain,
-  strength: t.common.level,
+  strength: t.fields.goals.strength,
   recomposition: t.fields.goals.cut,
-  nutrition: t.nav.recipes,
+  nutrition: t.fields.goals.nutrition,
 };
 ---
 <article class="card pcard">
@@ -79,7 +79,7 @@ const goalLabel: Record<string, string> = {
       {weeks && daysPerWeek && (
         <div class="attr">
           <dt>{t.common.format}</dt>
-          <dd>{fill(t.common.weeks, { n: weeks })} · {fill(t.common.daysPerWeek, { n: daysPerWeek })}</dd>
+          <dd>{fill(t.common.weeks, { n: weeks }, lang)} · {fill(t.common.daysPerWeek, { n: daysPerWeek }, lang)}</dd>
         </div>
       )}
     </dl>

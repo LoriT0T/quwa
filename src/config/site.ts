@@ -32,4 +32,11 @@ export const PAYMENT_PROVIDER = (import.meta.env.PUBLIC_PAYMENT_PROVIDER ?? 'lem
   | 'lemonsqueezy'
   | 'paddle'
   | 'stripe';
+/**
+ * Portfolio-sample mode. When true the site is noindex sitewide, the checkout
+ * cannot present a payment form, and a persistent notice says so on every page.
+ * Set PUBLIC_SAMPLE_MODE=false only when this becomes a real store.
+ */
+export const SAMPLE_MODE = (import.meta.env.PUBLIC_SAMPLE_MODE ?? 'true') !== 'false';
+
 export const EMAIL_PROVIDER = (import.meta.env.PUBLIC_EMAIL_PROVIDER ?? 'mock') as string;

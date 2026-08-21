@@ -1,0 +1,38 @@
+---
+import { getDict, type Locale } from '../i18n';
+import SectionHead from './SectionHead.astro';
+/** Six of twelve industry sites carry a founder or credibility story
+    ("Since 2009, Juggernaut has been your trusted training resource").
+    We have no founder to name and will not invent one, so the credibility
+    claim is the editorial standard itself. See docs/ASSET-INVENTORY.md #4. */
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const t = getDict(lang);
+---
+<SectionHead eyebrow={t.standard.eyebrow} title={t.standard.title} body={t.standard.body} />
+<ul class="list">
+  {t.standard.points.map((p) => (
+    <li class="item">
+      <span class="tick" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 13 4 4L19 7" /></svg>
+      </span>
+      <div>
+        <h3 class="t">{p.title}</h3>
+        <p class="b">{p.body}</p>
+      </div>
+    </li>
+  ))}
+</ul>
+<style>
+  .list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-6); }
+  .item { display: flex; gap: var(--space-4); align-items: flex-start; }
+  .tick {
+    flex: none; inline-size: 26px; block-size: 26px; display: grid; place-items: center;
+    background: var(--c-accent-soft); color: var(--c-accent);
+    border-radius: var(--r-sm); margin-block-start: 2px;
+  }
+  .t { font-size: var(--fs-body); margin-block-end: var(--space-1); }
+  .b { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.6; }
+  @media (min-width: 768px) { .list { grid-template-columns: 1fr 1fr; gap: var(--space-8); } }
+  @media (min-width: 1200px) { .list { grid-template-columns: repeat(3, 1fr); } }
+</style>

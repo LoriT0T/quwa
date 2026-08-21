@@ -1,11 +1,18 @@
 ---
 /** jeffnippard's 160px stat numeral, kept as a device and made fluid.
     The results-vary note sits inside the block, adjacent to the claim. */
-interface Props { value: string; label: string; note?: string; }
-const { value, label, note } = Astro.props;
+interface Props {
+  value: string;
+  label: string;
+  note?: string;
+  /** jeffnippard's "100,000+" device. Off for exact counts — a "+" on a literal
+      7 reads as an inflated number, which is the opposite of the intent. */
+  plus?: boolean;
+}
+const { value, label, note, plus = false } = Astro.props;
 ---
 <div class="stat">
-  <p class="value"><bdi>{value}</bdi><span class="plus" aria-hidden="true">+</span></p>
+  <p class="value"><bdi>{value}</bdi>{plus && <span class="plus" aria-hidden="true">+</span>}</p>
   <p class="label">{label}</p>
   {note && <p class="note">{note}</p>}
 </div>

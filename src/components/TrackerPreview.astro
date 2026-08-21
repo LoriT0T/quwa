@@ -1,0 +1,65 @@
+---
+import { getDict, type Locale } from '../i18n';
+import SectionHead from './SectionHead.astro';
+/** Hevy, Juggernaut and Freeletics all show app screenshots. We have no app, so we
+    show the artefact we do ship — the tracking sheet — as a real table rather than
+    a picture of one. See docs/ASSET-INVENTORY.md #11. */
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const t = getDict(lang);
+---
+<SectionHead eyebrow={t.tracker.eyebrow} title={t.tracker.title} body={t.tracker.body} />
+<div class="sheet">
+  <div class="chrome" aria-hidden="true">
+    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    <span class="file">hypertrophy-foundations · week 02</span>
+  </div>
+  <div class="scroll">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th scope="col">{t.tracker.columns.exercise}</th>
+          <th scope="col">{t.tracker.columns.target}</th>
+          <th scope="col">{t.tracker.columns.last}</th>
+          <th scope="col">{t.tracker.columns.thisWeek}</th>
+          <th scope="col" class="calc">{t.tracker.columns.next}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {t.tracker.rows.map((row) => (
+          <tr>
+            <th scope="row">{row.exercise}</th>
+            <td class="num">{row.target}</td>
+            <td class="num dim">{row.last}</td>
+            <td class="num">{row.thisWeek}</td>
+            <td class="num calc">{row.next}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+<p class="note">{t.tracker.note}</p>
+<style>
+  .sheet { border: 1px solid var(--c-line-strong); border-radius: var(--r-card); overflow: hidden; background: var(--c-surface); }
+  .chrome {
+    display: flex; align-items: center; gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    background: var(--c-surface-2); border-block-end: 1px solid var(--c-line);
+  }
+  .dot { inline-size: 10px; block-size: 10px; border-radius: var(--r-pill); background: var(--c-line-strong); }
+  .file { margin-inline-start: var(--space-4); font-size: var(--fs-eyebrow); color: var(--c-faint); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .scroll { overflow-x: auto; }
+  .tbl { inline-size: 100%; min-inline-size: 720px; border-collapse: collapse; }
+  .tbl th, .tbl td { padding: var(--space-3) var(--space-4); text-align: start; border-block-end: 1px solid var(--c-line); font-size: var(--fs-small); }
+  .tbl thead th {
+    font-size: var(--fs-eyebrow); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
+    color: var(--c-faint); background: var(--c-ink);
+  }
+  :global(:root[lang="ar"]) .tbl thead th { text-transform: none; }
+  .tbl tbody th { font-weight: var(--fw-bold); color: var(--c-paper); }
+  .num { font-variant-numeric: tabular-nums; color: var(--c-muted); }
+  .dim { color: var(--c-faint); }
+  .calc { background: var(--c-accent-soft); color: var(--c-accent); font-weight: var(--fw-bold); }
+  .note { margin-block-start: var(--space-6); font-size: var(--fs-body); color: var(--c-muted); max-inline-size: var(--measure-prose); }
+</style>

@@ -1,0 +1,48 @@
+---
+import { getDict, type Locale } from '../i18n';
+import { formatNumber } from '../lib/currency';
+import SectionHead from './SectionHead.astro';
+/** Athlean-X "PUTTING THE SCIENCE BACK IN STRENGTH" (958px, 172 words) and
+    Caliber "It's not you. It's the science." Six of twelve industry sites ship an
+    evidence block; none of the ones we measured says what the evidence implies
+    for the reader's next session, which is the part that makes it useful. */
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const t = getDict(lang);
+---
+<SectionHead eyebrow={t.evidence.eyebrow} title={t.evidence.title} body={t.evidence.body} />
+<ul class="grid">
+  {t.evidence.principles.map((p, i) => (
+    <li class="card p">
+      <span class="idx" aria-hidden="true">{formatNumber(i + 1, lang, { minimumIntegerDigits: 2 })}</span>
+      <h3 class="t">{p.title}</h3>
+      <p class="b">{p.body}</p>
+      <div class="imp">
+        <p class="imp-label">{t.evidence.implication}</p>
+        <p class="imp-body">{p.implication}</p>
+      </div>
+    </li>
+  ))}
+</ul>
+<style>
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
+  .p { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
+  .idx {
+    font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); color: var(--c-accent);
+    letter-spacing: var(--tracking-eyebrow); font-variant-numeric: tabular-nums;
+  }
+  .t { font-size: var(--fs-card-title); line-height: 1.3; }
+  .b { font-size: var(--fs-body); color: var(--c-muted); line-height: 1.65; }
+  .imp {
+    margin-block-start: auto; padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--c-line);
+    display: flex; flex-direction: column; gap: var(--space-2);
+  }
+  .imp-label {
+    font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); color: var(--c-faint);
+    letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
+  }
+  :global(:root[lang="ar"]) .imp-label { text-transform: none; }
+  .imp-body { font-size: var(--fs-small); color: var(--c-paper); line-height: 1.6; }
+  @media (min-width: 768px) { .grid { grid-template-columns: 1fr 1fr; } }
+</style>

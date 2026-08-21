@@ -6,7 +6,7 @@ import OrderBump from '../../components/OrderBump.astro';
 import { getDict, type Locale } from '../../i18n';
 import { localePath } from '../../lib/url';
 import { localeParams, getProgram } from '../../lib/content';
-import { COMMERCE_MODE } from '../../config/site';
+import { COMMERCE_MODE, SAMPLE_MODE } from '../../config/site';
 import { REFERRAL } from '../../config/pricing';
 
 export const getStaticPaths = localeParams;
@@ -44,7 +44,7 @@ const bumpProduct = await getProgram(lang, 'recipe-pack');
         <a class="btn btn-primary btn-block" href={localePath(lang, 'checkout')} data-checkout-link>{t.cta.checkout}</a>
         <p class="note">{t.cart.checkoutNote}</p>
         <p class="note">{t.cart.methods}</p>
-        {COMMERCE_MODE === 'mock' && <p class="mock">{t.cart.mockNotice}</p>}
+        {(COMMERCE_MODE === 'mock' || SAMPLE_MODE) && <p class="mock">{t.cart.mockNotice}</p>}
       </aside>
     </div>
   </Section>

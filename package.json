@@ -11,7 +11,10 @@
     "astro": "astro",
     "fonts": "node scripts/fonts.mjs",
     "images:optimize": "node scripts/optimize-images.mjs",
-    "images:generate": "node scripts/generate-images.mjs"
+    "images:generate": "node scripts/generate-images.mjs",
+    "ads": "cd tools && node make-ads.mjs",
+    "research": "cd tools && node research.mjs",
+    "audit": "cd tools && node audit.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.2.4",

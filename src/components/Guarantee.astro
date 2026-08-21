@@ -1,0 +1,42 @@
+---
+import { getDict, fill, type Locale } from '../i18n';
+import { localePath } from '../lib/url';
+import { GUARANTEE_DAYS } from '../config/pricing';
+import { formatNumber } from '../lib/currency';
+/** AG1, Huel and Athlean-X each give the guarantee its own band rather than a
+    footnote. Risk reversal is the last objection standing at the button. */
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const t = getDict(lang);
+---
+<div class="guarantee">
+  <div class="badge" aria-hidden="true">
+    <span class="n">{formatNumber(GUARANTEE_DAYS, lang)}</span>
+  </div>
+  <div class="body">
+    <p class="eyebrow">{t.guarantee.eyebrow}</p>
+    <h2 class="h2">{fill(t.guarantee.title, { n: GUARANTEE_DAYS }, lang)}</h2>
+    <p class="lead">{fill(t.guarantee.body, { n: GUARANTEE_DAYS }, lang)}</p>
+    <ul class="points">
+      {t.guarantee.points.map((p) => <li>{fill(p, { n: GUARANTEE_DAYS }, lang)}</li>)}
+    </ul>
+    <a class="link" href={localePath(lang, 'refund-policy')}>{t.guarantee.cta} →</a>
+  </div>
+</div>
+<style>
+  .guarantee { display: grid; gap: var(--space-8); align-items: start; }
+  .badge {
+    inline-size: 108px; block-size: 108px; flex: none;
+    display: grid; place-items: center;
+    border: 3px solid var(--c-accent); border-radius: var(--r-pill);
+    color: var(--c-accent);
+  }
+  .n { font-size: var(--fs-h2); font-weight: var(--fw-bold); line-height: 1; font-variant-numeric: tabular-nums; }
+  .body { display: flex; flex-direction: column; gap: var(--space-4); }
+  .points { list-style: none; margin: var(--space-2) 0 0; padding: 0; display: grid; gap: var(--space-3); }
+  .points li { font-size: var(--fs-body); color: var(--c-muted); padding-inline-start: var(--space-6); position: relative; line-height: 1.55; }
+  .points li::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 9px; inline-size: 8px; block-size: 8px; border-radius: 2px; background: var(--c-accent); }
+  .link { margin-block-start: var(--space-2); font-weight: var(--fw-bold); color: var(--c-accent); }
+  .link:hover { text-decoration: underline; text-underline-offset: 4px; }
+  @media (min-width: 768px) { .guarantee { grid-template-columns: auto 1fr; gap: var(--space-12); } .points { grid-template-columns: 1fr 1fr; } }
+</style>

@@ -5,6 +5,9 @@ import SectionHead from '../../../components/SectionHead.astro';
 import ProgramCard from '../../../components/ProgramCard.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import CTA from '../../../components/CTA.astro';
+import PlanFinder from '../../../components/PlanFinder.astro';
+import Guarantee from '../../../components/Guarantee.astro';
+import RatingSummary from '../../../components/RatingSummary.astro';
 import { getDict, type Locale } from '../../../i18n';
 import { localePath, absoluteUrl } from '../../../lib/url';
 import { localeParams, getPrograms } from '../../../lib/content';
@@ -62,6 +65,18 @@ const schema = [
     <div class="alt">
       <CTA lang={lang} href={localePath(lang, 'membership')} label={t.cta.joinMembership} terms={t.membership.trialLine} />
     </div>
+  </Section>
+
+  <Section surface>
+    <PlanFinder lang={lang} />
+  </Section>
+
+  <Section tight>
+    <RatingSummary lang={lang} />
+  </Section>
+
+  <Section tight surface>
+    <Guarantee lang={lang} />
   </Section>
 </Layout>
 <style>

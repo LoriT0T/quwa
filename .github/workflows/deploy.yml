@@ -40,6 +40,7 @@ jobs:
           PUBLIC_COMMERCE_MODE: ${{ vars.PUBLIC_COMMERCE_MODE || 'mock' }}
           PUBLIC_PAYMENT_PROVIDER: ${{ vars.PUBLIC_PAYMENT_PROVIDER || 'lemonsqueezy' }}
           PUBLIC_EMAIL_PROVIDER: ${{ vars.PUBLIC_EMAIL_PROVIDER || 'mock' }}
+          PUBLIC_SAMPLE_MODE: ${{ vars.PUBLIC_SAMPLE_MODE || 'true' }}
 
       - uses: actions/configure-pages@v5
 

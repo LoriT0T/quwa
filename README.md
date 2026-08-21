@@ -20,6 +20,18 @@ only server-side piece.
 | Commerce | `PaymentProvider` adapter: working mock, plus Lemon Squeezy / Paddle / Stripe stubs |
 | Backend | Optional Cloudflare Worker for webhooks, signed downloads, subscription gating, magic-link login |
 | Hosting | GitHub Pages via GitHub Actions |
+| Status | **Portfolio sample** — `noindex` sitewide, robots disallow all, no payment path |
+
+> **This is a sample.** `PUBLIC_SAMPLE_MODE` defaults to `true`, which makes the site
+> `noindex` on every route, serves a `Disallow: /` robots.txt, shows a persistent notice
+> on every page, and makes the checkout state plainly that no payment form is presented
+> and no money can move. Set it to `false` only if this ever becomes a real store.
+
+The home page structure comes from a second sweep — 12 industry leaders (AG1, Whoop,
+Huel, Gymshark, Athlean-X, MacroFactor, JuggernautAI, Hevy, Centr, Freeletics, Sweat,
+Caliber) measured for which conversion patterns they actually ship. Findings and what we
+took: [`docs/ASSET-INVENTORY.md`](docs/ASSET-INVENTORY.md).
+Ad creatives and copy: [`docs/AD-COPY.md`](docs/AD-COPY.md), files in [`out/ads/`](out/ads).
 
 Design decisions are derived from a measured Playwright sweep of four reference
 sites — see [`docs/REFERENCE-SPEC.md`](docs/REFERENCE-SPEC.md). Every judgement call and
@@ -53,6 +65,9 @@ the build rather than reaching production.
 | `npm run images:source` | Fill stock slots from the Openverse API |
 | `npm run images:generate` | Generate brand compositions and textures |
 | `npm run images:optimize` | Crop, emit AVIF/WebP sets, write the LQIP map |
+| `npm run ads` | Re-render the four ad creatives from the live brand fonts |
+| `npm run research` | Re-run the industry pattern sweep |
+| `npm run audit` | Structural, accessibility and functional sweep of every template |
 
 ---
 
