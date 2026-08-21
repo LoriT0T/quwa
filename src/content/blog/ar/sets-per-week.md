@@ -5,6 +5,8 @@ description: "الجواب الصادق نطاق يعتمد على عمرك ال
 intent: "كم مجموعة لكل عضلة اسبوعيا"
 published: 2026-05-26
 tags: [تدريب, برمجة, حجم]
+image: ../../../assets/images/topic-training.jpg
+imageAlt: "متدرّب يرفع الأثقال في صالة تدريب"
 readingMinutes: 5
 tools: []
 ---

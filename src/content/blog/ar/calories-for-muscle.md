@@ -6,6 +6,8 @@ intent: "كم سعرة حرارية احتاج لبناء العضل"
 published: 2026-03-06
 updated: 2026-07-14
 tags: [تغذية, عضل, سعرات]
+image: ../../../assets/images/topic-nutrition.jpg
+imageAlt: "خضار وفواكه طازجة على بسطة سوق"
 readingMinutes: 6
 tools: [tdee, macros, protein]
 featured: true

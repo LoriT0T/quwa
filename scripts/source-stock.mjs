@@ -20,6 +20,7 @@
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import crypto from 'node:crypto';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const MANIFEST = path.join(ROOT, 'assets/manifest.json');
@@ -87,6 +88,9 @@ async function searchWikimedia(query, minWidth) {
     })
     .filter(Boolean)
     .filter((r) => OK_LICENCES.test(r.licence) && !BAD_LICENCES.test(r.licence))
+    // Commons is a catalogue as much as a photo library. Without this, "balance
+    // scales" returns an 1841 museum accession and "salad bowl" returns a ceramic.
+    .filter((r) => !REJECT.test(`${r.title} ${r.categories}`))
     .filter((r) => r.fullWidth >= minWidth);
 }
 
@@ -128,6 +132,18 @@ const manifest = JSON.parse(await fs.readFile(MANIFEST, 'utf8'));
 const ledger = await readJson(LEDGER, {});
 await fs.mkdir(DOWNLOADS, { recursive: true });
 
+/**
+ * Full-text search will hand the same photo to two different queries — a leg-press
+ * frame satisfied both "gym weights" and "gym machines", so two slots ended up
+ * sharing a file. Hash what is already on disk and refuse a repeat.
+ */
+const seenHashes = new Map();
+for (const file of await fs.readdir(DOWNLOADS).catch(() => [])) {
+  if (!file.endsWith('.jpg')) continue;
+  const buf = await fs.readFile(path.join(DOWNLOADS, file));
+  seenHashes.set(crypto.createHash('md5').update(buf).digest('hex'), file.replace('.jpg', ''));
+}
+
 const slots = manifest.slots.filter(
   (s) => s.source === 'stock' && !s.blocked && (only.length === 0 || only.includes(s.id)),
 );
@@ -146,8 +162,10 @@ for (const slot of slots) {
      "weight plates stacked". Requiring a real term overlap is the difference
      between an illustrated page and a wrong one. */
   const terms = queries.join(' ').toLowerCase().split(/\s+/).filter((w) => w.length > 3);
+  const slotReject = slot.reject ? new RegExp(slot.reject.join('|'), 'i') : null;
   const relevant = (r) => {
     const haystack = `${r.title} ${r.categories}`.toLowerCase();
+    if (slotReject && slotReject.test(haystack)) return false;
     return terms.some((t) => haystack.includes(t));
   };
 
@@ -180,6 +198,10 @@ for (const slot of slots) {
     if (!image.ok) throw new Error(`download ${image.status}`);
     const buffer = Buffer.from(await image.arrayBuffer());
     if (buffer.length < 20000) throw new Error(`suspiciously small (${buffer.length} bytes)`);
+    const hash = crypto.createHash('md5').update(buffer).digest('hex');
+    const owner = seenHashes.get(hash);
+    if (owner && owner !== slot.id) throw new Error(`identical to the file already used by "${owner}"`);
+    seenHashes.set(hash, slot.id);
     await fs.writeFile(target, buffer);
 
     ledger[slot.id] = {

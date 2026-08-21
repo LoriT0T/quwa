@@ -27,6 +27,8 @@ const providers = {
   /** Deterministic brand art. This is the one that actually runs in CI. */
   async local(slot) {
     if (slot.id === 'texture-grain') return grainTexture(slot);
+    if (slot.id === 'band-tracking') return progressionChart(slot);
+    if (slot.id === 'tools-cover') return numericGrid(slot);
     return brandCard(slot);
   },
 
@@ -107,6 +109,71 @@ function brandCard(slot) {
   return sharp(Buffer.from(svg)).png().toBuffer();
 }
 
+/** A load-progression chart. Abstract data, not a photograph of anything. */
+function progressionChart(slot) {
+  const { width: w, height: h } = slot;
+  const bars = [0.30, 0.36, 0.34, 0.44, 0.50, 0.47, 0.58, 0.66, 0.62, 0.74, 0.82, 0.92];
+  const pad = Math.round(w * 0.12);
+  const inner = w - pad * 2;
+  const gap = inner * 0.035;
+  const bw = (inner - gap * (bars.length - 1)) / bars.length;
+  const base = h - Math.round(h * 0.14);
+  const maxH = base - Math.round(h * 0.16);
+
+  const grid = Array.from({ length: 9 }, (_, i) => {
+    const y = Math.round(h * 0.14 + (i * (base - h * 0.14)) / 8);
+    return `<line x1="${pad}" y1="${y}" x2="${w - pad}" y2="${y}" stroke="${PAPER}" stroke-opacity="0.07" stroke-width="1"/>`;
+  }).join('');
+
+  const rects = bars.map((v, i) => {
+    const bh = Math.round(maxH * v);
+    const x = pad + i * (bw + gap);
+    const y = base - bh;
+    const last = i === bars.length - 1;
+    return `<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="3"
+      fill="${last ? ACCENT : PAPER}" fill-opacity="${last ? 1 : 0.16 + (i / bars.length) * 0.34}"/>`;
+  }).join('');
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
+    <rect width="${w}" height="${h}" fill="${INK}"/>
+    <rect width="${w}" height="${h}" fill="${SURFACE}" fill-opacity="0.55"/>
+    ${grid}
+    <line x1="${pad}" y1="${base}" x2="${w - pad}" y2="${base}" stroke="${PAPER}" stroke-opacity="0.22" stroke-width="2"/>
+    ${rects}
+  </svg>`;
+  return sharp(Buffer.from(svg)).jpeg({ quality: 92 }).toBuffer();
+}
+
+/** A numeric-key grid. Abstract, for the free-tools cover. */
+function numericGrid(slot) {
+  const { width: w, height: h } = slot;
+  const cols = 8, rows = 5;
+  const pad = Math.round(w * 0.06);
+  const cw = (w - pad * 2) / cols;
+  const ch = (h - pad * 2) / rows;
+  const glyphs = ['7','2','·','4','9','1','5','0','3','8','%','6','1','4','·','2','7','5','9','3','0','8','6','1','2','9','4','·','7','3','5','0','8','6','1','2','4','9','3','7'];
+  const cells = [];
+  for (let r = 0; r < rows; r += 1) {
+    for (let c = 0; c < cols; c += 1) {
+      const i = r * cols + c;
+      const hot = (i * 7) % 11 === 0;
+      const x = pad + c * cw;
+      const y = pad + r * ch;
+      cells.push(`<rect x="${x + 4}" y="${y + 4}" width="${cw - 8}" height="${ch - 8}" rx="8"
+        fill="${hot ? ACCENT : PAPER}" fill-opacity="${hot ? 0.14 : 0.035}"
+        stroke="${hot ? ACCENT : PAPER}" stroke-opacity="${hot ? 0.5 : 0.08}"/>`);
+      cells.push(`<text x="${x + cw / 2}" y="${y + ch / 2 + ch * 0.13}" text-anchor="middle"
+        font-family="Inter, system-ui, sans-serif" font-size="${Math.round(ch * 0.36)}" font-weight="700"
+        fill="${hot ? ACCENT : PAPER}" fill-opacity="${hot ? 0.95 : 0.2}">${glyphs[i % glyphs.length]}</text>`);
+    }
+  }
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
+    <rect width="${w}" height="${h}" fill="${INK}"/>
+    ${cells.join('')}
+  </svg>`;
+  return sharp(Buffer.from(svg)).jpeg({ quality: 92 }).toBuffer();
+}
+
 function grainTexture(slot) {
   const { width: w, height: h } = slot;
   const pixels = Buffer.alloc(w * h * 4);
@@ -132,7 +199,13 @@ const slots = manifest.slots.filter(
 );
 
 for (const slot of slots) {
-  const out = path.join(ROOT, slot.path);
+  /* A generated slot whose declared path is a master goes through the same
+     crop/AVIF/LQIP pipeline as a photograph — so it is written into the
+     downloads folder and `npm run images:optimize` picks it up from there. */
+  const feedsPipeline = slot.path.startsWith('src/assets/images/');
+  const out = feedsPipeline
+    ? path.join(ROOT, manifest.output.downloads, `${slot.id}.jpg`)
+    : path.join(ROOT, slot.path);
   await fs.mkdir(path.dirname(out), { recursive: true });
   try {
     const buffer = await adapter(slot);

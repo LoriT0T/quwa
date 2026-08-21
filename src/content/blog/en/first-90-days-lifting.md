@@ -5,6 +5,8 @@ description: "What to do, what to ignore, and the three mistakes that cost begin
 intent: "beginner gym routine for the first 3 months"
 published: 2026-06-18
 tags: [beginner, training]
+image: ../../../assets/images/topic-beginner.jpg
+imageAlt: "Hands lifting a dumbbell from a rack"
 readingMinutes: 6
 tools: [tdee, protein]
 featured: true

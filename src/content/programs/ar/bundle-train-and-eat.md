@@ -8,6 +8,8 @@ kind: bundle
 level: intermediate
 goal: muscle
 equipment: full-gym
+image: ../../../assets/images/program-bundle-train-and-eat.jpg
+imageAlt: "طبق نودلز مع خضار"
 order: 15
 rating: { value: 4.7, count: 88 }
 whatsInside:

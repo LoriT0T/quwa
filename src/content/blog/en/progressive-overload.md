@@ -5,6 +5,8 @@ description: "There are five ways to make a session harder than the last one, an
 intent: "what is progressive overload and how to apply it"
 published: 2026-04-02
 tags: [training, programming]
+image: ../../../assets/images/topic-training.jpg
+imageAlt: "A lifter training with weights in a gym"
 readingMinutes: 6
 tools: [onerm]
 featured: true

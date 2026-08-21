@@ -5,6 +5,8 @@ description: "A deload is not a week off. It is a planned reduction in a specifi
 intent: "what is a deload week and when do i need one"
 published: 2026-06-03
 tags: [training, recovery, programming]
+image: ../../../assets/images/topic-recovery.jpg
+imageAlt: "A stretching mat on a floor at home"
 readingMinutes: 5
 tools: []
 ---

@@ -5,6 +5,8 @@ description: "Both work. The right one depends on how many days you can genuinel
 intent: "push pull legs vs upper lower split"
 published: 2026-05-06
 tags: [training, programming, splits]
+image: ../../../assets/images/topic-training.jpg
+imageAlt: "A lifter training with weights in a gym"
 readingMinutes: 5
 tools: []
 ---

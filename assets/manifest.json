@@ -85,12 +85,12 @@
       "height": 900,
       "source": "stock",
       "query": [
-        "healthy meal vegetables chicken",
-        "grilled chicken vegetables dinner",
-        "salad plate lunch healthy"
+        "chicken breast rice broccoli",
+        "healthy dinner plate meat vegetables",
+        "cooked chicken vegetables plate"
       ],
-      "why": "Three licensed candidates were rejected on review: a restaurant dining room, a museum ceramic accession, and Marines grilling chicken at a field barbecue. None is a plate of food a dieting person would eat. Free licensed aggregators do not reliably return commercial-grade food photography; this needs an Unsplash or Pexels key, or the shoot.",
-      "prompt": "An overhead plate of grilled chicken, rice and green vegetables on a dark surface, single soft window light from the left.",
+      "why": "Six licensed candidates rejected on visual review across three rounds: a restaurant dining room (three times), a museum ceramic accession, and Marines grilling chicken at a field barbecue. Free licensed aggregators do not return commercial-grade plated food. Needs an Unsplash or Pexels key, or the shoot.",
+      "prompt": "Grilled chicken, rice and green vegetables on a dark plate, overhead, soft window light from the left.",
       "alt": "program.lean-recomposition.imageAlt",
       "note": "Rejected three licensed candidates on review: a restaurant dining room, a museum ceramic accession, and Marines grilling chicken at a field barbecue. None of them is a plate of food a person would eat while dieting. Needs an Unsplash/Pexels key or the shoot in docs/SHOT-LIST.md.",
       "blocked": true,
@@ -258,6 +258,220 @@
       "alt": "",
       "blocked": true,
       "shotList": "docs/SHOT-LIST.md#founder"
+    },
+    {
+      "id": "program-bundle-complete-library",
+      "path": "src/assets/images/program-bundle-complete-library.jpg",
+      "ratio": "4:3",
+      "width": 1200,
+      "height": 900,
+      "source": "stock",
+      "query": [
+        "weight plates rack gym",
+        "dumbbell rack row gym",
+        "barbell rack weights gym"
+      ],
+      "why": "A bundle is six programs; the picture has to read as a whole room of equipment rather than one object.",
+      "prompt": "A wide view of a weight room, racks and dumbbells receding, low key, no people.",
+      "alt": ""
+    },
+    {
+      "id": "program-bundle-train-and-eat",
+      "path": "src/assets/images/program-bundle-train-and-eat.jpg",
+      "ratio": "4:3",
+      "width": 1200,
+      "height": 900,
+      "source": "stock",
+      "query": [
+        "healthy meal bowl protein",
+        "food bowl vegetables meat",
+        "balanced meal plate food"
+      ],
+      "why": "This bundle is training plus food, so the frame has to carry the food half.",
+      "prompt": "Raw ingredients laid out on a dark counter, overhead, single soft light.",
+      "alt": ""
+    },
+    {
+      "id": "topic-nutrition",
+      "path": "src/assets/images/topic-nutrition.jpg",
+      "ratio": "16:9",
+      "width": 1280,
+      "height": 720,
+      "source": "stock",
+      "query": [
+        "vegetables food ingredients table",
+        "healthy food ingredients",
+        "fresh vegetables market"
+      ],
+      "why": "Header for nutrition, calorie and protein articles.",
+      "prompt": "Fresh ingredients on a dark surface, overhead, hard side light.",
+      "alt": ""
+    },
+    {
+      "id": "topic-training",
+      "path": "src/assets/images/topic-training.jpg",
+      "ratio": "16:9",
+      "width": 1280,
+      "height": 720,
+      "source": "stock",
+      "query": [
+        "barbell training gym",
+        "weightlifting gym training",
+        "gym barbell weights training"
+      ],
+      "why": "Header for programming and volume articles.",
+      "prompt": "A loaded barbell mid-set in a dim gym, motion implied, no faces.",
+      "alt": ""
+    },
+    {
+      "id": "topic-recovery",
+      "path": "src/assets/images/topic-recovery.jpg",
+      "ratio": "16:9",
+      "width": 1280,
+      "height": 720,
+      "source": "stock",
+      "query": [
+        "stretching exercise mat",
+        "yoga mat stretching floor",
+        "exercise mat gym floor"
+      ],
+      "why": "Header for deload, sleep and fatigue articles.",
+      "prompt": "An empty mat on a gym floor, raking light, cool palette.",
+      "alt": ""
+    },
+    {
+      "id": "topic-supplements",
+      "path": "src/assets/images/topic-supplements.jpg",
+      "ratio": "16:9",
+      "width": 1280,
+      "height": 720,
+      "source": "stock",
+      "query": [
+        "protein powder scoop",
+        "supplement powder container",
+        "whey protein powder"
+      ],
+      "why": "Header for creatine and supplement articles.",
+      "prompt": "A scoop of powder on a dark surface, tight crop, hard light.",
+      "alt": ""
+    },
+    {
+      "id": "topic-beginner",
+      "path": "src/assets/images/topic-beginner.jpg",
+      "ratio": "16:9",
+      "width": 1280,
+      "height": 720,
+      "source": "stock",
+      "query": [
+        "man lifting dumbbell gym",
+        "dumbbell exercise training",
+        "dumbbell workout gym"
+      ],
+      "why": "Header for first-90-days and home-training articles.",
+      "prompt": "A pair of dumbbells on a wooden floor, natural window light.",
+      "alt": ""
+    },
+    {
+      "id": "topic-technique",
+      "path": "src/assets/images/topic-technique.jpg",
+      "ratio": "16:9",
+      "width": 1280,
+      "height": 720,
+      "source": "stock",
+      "query": [
+        "squat barbell lifting",
+        "deadlift barbell lifting",
+        "powerlifting squat barbell"
+      ],
+      "why": "Header for squat-mistakes and one-rep-max articles.",
+      "prompt": "A lifter mid-squat seen from the side, low key, face not the subject.",
+      "alt": ""
+    },
+    {
+      "id": "band-rationale",
+      "path": "src/assets/images/band-rationale.jpg",
+      "ratio": "4:5",
+      "width": 900,
+      "height": 1125,
+      "source": "stock",
+      "query": [
+        "notebook pen writing",
+        "training notebook journal",
+        "notebook paper pen desk"
+      ],
+      "why": "The band is about written reasoning, so the frame is paper.",
+      "prompt": "An open notebook and pen, hard side light, deep shadow.",
+      "alt": ""
+    },
+    {
+      "id": "band-substitutions",
+      "path": "src/assets/images/band-substitutions.jpg",
+      "ratio": "4:5",
+      "width": 900,
+      "height": 1125,
+      "source": "stock",
+      "query": [
+        "cable machine gym",
+        "weight machine gym equipment",
+        "gym machines row equipment"
+      ],
+      "why": "The band is about a busy gym, so the frame is machines.",
+      "prompt": "A row of gym machines receding, cool light, no people.",
+      "alt": ""
+    },
+    {
+      "id": "band-tracking",
+      "path": "src/assets/images/band-tracking.jpg",
+      "ratio": "4:5",
+      "width": 900,
+      "height": 1125,
+      "source": "generate",
+      "why": "Two rounds of licensed search returned archive scans \u2014 Charles Lyell's notebook and a 1966 botanical field log. No photograph says \"progression chart\" without being a museum object, so this is an abstract brand composition: a rendered load-progression graphic. Permitted under the image rules, which allow generation for brand compositions and textures but never for a person, a body, a food item or a piece of equipment.",
+      "prompt": "A load-progression bar chart in the brand palette: near-black ground, ascending bars in accent orange, a faint 8px grid behind.",
+      "alt": ""
+    },
+    {
+      "id": "band-deload",
+      "path": "src/assets/images/band-deload.jpg",
+      "ratio": "4:5",
+      "width": 900,
+      "height": 1125,
+      "source": "stock",
+      "query": [
+        "gym bench empty",
+        "weight bench gym",
+        "exercise bench gym floor"
+      ],
+      "why": "The band is about scheduled rest, so the frame is an unused bench.",
+      "prompt": "An empty weight bench in a dim gym, single overhead light.",
+      "alt": ""
+    },
+    {
+      "id": "tools-cover",
+      "path": "src/assets/images/tools-cover.jpg",
+      "ratio": "16:9",
+      "width": 1280,
+      "height": 720,
+      "source": "generate",
+      "why": "Licensed search returned antique balance scales with museum accession tags, twice. The free tools are arithmetic, not an object, so this is an abstract brand composition.",
+      "prompt": "A numeric grid composition in the brand palette, calculator-key motif, accent highlights on a near-black ground.",
+      "alt": ""
+    },
+    {
+      "id": "membership-cover",
+      "path": "src/assets/images/membership-cover.jpg",
+      "ratio": "4:3",
+      "width": 1200,
+      "height": 900,
+      "source": "stock",
+      "query": [
+        "weight training room gym",
+        "gymnasium weights interior",
+        "gym free weights area"
+      ],
+      "why": "Header for the membership page.",
+      "prompt": "A wide gym interior, empty, cool light falling from high windows.",
+      "alt": ""
     }
   ]
 }

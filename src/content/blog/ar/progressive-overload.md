@@ -5,6 +5,8 @@ description: "هناك خمس طرق لجعل الحصة أصعب من سابق�
 intent: "ما هو التدرج في الاوزان وكيف اطبقه"
 published: 2026-05-11
 tags: [تدريب, برمجة]
+image: ../../../assets/images/topic-training.jpg
+imageAlt: "متدرّب يرفع الأثقال في صالة تدريب"
 readingMinutes: 6
 tools: [onerm]
 ---

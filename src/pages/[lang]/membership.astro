@@ -10,6 +10,8 @@ import CTA from '../../components/CTA.astro';
 import CompareApproach from '../../components/CompareApproach.astro';
 import Community from '../../components/Community.astro';
 import Guarantee from '../../components/Guarantee.astro';
+import Media from '../../components/Media.astro';
+import cover from '../../assets/images/membership-cover.jpg';
 import { getDict, fill, type Locale } from '../../i18n';
 import { localePath, absoluteUrl } from '../../lib/url';
 import { localeParams } from '../../lib/content';
@@ -35,6 +37,10 @@ const schema = [
     <Breadcrumbs lang={lang} items={crumbs} />
     <div class="gap">
       <SectionHead as="h1" eyebrow={t.membership.eyebrow} title={t.membership.title} body={t.membership.sub} center />
+      <div class="cover">
+        <Media src={cover} alt={t.membership.title} ratio="21 / 9" priority slot_id="membership-cover"
+               sizes="100vw" widths={[640, 1024, 1280]} />
+      </div>
     </div>
 
     <!-- ── Plans. Annual is the visual default and carries the trial. ──── -->
@@ -153,6 +159,7 @@ const schema = [
 </Layout>
 <style>
   .gap { margin-block-start: var(--space-8); }
+  .cover { margin-block: var(--space-8) var(--space-12); }
   /* 900px was the last hand-typed measure on the site. Two card measures plus
      the gap is the same figure, expressed in tokens. */
   .plans { display: grid; gap: var(--space-4); max-inline-size: calc(var(--measure-card) * 2 + var(--space-4)); margin-inline: auto; }

@@ -5,6 +5,8 @@ description: "أكثر المكمّلات دراسةً في تغذية الري�
 intent: "هل الكرياتين مفيد وكيف استخدمه"
 published: 2026-07-02
 tags: [مكملات, تغذية]
+image: ../../../assets/images/topic-supplements.jpg
+imageAlt: "مكيال بروتين يُقاس من عبوة"
 readingMinutes: 5
 tools: []
 ---

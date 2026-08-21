@@ -108,5 +108,145 @@
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Young_attractive_man_doing_leg_with_machine_in_gym._Back_view_closeup.jpg",
     "provider": "Wikimedia Commons",
     "dimensions": "4016×6016"
+  },
+  "topic-nutrition": {
+    "slot": "topic-nutrition",
+    "title": "20180803-AMS-LSC-0001 (43891328261)",
+    "creator": "U.S. Department of Agriculture Lance Cheung/Multimedia PhotoJournalist",
+    "licence": "Public domain",
+    "licenceUrl": "",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:20180803-AMS-LSC-0001_(43891328261).jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "8256×5504"
+  },
+  "topic-training": {
+    "slot": "topic-training",
+    "title": "U.S. Soldiers Conduct Physical Training DVIDS118982",
+    "creator": "Staff Sgt. Manuel J. Martinez",
+    "licence": "Public domain",
+    "licenceUrl": "",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:U.S._Soldiers_Conduct_Physical_Training_DVIDS118982.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "3216×2136"
+  },
+  "topic-recovery": {
+    "slot": "topic-recovery",
+    "title": "Woman practicing yoga at home using laptop while sitting on mat",
+    "creator": "Shixart1985",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Woman_practicing_yoga_at_home_using_laptop_while_sitting_on_mat.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "6016×4016"
+  },
+  "topic-supplements": {
+    "slot": "topic-supplements",
+    "title": "User measures a scoop of protein powder from a container in a kitchen",
+    "creator": "Shixart1985",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:User_measures_a_scoop_of_protein_powder_from_a_container_in_a_kitchen.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "6048×4032"
+  },
+  "topic-technique": {
+    "slot": "topic-technique",
+    "title": "MPOTY 2014 Weight-lifting competition aboard the USS Bataan",
+    "creator": "U.S. Marine Corps photo by Sgt. Austin Hazard",
+    "licence": "Public domain",
+    "licenceUrl": "",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:MPOTY_2014_Weight-lifting_competition_aboard_the_USS_Bataan.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "2000×1333"
+  },
+  "band-rationale": {
+    "slot": "band-rationale",
+    "title": "Writing with a fountain pen (Unsplash)",
+    "creator": "Aaron Burden aaronburden",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Writing_with_a_fountain_pen_(Unsplash).jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "4592×3448"
+  },
+  "band-deload": {
+    "slot": "band-deload",
+    "title": "Join the club, Cherry Point weight lifters have goals to achieve in the gym 130306-M-EY704-005",
+    "creator": "Lance Cpl. Cory D. Polom",
+    "licence": "Public domain",
+    "licenceUrl": "",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Join_the_club,_Cherry_Point_weight_lifters_have_goals_to_achieve_in_the_gym_130306-M-EY704-005.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "2720×4080"
+  },
+  "program-bundle-complete-library": {
+    "slot": "program-bundle-complete-library",
+    "title": "A variety of colorful weight plates",
+    "creator": "Shixart1985",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:A_variety_of_colorful_weight_plates.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "4016×6016"
+  },
+  "program-bundle-train-and-eat": {
+    "slot": "program-bundle-train-and-eat",
+    "title": "Noodle Bowl for Lunch (Unsplash)",
+    "creator": "Tran Mau Tri Tam tranmautritam",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Noodle_Bowl_for_Lunch_(Unsplash).jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "5184×3456"
+  },
+  "topic-beginner": {
+    "slot": "topic-beginner",
+    "title": "Young man lifting dumbbell weight for exercise in fitness gym",
+    "creator": "Nenad Stojkovic",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Young_man_lifting_dumbbell_weight_for_exercise_in_fitness_gym.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "3802×5695"
+  },
+  "band-substitutions": {
+    "slot": "band-substitutions",
+    "title": "Woman using a seated cable row machine at the gym",
+    "creator": "Miguel Angel Omaña Rojas",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Woman_using_a_seated_cable_row_machine_at_the_gym.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "1200×834"
+  },
+  "membership-cover": {
+    "slot": "membership-cover",
+    "title": "UCHSWeightRoom9.10.09ByLuigiNovi1",
+    "creator": "Nightscream",
+    "licence": "CC BY 3.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:UCHSWeightRoom9.10.09ByLuigiNovi1.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "1600×1200"
+  },
+  "band-tracking": {
+    "slot": "band-tracking",
+    "title": "C Lyell notebook page 1",
+    "creator": "University of Edinburgh Heritage Collections",
+    "licence": "CC BY 3.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:C_Lyell_notebook_page_1.jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "5811×8605"
+  },
+  "tools-cover": {
+    "slot": "tools-cover",
+    "title": "Balance (AM 610322)",
+    "creator": "Unknown",
+    "licence": "CC BY 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Balance_(AM_610322).jpg",
+    "provider": "Wikimedia Commons",
+    "dimensions": "1965×1155"
   }
 }

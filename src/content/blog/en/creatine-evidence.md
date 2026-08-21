@@ -5,6 +5,8 @@ description: "The most studied supplement in sports nutrition, what it does, wha
 intent: "does creatine work and how to take it"
 published: 2026-07-29
 tags: [supplements, nutrition]
+image: ../../../assets/images/topic-supplements.jpg
+imageAlt: "A scoop of protein powder being measured from a tub"
 readingMinutes: 5
 tools: []
 ---

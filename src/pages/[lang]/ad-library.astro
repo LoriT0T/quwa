@@ -1,0 +1,178 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { getDict, type Locale } from '../../i18n';
+import { localePath, rootPath } from '../../lib/url';
+import { localeParams } from '../../lib/content';
+import { formatNumber } from '../../lib/currency';
+import { CREATIVES, AD_COPY } from '../../data/ads';
+
+export const getStaticPaths = localeParams;
+
+const lang = Astro.params.lang as Locale;
+const t = getDict(lang);
+const a = t.adLibrary;
+const creatives = CREATIVES[lang];
+const copy = AD_COPY[lang];
+
+const crumbs = [
+  { name: t.common.home, href: localePath(lang, '/') },
+  { name: a.title, href: localePath(lang, 'ad-library') },
+];
+const dim = (n: number) => formatNumber(n, lang, { useGrouping: false });
+---
+<Layout lang={lang} title={a.title} description={a.sub} path="ad-library" noOffers>
+  <Section>
+    <Breadcrumbs lang={lang} items={crumbs} />
+    <div class="gap">
+      <SectionHead as="h1" eyebrow={a.eyebrow} title={a.title} body={a.sub} />
+    </div>
+    <p class="note">{a.note}</p>
+
+    {creatives.map((c) => {
+      const ad = copy[c.id]!;
+      const concept = a.concepts[c.concept];
+      const src = rootPath(`ads/${c.file}`);
+      return (
+        <article class="ad">
+          <div class="preview">
+            {/* The creatives are fixed-size PNGs, not responsive art — shown at
+                their real aspect ratio so the framing can be judged. */}
+            <a href={src} target="_blank" rel="noopener">
+              <img
+                src={src}
+                alt={ad.headline}
+                width={c.width}
+                height={c.height}
+                loading="lazy"
+                decoding="async"
+                style={`aspect-ratio:${c.width} / ${c.height}`}
+              />
+            </a>
+            <div class="actions">
+              <a class="btn btn-secondary" href={src} download>{a.download}</a>
+              <a class="btn btn-ghost" href={src} target="_blank" rel="noopener">{a.open} →</a>
+            </div>
+          </div>
+
+          <div class="detail">
+            <p class="platform">{c.platform === 'facebook' ? 'Facebook' : 'Instagram'}</p>
+            <h2 class="h3">{ad.headline}</h2>
+
+            <dl class="spec">
+              <div><dt>{a.spec.placement}</dt><dd>{a.placements[c.platform]}</dd></div>
+              <div><dt>{a.spec.size}</dt><dd><bdi>{dim(c.width)} × {dim(c.height)}</bdi></dd></div>
+              <div><dt>{a.spec.ratio}</dt><dd><bdi>{c.ratio}</bdi></dd></div>
+              <div><dt>{a.spec.file}</dt><dd><code>{c.file}</code></dd></div>
+              <div><dt>{a.spec.destination}</dt><dd><code>{ad.destination}</code></dd></div>
+            </dl>
+
+            <div class="concept">
+              <p class="c-label">{a.conceptLabel} · {concept.name}</p>
+              <p class="c-body">{concept.body}</p>
+            </div>
+
+            <dl class="fields">
+              <div><dt>{a.fields.primaryText}</dt><dd>{ad.primaryText}</dd></div>
+              <div><dt>{a.fields.headline}</dt><dd>{ad.headline}</dd></div>
+              {ad.description && <div><dt>{a.fields.description}</dt><dd>{ad.description}</dd></div>}
+              <div><dt>{a.fields.cta}</dt><dd>{ad.cta}</dd></div>
+              {ad.firstComment && <div><dt>{a.fields.firstComment}</dt><dd>{ad.firstComment}</dd></div>}
+            </dl>
+          </div>
+        </article>
+      );
+    })}
+  </Section>
+
+  <Section tight surface>
+    <SectionHead eyebrow={a.compliance.eyebrow} title={a.compliance.title} body={a.compliance.body} />
+    <ul class="rules">
+      {a.compliance.items.map((item) => (
+        <li class="rule card">
+          <span class="x" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6 6 18M6 6l12 12" /></svg>
+          </span>
+          <div>
+            <h3 class="r-t">{item.title}</h3>
+            <p class="r-b">{item.body}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <p class="disc">{a.disclaimerNote}</p>
+  </Section>
+
+  <Section tight>
+    <h2 class="h2 mb">{a.targeting.title}</h2>
+    <ul class="targeting">
+      {a.targeting.items.map((item) => <li>{item}</li>)}
+    </ul>
+  </Section>
+</Layout>
+
+<style>
+  .gap { margin-block-start: var(--space-8); }
+  .note {
+    margin-block-end: var(--space-16); padding: var(--space-4);
+    border: 1px solid var(--c-line-strong); border-radius: var(--r-control);
+    background: var(--c-surface); font-size: var(--fs-small);
+    color: var(--c-muted); max-inline-size: var(--measure-prose);
+  }
+  .ad {
+    display: grid; gap: var(--space-8);
+    padding-block-end: var(--space-16); margin-block-end: var(--space-16);
+    border-block-end: 1px solid var(--c-line);
+  }
+  .ad:last-of-type { border-block-end: none; }
+  .preview img {
+    inline-size: 100%; block-size: auto; border-radius: var(--r-card);
+    border: 1px solid var(--c-line); background: var(--c-surface);
+  }
+  .actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-block-start: var(--space-4); }
+  .actions .btn { min-block-size: 44px; }
+  .detail { display: flex; flex-direction: column; gap: var(--space-6); }
+  .platform {
+    font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); color: var(--c-accent);
+    letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
+  }
+  :global(:root[lang="ar"]) .platform { text-transform: none; }
+  .spec { margin: 0; display: grid; gap: var(--space-3); }
+  .spec > div { display: flex; gap: var(--space-4); justify-content: space-between; align-items: baseline; border-block-end: 1px solid var(--c-line); padding-block-end: var(--space-3); }
+  .spec dt { font-size: var(--fs-small); color: var(--c-faint); flex: none; }
+  .spec dd { margin: 0; font-size: var(--fs-small); font-weight: var(--fw-bold); text-align: end; }
+  .concept { padding: var(--space-4); background: var(--c-accent-soft); border-radius: var(--r-control); }
+  .c-label { font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); color: var(--c-accent); margin-block-end: var(--space-2); }
+  .c-body { font-size: var(--fs-small); color: var(--c-paper); line-height: 1.6; }
+  .fields { margin: 0; display: grid; gap: var(--space-4); }
+  .fields dt {
+    font-size: var(--fs-eyebrow); font-weight: var(--fw-bold); color: var(--c-faint);
+    letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; margin-block-end: var(--space-2);
+  }
+  :global(:root[lang="ar"]) .fields dt { text-transform: none; }
+  .fields dd { margin: 0; font-size: var(--fs-body); line-height: 1.6; color: var(--c-muted); }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: var(--fs-small); color: var(--c-accent); }
+
+  .mb { margin-block-end: var(--space-8); }
+  .rules { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
+  .rule { display: flex; gap: var(--space-4); align-items: flex-start; padding: var(--space-6); }
+  .x {
+    flex: none; inline-size: 26px; block-size: 26px; display: grid; place-items: center;
+    background: rgb(245 247 250 / 0.08); color: var(--c-muted);
+    border-radius: var(--r-sm); margin-block-start: 2px;
+  }
+  .r-t { font-size: var(--fs-body); margin-block-end: var(--space-2); }
+  .r-b { font-size: var(--fs-small); color: var(--c-muted); line-height: 1.6; }
+  .disc { margin-block-start: var(--space-8); font-size: var(--fs-body); color: var(--c-muted); line-height: 1.65; max-inline-size: var(--measure-prose); }
+  .targeting { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); max-inline-size: var(--measure-prose); }
+  .targeting li { font-size: var(--fs-body); color: var(--c-muted); line-height: 1.65; padding-inline-start: var(--space-6); position: relative; }
+  .targeting li::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 10px; inline-size: 8px; block-size: 8px; border-radius: 2px; background: var(--c-accent); }
+
+  @media (min-width: 768px) { .rules { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1024px) {
+    .ad { grid-template-columns: 1.15fr 0.85fr; gap: var(--space-16); align-items: start; }
+    .spec > div { justify-content: space-between; }
+  }
+</style>

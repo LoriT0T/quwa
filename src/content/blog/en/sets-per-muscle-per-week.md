@@ -5,6 +5,8 @@ description: "The honest answer is a range that depends on training age, recover
 intent: "how many sets per muscle per week for growth"
 published: 2026-04-21
 tags: [training, programming, volume]
+image: ../../../assets/images/topic-training.jpg
+imageAlt: "A lifter training with weights in a gym"
 readingMinutes: 5
 tools: []
 ---

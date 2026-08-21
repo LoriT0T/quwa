@@ -6,6 +6,8 @@ intent: "how many calories should i eat to build muscle"
 published: 2026-03-04
 updated: 2026-07-11
 tags: [nutrition, muscle, calories]
+image: ../../../assets/images/topic-nutrition.jpg
+imageAlt: "Fresh vegetables and fruit on a market stall"
 readingMinutes: 6
 tools: [tdee, macros, protein]
 featured: true

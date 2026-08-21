@@ -8,6 +8,8 @@ kind: bundle
 level: all
 goal: muscle
 equipment: full-gym
+image: ../../../assets/images/program-bundle-complete-library.jpg
+imageAlt: "Colourful weight plates racked in a gym"
 order: 5
 featured: true
 rating: { value: 4.74, count: 156 }

@@ -5,6 +5,8 @@ description: "Four variables decide how much muscle survives a diet. Three of th
 intent: "how to lose fat without losing muscle"
 published: 2026-07-08
 tags: [nutrition, fat loss, training]
+image: ../../../assets/images/topic-nutrition.jpg
+imageAlt: "Fresh vegetables and fruit on a market stall"
 readingMinutes: 6
 tools: [tdee, protein, macros]
 featured: true

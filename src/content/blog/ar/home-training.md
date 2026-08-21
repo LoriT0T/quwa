@@ -5,6 +5,8 @@ description: "ما الذي تستطيع بناءه فعلاً بلا صالة،
 intent: "تمارين المنزل بدون معدات لبناء العضل"
 published: 2026-07-21
 tags: [تدريب, بيت, مبتدئ]
+image: ../../../assets/images/topic-beginner.jpg
+imageAlt: "يدان ترفعان دمبل من الرف"
 readingMinutes: 6
 tools: []
 ---

@@ -4,6 +4,8 @@ import Section from '../../../components/Section.astro';
 import SectionHead from '../../../components/SectionHead.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import EmailCapture from '../../../components/EmailCapture.astro';
+import Media from '../../../components/Media.astro';
+import cover from '../../../assets/images/tools-cover.jpg';
 import { getDict, type Locale } from '../../../i18n';
 import { localePath, absoluteUrl } from '../../../lib/url';
 import { localeParams } from '../../../lib/content';
@@ -22,8 +24,10 @@ const schema = [S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUr
 <Layout lang={lang} title={t.tools.indexTitle} description={t.tools.indexSub} path="tools" schema={schema}>
   <Section>
     <Breadcrumbs lang={lang} items={crumbs} />
-    <div class="gap">
+    <div class="gap head">
       <SectionHead as="h1" eyebrow={t.tools.eyebrow} title={t.tools.indexTitle} body={t.tools.indexSub} />
+      <Media src={cover} alt={t.tools.indexTitle} ratio="16 / 9" priority slot_id="tools-cover"
+             sizes="(min-width: 900px) 420px, 100vw" widths={[420, 720, 1080]} />
     </div>
     <ul class="grid">
       {TOOLS.map((tool) => {
@@ -47,6 +51,8 @@ const schema = [S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUr
 </Layout>
 <style>
   .gap { margin-block-start: var(--space-8); }
+  .head { display: grid; gap: var(--space-8); align-items: center; }
+  @media (min-width: 900px) { .head { grid-template-columns: 1fr 420px; gap: var(--space-12); } }
   .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
   .item { padding: 0; transition: border-color .16s var(--ease), transform .16s var(--ease); }
   .item:hover { border-color: var(--c-accent); transform: translateY(-2px); }

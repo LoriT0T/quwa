@@ -4,6 +4,7 @@ import Section from '../../../components/Section.astro';
 import SectionHead from '../../../components/SectionHead.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import EmailCapture from '../../../components/EmailCapture.astro';
+import Media from '../../../components/Media.astro';
 import { getDict, fill, type Locale } from '../../../i18n';
 import { localePath, absoluteUrl } from '../../../lib/url';
 import { localeParams, getPosts, slugOf } from '../../../lib/content';
@@ -30,6 +31,12 @@ const schema = [S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUr
       {posts.map((post) => (
         <li class="item">
           <a href={localePath(lang, `blog/${slugOf(post)}`)}>
+            <div class="thumb">
+              <Media src={post.data.image} alt={post.data.imageAlt ?? ''} ratio="16 / 9"
+                     slot_id={`blog-${slugOf(post)}`} sizes="(min-width: 768px) 260px, 100vw"
+                     widths={[260, 420, 640]} />
+            </div>
+            <div class="text">
             <p class="meta">
               <time datetime={post.data.published.toISOString()}>{formatDate(post.data.published, lang)}</time>
               <span aria-hidden="true">·</span>
@@ -38,6 +45,7 @@ const schema = [S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUr
             <h2 class="title">{post.data.title}</h2>
             <p class="desc">{post.data.description}</p>
             <p class="tags">{post.data.tags.map((tag) => <span class="tag">{tag}</span>)}</p>
+            </div>
           </a>
         </li>
       ))}
@@ -51,7 +59,9 @@ const schema = [S.breadcrumbs(crumbs.map((c) => ({ name: c.name, url: absoluteUr
   .gap { margin-block-start: var(--space-8); }
   .list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-block-start: 1px solid var(--c-line); }
   .item { border-block-end: 1px solid var(--c-line); }
-  .item a { display: block; padding-block: var(--space-6); }
+  .item a { display: grid; gap: var(--space-4); padding-block: var(--space-6); align-items: start; }
+  .thumb { max-inline-size: 100%; }
+  @media (min-width: 768px) { .item a { grid-template-columns: 260px 1fr; gap: var(--space-8); } }
   .item:hover .title { color: var(--c-accent); }
   .meta { display: flex; flex-wrap: wrap; gap: var(--space-3); font-size: var(--fs-small); color: var(--c-faint); }
   .title { font-size: var(--fs-h3); margin-block: var(--space-2); max-inline-size: var(--measure-prose); transition: color .16s var(--ease); }

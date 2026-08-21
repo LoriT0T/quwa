@@ -5,6 +5,8 @@ description: "The evidence supports a range, not a magic number. Here is the ran
 intent: "how much protein per day to build muscle"
 published: 2026-03-19
 tags: [nutrition, protein]
+image: ../../../assets/images/topic-nutrition.jpg
+imageAlt: "Fresh vegetables and fruit on a market stall"
 readingMinutes: 5
 tools: [protein, macros]
 featured: true

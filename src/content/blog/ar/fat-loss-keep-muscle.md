@@ -5,6 +5,8 @@ description: "أربعة متغيّرات تحدّد كم من عضلك ينجو
 intent: "كيف اخسر دهون بدون خسارة عضل"
 published: 2026-06-12
 tags: [تغذية, خسارة دهون, تدريب]
+image: ../../../assets/images/topic-nutrition.jpg
+imageAlt: "خضار وفواكه طازجة على بسطة سوق"
 readingMinutes: 6
 tools: [tdee, protein, macros]
 featured: true

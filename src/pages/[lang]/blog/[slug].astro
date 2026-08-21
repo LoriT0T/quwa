@@ -4,6 +4,7 @@ import Layout from '../../../layouts/Layout.astro';
 import Section from '../../../components/Section.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import EmailCapture from '../../../components/EmailCapture.astro';
+import Media from '../../../components/Media.astro';
 import { getDict, fill, type Locale } from '../../../i18n';
 import { localePath, absoluteUrl, rootPath } from '../../../lib/url';
 import { getPosts, slugOf } from '../../../lib/content';
@@ -68,6 +69,13 @@ const linkedTools = d.tools.map((s) => getTool(s)).filter(Boolean);
           <h1 class="h2">{d.title}</h1>
           <p class="lead measure-prose">{d.description}</p>
         </header>
+        {d.image && (
+          <div class="hero-img">
+            <Media src={d.image} alt={d.imageAlt ?? ''} ratio="16 / 9" priority
+                   slot_id={`blog-${slug}`} sizes="(min-width: 1024px) 720px, 100vw"
+                   widths={[420, 720, 1080]} />
+          </div>
+        )}
         <div class="prose-body"><Content /></div>
         <footer class="art-foot">
           <p class="tags">{d.tags.map((tag) => <span class="tag">{tag}</span>)}</p>
@@ -114,7 +122,8 @@ const linkedTools = d.tools.map((s) => getTool(s)).filter(Boolean);
 </Layout>
 <style>
   .layout { display: grid; gap: var(--space-12); margin-block-start: var(--space-8); }
-  .art-head { display: flex; flex-direction: column; gap: var(--space-3); margin-block-end: var(--space-12); }
+  .art-head { display: flex; flex-direction: column; gap: var(--space-3); margin-block-end: var(--space-8); }
+  .hero-img { margin-block-end: var(--space-12); }
   .meta { display: flex; flex-wrap: wrap; gap: var(--space-2); font-size: var(--fs-eyebrow); color: var(--c-faint); }
   .art-foot { margin-block-start: var(--space-12); padding-block-start: var(--space-6); border-block-start: 1px solid var(--c-line); display: flex; flex-wrap: wrap; gap: var(--space-4); justify-content: space-between; }
   .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }

@@ -573,10 +573,10 @@ export const en = {
   bands: {
     eyebrow: 'What you actually get',
     items: [
-      { eyebrow: 'Written, not implied', title: 'The rationale, in two pages', body: 'Why the sets, the reps, the rest and the progression are what they are — so when week seven goes badly you can adapt instead of quitting.' },
-      { eyebrow: 'Two per movement', title: 'Substitutions that keep the session', body: 'Chosen for the same joint action, not the same muscle name. A busy cable stack stops being a reason to go home.' },
-      { eyebrow: 'Carries forward', title: 'A tracking sheet that does the maths', body: 'Your loads move week to week automatically, and the progression rule applies itself. No percentages calculated between sets.' },
-      { eyebrow: 'In the plan', title: 'Deloads you did not have to decide on', body: 'Scheduled into weeks 4, 8 and 12. The adaptation happens in recovery, so the recovery is programmed rather than negotiated.' },
+      { eyebrow: 'Written, not implied', title: 'The rationale, in two pages', body: 'Why the sets, the reps, the rest and the progression are what they are — so when week seven goes badly you can adapt instead of quitting.' , alt: 'A fountain pen writing on lined paper', alt: 'A fountain pen writing on lined paper' },
+      { eyebrow: 'Two per movement', title: 'Substitutions that keep the session', body: 'Chosen for the same joint action, not the same muscle name. A busy cable stack stops being a reason to go home.' , alt: 'A fountain pen writing on lined paper', alt: 'A lifter using a seated cable row machine' },
+      { eyebrow: 'Carries forward', title: 'A tracking sheet that does the maths', body: 'Your loads move week to week automatically, and the progression rule applies itself. No percentages calculated between sets.' , alt: 'A fountain pen writing on lined paper', alt: 'A load-progression chart rising week by week' },
+      { eyebrow: 'In the plan', title: 'Deloads you did not have to decide on', body: 'Scheduled into weeks 4, 8 and 12. The adaptation happens in recovery, so the recovery is programmed rather than negotiated.' , alt: 'A fountain pen writing on lined paper', alt: 'A lifter benching under a loaded barbell' },
     ],
   },
   tracker: {
@@ -592,6 +592,59 @@ export const en = {
       { exercise: 'Lateral raise', target: '4 × 15', last: '10 kg × 15, 14, 12, 11', thisWeek: '10 kg × 15, 15, 14, 13', next: 'Hold, repeat' },
     ],
     note: 'The "next session" column is computed, not typed. That is the whole progression rule.',
+  },
+  adLibrary: {
+    eyebrow: 'Campaign assets',
+    title: 'Ad library',
+    sub: 'Four creatives, two concepts, both languages. Rendered from the same design tokens as the site, so a palette change here changes the ads.',
+    note: 'These are concepts for a sample brand. They carry a discreet marker and are not running anywhere.',
+    conceptLabel: 'Concept',
+    concepts: {
+      tools: {
+        name: 'The free tools',
+        body: 'Leads with the calculators rather than the products. The offer costs the viewer nothing and is true, which is the only reason a cold audience clicks. Every measured reference promotes its free layer above its paid one.',
+      },
+      numbers: {
+        name: 'The specific numbers',
+        body: 'Names the three outputs rather than the category. "Your calories, macros and one-rep max" is concrete; "get fit" is not. Suits retargeting anyone who opened a calculator but did not submit the email gate.',
+      },
+    },
+    spec: { placement: 'Placement', size: 'Size', ratio: 'Ratio', file: 'File', destination: 'Destination' },
+    placements: {
+      facebook: 'Facebook feed, right column, Messenger',
+      instagram: 'Instagram feed',
+    },
+    fields: {
+      primaryText: 'Primary text',
+      headline: 'Headline',
+      description: 'Description',
+      cta: 'CTA button',
+      firstComment: 'First comment',
+    },
+    download: 'Download PNG',
+    open: 'Open full size',
+    compliance: {
+      eyebrow: 'Ad policy',
+      title: 'What is deliberately absent',
+      body: 'Meta rejects a specific list of things in health and fitness advertising, and most fitness ads get rejected for one of them. None of these appears in any of the four creatives.',
+      items: [
+        { title: 'No before-and-after imagery', body: 'Explicitly prohibited — and that image slot is blocked in our manifest anyway, because it would need a real member.' },
+        { title: 'No implied personal attributes', body: 'Nothing addresses the viewer\'s body. "Your calories" is about arithmetic, not about them.' },
+        { title: 'No outcome promise or timeline', body: 'No pounds, no weeks-to-results, no "transform". The same rule the site copy runs on, for the same reason: outcome claims generate chargebacks.' },
+        { title: 'No close crop on a body part', body: 'Also explicitly prohibited.' },
+        { title: 'No urgency device', body: 'Two of twelve industry sites use countdowns. They lift a first order and cost the second.' },
+      ],
+    },
+    disclaimerNote: 'The Instagram creative carries the estimate disclaimer inside the artwork, so the claim and its qualifier travel together even when the caption is truncated.',
+    targeting: {
+      title: 'Running these',
+      items: [
+        'Run Arabic and English as separate campaigns, not one campaign with two creatives. The copy is not a translation, the landing pages differ, and mixing them makes the results unreadable.',
+        'Concept one is a cold-audience creative — optimise for landing-page views, not conversions. There is no purchase on that page.',
+        'Concept two suits retargeting anyone who opened a calculator and did not submit the email gate. That is the clearest intent signal the site produces.',
+        'The 4:5 creative also works as a Facebook feed placement. The 1.91:1 does not work on Instagram — it gets letterboxed.',
+      ],
+    },
   },
   homeFaq: [
     { q: 'Do I need a gym membership?', a: 'For four of the six programs, yes — they use barbells and a cable stack. The Minimal Kit needs a pair of adjustable dumbbells and a bench, and Posterior Chain runs on a rack or bands. Every program lists its equipment before you buy, on the card and on the page.' },

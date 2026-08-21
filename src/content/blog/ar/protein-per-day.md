@@ -5,6 +5,8 @@ description: "الأدلة تدعم نطاقاً لا رقماً سحرياً. �
 intent: "كم جرام بروتين احتاج يوميا لبناء العضل"
 published: 2026-03-22
 tags: [تغذية, بروتين]
+image: ../../../assets/images/topic-nutrition.jpg
+imageAlt: "خضار وفواكه طازجة على بسطة سوق"
 readingMinutes: 5
 tools: [protein, macros]
 featured: true

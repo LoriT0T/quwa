@@ -1,19 +1,32 @@
 ---
 import { getDict, type Locale } from '../i18n';
+import Media from './Media.astro';
+import rationale from '../assets/images/band-rationale.jpg';
+import substitutions from '../assets/images/band-substitutions.jpg';
+import tracking from '../assets/images/band-tracking.jpg';
+import deload from '../assets/images/band-deload.jpg';
 /** Whoop runs seven consecutive 519px benefit bands, one idea each, 3–8 words per
     band; rpstrength runs four at 500px. Two independent references converge on a
     ~500px repeating unit, so ours is four bands on that rhythm. */
 interface Props { lang: Locale; }
 const { lang } = Astro.props;
 const t = getDict(lang);
+const art = [rationale, substitutions, tracking, deload];
+const slots = ['band-rationale', 'band-substitutions', 'band-tracking', 'band-deload'];
 ---
 <ul class="bands">
   {t.bands.items.map((item, i) => (
     <li class="band">
       <div class="container-page inner">
-        <p class="eyebrow">{item.eyebrow}</p>
-        <h3 class="h2 t">{item.title}</h3>
-        <p class="b">{item.body}</p>
+        <div class="copy">
+          <p class="eyebrow">{item.eyebrow}</p>
+          <h3 class="h2 t">{item.title}</h3>
+          <p class="b">{item.body}</p>
+        </div>
+        <div class="art">
+          <Media src={art[i]} alt={item.alt} ratio="4 / 5" slot_id={slots[i]}
+                 sizes="(min-width: 1024px) 380px, 60vw" widths={[300, 480, 760]} />
+        </div>
         <span class="rule" aria-hidden="true" style={`--i:${i}`}></span>
       </div>
     </li>
@@ -29,8 +42,18 @@ const t = getDict(lang);
   .band:nth-child(even) { background: var(--c-surface); }
   .band:last-child { border-block-end: none; }
   .inner {
-    display: flex; flex-direction: column; gap: var(--space-4);
+    display: grid; gap: var(--space-8);
     position: relative; padding-block: var(--space-12);
+  }
+  .copy { display: flex; flex-direction: column; gap: var(--space-4); }
+  .art { max-inline-size: 320px; }
+  .band:nth-child(even) .art { justify-self: end; }
+  @media (min-width: 900px) {
+    .inner { grid-template-columns: 1fr 380px; align-items: center; gap: var(--space-16); }
+    .art { max-inline-size: none; }
+    .band:nth-child(even) .inner { grid-template-columns: 380px 1fr; }
+    .band:nth-child(even) .copy { order: 2; }
+    .band:nth-child(even) .art { order: 1; justify-self: start; }
   }
   .t { max-inline-size: 18ch; }
   .b { font-size: var(--fs-lead); color: var(--c-muted); line-height: 1.6; max-inline-size: var(--measure-prose); }

@@ -5,6 +5,8 @@ description: "Three formulas, what each one gets wrong, and why the average is t
 intent: "how to calculate one rep max from reps"
 published: 2026-05-20
 tags: [training, strength]
+image: ../../../assets/images/topic-technique.jpg
+imageAlt: "A lifter mid-squat under a loaded barbell"
 readingMinutes: 4
 tools: [onerm]
 ---

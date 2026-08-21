@@ -5,6 +5,8 @@ description: "ماذا تفعل، وماذا تتجاهل، والأخطاء ا�
 intent: "برنامج تمارين للمبتدئين في الجيم"
 published: 2026-04-27
 tags: [مبتدئ, تدريب]
+image: ../../../assets/images/topic-beginner.jpg
+imageAlt: "يدان ترفعان دمبل من الرف"
 readingMinutes: 6
 tools: [tdee, protein]
 featured: true

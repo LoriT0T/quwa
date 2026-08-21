@@ -5,6 +5,8 @@ description: "متى تتدرّب، وكيف توزّع البروتين على 
 intent: "التمرين في رمضان وقت التدريب والتغذية"
 published: 2026-04-09
 tags: [تدريب, تغذية, رمضان]
+image: ../../../assets/images/topic-recovery.jpg
+imageAlt: "سجادة تمارين على أرضية في البيت"
 readingMinutes: 7
 tools: [protein, water, tdee]
 featured: true

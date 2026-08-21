@@ -8,6 +8,8 @@ kind: bundle
 level: all
 goal: muscle
 equipment: full-gym
+image: ../../../assets/images/program-bundle-complete-library.jpg
+imageAlt: "أقراص أوزان ملوّنة مصفوفة على رف في صالة تدريب"
 order: 5
 featured: true
 rating: { value: 4.74, count: 156 }

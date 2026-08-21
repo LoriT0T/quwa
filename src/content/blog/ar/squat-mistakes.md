@@ -5,6 +5,8 @@ description: "ليست قائمة بما لا تفعله، بل شرح لسبب 
 intent: "اخطاء السكوات الشائعة وكيف اصلحها"
 published: 2026-08-05
 tags: [تدريب, أداء فني, سكوات]
+image: ../../../assets/images/topic-technique.jpg
+imageAlt: "رافع في منتصف السكوات تحت بار محمّل"
 readingMinutes: 6
 tools: [onerm]
 ---

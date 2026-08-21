@@ -22,6 +22,20 @@ Slots marked `generate` in `assets/manifest.json` are produced by
 | `recipe-chicken-rice-bowl` | Sesame oil chicken (4849352485) | jeffreyw | CC BY 2.0 | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:Sesame_oil_chicken_(4849352485).jpg) |
 | `recipe-overnight-oats` | Banana Oatmeal Breakfast Bowl (44302857265) | Ella Olsson from Stockholm, Sweden | CC BY 2.0 | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:Banana_Oatmeal_Breakfast_Bowl_(44302857265).jpg) |
 | `starter-cover` | USVI IMG 5202 - Minimalist desk with colorful pencils in a cardboard holder a cup holding pens and scissors and a notebook with botanical patterns all under soft light | Category:Government of the United States Virgin Islands | Public domain | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:USVI_IMG_5202_-_Minimalist_desk_with_colorful_pencils_in_a_cardboard_holder_a_cup_holding_pens_and_scissors_and_a_notebook_with_botanical_patterns_all_under_soft_light.jpg) |
+| `program-bundle-complete-library` | A variety of colorful weight plates | Shixart1985 | CC BY 2.0 | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:A_variety_of_colorful_weight_plates.jpg) |
+| `program-bundle-train-and-eat` | Noodle Bowl for Lunch (Unsplash) | Tran Mau Tri Tam tranmautritam | CC0 | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:Noodle_Bowl_for_Lunch_(Unsplash).jpg) |
+| `topic-nutrition` | 20180803-AMS-LSC-0001 (43891328261) | U.S. Department of Agriculture Lance Cheung/Multimedia PhotoJournalist | Public domain | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:20180803-AMS-LSC-0001_(43891328261).jpg) |
+| `topic-training` | U.S. Soldiers Conduct Physical Training DVIDS118982 | Staff Sgt. Manuel J. Martinez | Public domain | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:U.S._Soldiers_Conduct_Physical_Training_DVIDS118982.jpg) |
+| `topic-recovery` | Woman practicing yoga at home using laptop while sitting on mat | Shixart1985 | CC BY 2.0 | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:Woman_practicing_yoga_at_home_using_laptop_while_sitting_on_mat.jpg) |
+| `topic-supplements` | User measures a scoop of protein powder from a container in a kitchen | Shixart1985 | CC BY 2.0 | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:User_measures_a_scoop_of_protein_powder_from_a_container_in_a_kitchen.jpg) |
+| `topic-beginner` | Young man lifting dumbbell weight for exercise in fitness gym | Nenad Stojkovic | CC BY 2.0 | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:Young_man_lifting_dumbbell_weight_for_exercise_in_fitness_gym.jpg) |
+| `topic-technique` | MPOTY 2014 Weight-lifting competition aboard the USS Bataan | U.S. Marine Corps photo by Sgt. Austin Hazard | Public domain | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:MPOTY_2014_Weight-lifting_competition_aboard_the_USS_Bataan.jpg) |
+| `band-rationale` | Writing with a fountain pen (Unsplash) | Aaron Burden aaronburden | CC0 | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:Writing_with_a_fountain_pen_(Unsplash).jpg) |
+| `band-substitutions` | Woman using a seated cable row machine at the gym | Miguel Angel Omaña Rojas | CC0 | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:Woman_using_a_seated_cable_row_machine_at_the_gym.jpg) |
+| `band-tracking` | C Lyell notebook page 1 | University of Edinburgh Heritage Collections | CC BY 3.0 | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:C_Lyell_notebook_page_1.jpg) |
+| `band-deload` | Join the club, Cherry Point weight lifters have goals to achieve in the gym 130306-M-EY704-005 | Lance Cpl. Cory D. Polom | Public domain | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:Join_the_club,_Cherry_Point_weight_lifters_have_goals_to_achieve_in_the_gym_130306-M-EY704-005.jpg) |
+| `tools-cover` | Balance (AM 610322) | Unknown | CC BY 4.0 | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:Balance_(AM_610322).jpg) |
+| `membership-cover` | UCHSWeightRoom9.10.09ByLuigiNovi1 | Nightscream | CC BY 3.0 | Wikimedia Commons | [source](https://commons.wikimedia.org/wiki/File:UCHSWeightRoom9.10.09ByLuigiNovi1.jpg) |
 
 ## Unfilled stock slots
 
@@ -32,10 +46,10 @@ but they are placeholders and should be filled before launch.
 
 ## Blocked slots — shoot required
 
-- `program-lean-recomposition` — Three licensed candidates were rejected on review: a restaurant dining room, a museum ceramic accession, and Marines grilling chicken at a field barbecue. None is a plate of food a dieting person would eat. Free licensed aggregators do not reliably return commercial-grade food photography; this needs an Unsplash or Pexels key, or the shoot.
+- `program-lean-recomposition` — Six licensed candidates rejected on visual review across three rounds: a restaurant dining room (three times), a museum ceramic accession, and Marines grilling chicken at a field barbecue. Free licensed aggregators do not return commercial-grade plated food. Needs an Unsplash or Pexels key, or the shoot.
 - `proof-transformation-1` — This slot would show an actual member's result. It cannot be stock and it must not be generated — a generated body presented as a customer outcome is a fabricated testimonial. Blocked until a real shoot exists.
 - `founder-portrait` — A named person's portrait. Generating one and attaching a name to it is impersonation.
 
 Brief: [docs/SHOT-LIST.md](../docs/SHOT-LIST.md)
 
-_Last run: 2026-08-20_
+_Last run: 2026-08-21_
