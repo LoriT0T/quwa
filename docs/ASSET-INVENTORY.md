@@ -79,6 +79,28 @@ Difference`. Proof gets a quarter of the page.
 | 11 | Hevy, Juggernaut, Freeletics | App screenshots | **`<TrackerPreview>`** — we have no app, so we show the artefact we do ship: the tracking sheet, rendered as a real table |
 | 12 | Athlean-X, Caliber | Results / success stories | Testimonials expanded from 9 to **22 per locale**, still product-tagged |
 
+## 3b. Two sourcing bugs found while filling the new slots
+
+Worth recording because both produced plausible-looking wrong results rather than
+obvious failures.
+
+**The catalogue-record reject filter was never wired into the search.** It was defined
+— accession numbers, `museum`, `replica`, `plastic food` and so on — but the `.filter()`
+call was dropped when the script was rewritten to add the Wikimedia provider. So a query
+for "balance scales" returned an 1841 museum accession with its inventory tag visible in
+frame, and "handwritten notes" returned a page of Charles Lyell's notebook. Both passed
+relevance because the words matched. Now applied, plus a per-slot `reject` list for cases
+a generic list cannot catch.
+
+**Two slots were handed the identical file.** One leg-press frame satisfied both "gym
+weights" and "gym machines", so `band-substitutions` and `home-hero` shipped the same
+photograph. Downloads are now hashed on write and a repeat is refused with the name of
+the slot that already owns it.
+
+Six candidates for one food slot were rejected across three rounds — a restaurant dining
+room three times, a museum ceramic, and Marines grilling chicken at a field barbecue.
+That slot is now blocked. Free licensed aggregators do not return plated food.
+
 ## 4. Deliberately not taken
 
 - **Urgency and countdown timers** (freeletics, sweat). They lift a first order and cost

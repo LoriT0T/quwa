@@ -190,6 +190,16 @@ Openverse was the first choice and worked for four slots before beginning to ret
 to unauthenticated clients mid-build. The adapter is still in `scripts/source-stock.mjs`
 and activates if `OPENVERSE_TOKEN` is set.
 
+### 14b. Two images are generated rather than photographed
+`band-tracking` and `tools-cover` are brand compositions produced by
+`scripts/generate-images.mjs` — a rendered load-progression chart and a numeric-key
+grid. Two rounds of licensed search returned only archive scans, and no photograph says
+"progression chart" without being a museum object.
+
+This is inside the rule, not an exception to it: generation is allowed for brand
+compositions, textures and backgrounds, and never for a person, a body, a food item or a
+piece of equipment. Both are abstract graphics in the brand palette.
+
 ### 15. Testimonials are written, not collected — **CONFIRM before launch**
 Nine per locale in `src/data/testimonials.ts`, each tagged to a specific product because
 `<Proof>` will not render an untagged one. They are placeholders that demonstrate the

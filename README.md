@@ -31,7 +31,8 @@ The home page structure comes from a second sweep — 12 industry leaders (AG1, 
 Huel, Gymshark, Athlean-X, MacroFactor, JuggernautAI, Hevy, Centr, Freeletics, Sweat,
 Caliber) measured for which conversion patterns they actually ship. Findings and what we
 took: [`docs/ASSET-INVENTORY.md`](docs/ASSET-INVENTORY.md).
-Ad creatives and copy: [`docs/AD-COPY.md`](docs/AD-COPY.md), files in [`out/ads/`](out/ads).
+Ad creatives and copy: [`docs/AD-COPY.md`](docs/AD-COPY.md), files in [`out/ads/`](out/ads),
+rendered on the site at **`/[lang]/ad-library/`** with specs, copy fields and policy notes.
 
 Design decisions are derived from a measured Playwright sweep of four reference
 sites — see [`docs/REFERENCE-SPEC.md`](docs/REFERENCE-SPEC.md). Every judgement call and
@@ -196,7 +197,8 @@ Everything a non-developer would want to change is markdown or one config file.
 | An article | `src/content/blog/{en,ar}/<slug>.md` |
 | A testimonial | [`src/data/testimonials.ts`](src/data/testimonials.ts) — each one must name the product it proves |
 | Design tokens | [`src/styles/tokens.css`](src/styles/tokens.css), rendered live at `/[lang]/styleguide` |
-| An image slot | [`assets/manifest.json`](assets/manifest.json) |
+| An image slot | [`assets/manifest.json`](assets/manifest.json) — 30 slots, 25 filled |
+| Ad copy | [`src/data/ads.ts`](src/data/ads.ts) — renders on the Ad Library page |
 
 Adding a program means adding two markdown files (one per locale) with the same
 `product:` value, and a price under that key in `pricing.ts`. Nothing else.
